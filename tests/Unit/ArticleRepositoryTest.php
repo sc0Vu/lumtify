@@ -18,9 +18,9 @@ class ArticleRepositoryTest extends TestCase
     {
         $article = new Article;
         $repository = new ArticleRepository($article);
-        $this->assertEquals($repository->getArticle("articles80"), $article->where("article80")->first());
-        $this->assertEquals($repository->getArticle("articles80", Article::STATUS_DRAFT), $article->where("article80", Article::STATUS_DRAFT)->first());
-        $this->assertEquals($repository->getArticle("articles80", Article::STATUS_PUBLISHED, true), $article->where("article80", Article::STATUS_PUBLISHED)->with("author")->first());
+        $this->assertEquals($repository->getArticle("articles80"), $article->where("title", "article80")->first());
+        $this->assertEquals($repository->getArticle("articles80", Article::STATUS_DRAFT), $article->where("title", "article80")->where("status", Article::STATUS_DRAFT)->first());
+        $this->assertEquals($repository->getArticle("articles80", Article::STATUS_PUBLISHED, true), $article->where("title", "article80")->where("status", Article::STATUS_PUBLISHED)->with("author")->first());
     }
 
     /**
