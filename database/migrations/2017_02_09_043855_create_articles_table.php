@@ -14,8 +14,8 @@ class CreateArticlesTable extends Migration
     public function up()
     {
         Schema::create("articles", function (Blueprint $table) {
-            $table->integer("user_id");
-            $table->string("link")->unique();
+            $table->integer("user_id")->index();
+            $table->string("link")->primary();
             $table->string("title", 255);
             $table->string("short_description", 255);
             $table->string("content");

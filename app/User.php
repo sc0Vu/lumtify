@@ -11,6 +11,16 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
+    
+    /**
+     * The activated status
+     */
+    const STATUS_ACTIVATED = 1;
+    
+    /**
+     * The banned status
+     */
+    const STATUS_BANNED = 2;
 
     /**
      * The table
@@ -25,7 +35,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email',
+        "uid", "name", "email", "password", "status"
     ];
 
     /**
@@ -34,6 +44,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password',
+        "id", "password"
     ];
 }

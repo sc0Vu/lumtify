@@ -37,6 +37,8 @@ class JWTAuthenticate
     {
         if ($this->auth->guard($guard)->guest()) {
             return response()->json([
+                "errs" => [],
+                "errFor" => [],
                 "msg" => 'Unauthorized.',
                 "success" => false
             ], 401);

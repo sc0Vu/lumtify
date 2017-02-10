@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 use App\User;
 use App\Repositories\UserRepository;
 

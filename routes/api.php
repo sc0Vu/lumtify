@@ -15,16 +15,25 @@ $app->get('test', function ()    {
     return "hello api";
 });
 
-$app->get('auth', ["middleware" => "api"], function () {
+
+// auths
+$app->post('/auth/login', function () {
     return "hello api";
 });
 
-$app->post('/users/register', ["middleware" => "guest"], "AuthController@register");
-
-$app->post('/users/login', ["middleware" => "guest"], function () {
+$app->post('/auth/logout', function () {
     return "hello api";
 });
 
-$app->post('/users/logout', ["middleware" => "guest"], function () {
-    return "hello api";
-});
+// articles
+// $app->get('/articles', 'ArticleController@articles');
+// $app->post('/articles', 'ArticleController@update');
+// $app->get('/articles/{link}', 'ArticleController@read')->where(['link' => '/^[a-zA-Z0-9]*$/']);
+// $app->put('/articles/{link}', 'ArticleController@update')->where(['link' => '/^[a-zA-Z0-9]*$/']);
+// $app->delete('/articles/{link}', 'ArticleController@delete')->where(['link' => '/^[a-zA-Z0-9]*$/']);
+// users
+// $app->get('/users', 'UserController@users');
+// $app->get('/users{uid}', 'UserController@read')->where(['uid' => '/^[a-zA-Z0-9]{32}$/']);
+// $app->put('/users{uid}', 'UserController@update')->where(['uid' => '/^[a-zA-Z0-9]{32}$/']);
+$app->post('/users', "UserController@create");
+// $app->delete('/users{uid}', 'UserController@delete')->where(['uid' => '/^[a-zA-Z0-9]{32}$/']);

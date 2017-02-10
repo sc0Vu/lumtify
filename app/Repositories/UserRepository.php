@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use App\User;
 
 class UserRepository
@@ -25,12 +26,35 @@ class UserRepository
 	}
     
     /**
+     * create user
+     * 
+     * @param  array $data
+     * @return 
+     */
+    public function create($data)
+    {
+        $uid = $this->makeUid();
+
+        $this->user->uid = $uid;
+        $this->user->name = $data["name"];
+        $this->user->email = $data["email"];
+        $this->user->password = Hash::make($data["pass"]);
+        $this->user->status = User::STATUS_ACTIVATED;
+        
+        try {
+            return $this->user->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return false;
+        }
+    }
+    
+    /**
      * make user uid
      *
      * @param  integer $length
      * @return string
      */
-	public function makeUid($length)
+	public function makeUid($length=32)
 	{
 		$uid = Str::random($length);
 		$user = $this->user->where("uid", $uid)->first();

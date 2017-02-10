@@ -8,23 +8,26 @@ class AuthApiTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * Test get auth api
+     * Test login api
      *
      * @return void
      */
-    public function testGetAuthApi()
+    public function testLoginApi()
     {
-        $request = $this->get('/api/users/register');
+        $request = $this->get('/api/auth/login');
         $request->assertResponseStatus(405);
         // $request->seeJson();
+    }
 
-        $request = $this->get('/api/users/login');
+    /**
+     * Test logout api
+     *
+     * @return void
+     */
+    public function testLogoutApi()
+    {
+        $request = $this->get('/api/auth/logout');
         $request->assertResponseStatus(405);
         // $request->seeJson();
-
-        $request = $this->get('/api/users/logout');
-        $request->assertResponseStatus(405);
-        // $request->seeJson();
-        
     }
 }
