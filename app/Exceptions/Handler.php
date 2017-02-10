@@ -45,12 +45,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if (($e instanceof AuthorizationException || $e instanceof HttpException) && $request->is("api")) {
+        if ($request->is("api")) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
-                "msg" => trans("http.status." . $e->getStatusCode()),
-               
+                "msg" => trans("http.status." . $e->getStatusCode()),               
                 "success" => false,
             ]);
         }

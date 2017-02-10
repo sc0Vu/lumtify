@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-// use App\Role;
+use App\Role;
 
 class RolesTableSeeder extends Seeder
 {
@@ -19,10 +19,11 @@ class RolesTableSeeder extends Seeder
 
         foreach ($auths as $key => &$auth) {
         	$roles[] = [
-        	    "id" => $key++,
+        	    "id" => $key + 1,
         	    "name" => $auth
         	];
         }
-        // Role::insert($roles);
+
+        Role::insert($roles);
     }
 }

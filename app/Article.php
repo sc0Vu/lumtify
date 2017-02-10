@@ -22,7 +22,7 @@ class Article extends Model
     const STATUS_ARCHIEVE = 3;
 
     /**
-     * The primate key
+     * The primary key
      * 
      * @var string
      */

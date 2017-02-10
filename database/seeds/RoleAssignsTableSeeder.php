@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-// use App\RoleAssign;
+use App\RoleAssign;
 
 class RoleAssignsTableSeeder extends Seeder
 {
@@ -24,6 +24,6 @@ class RoleAssignsTableSeeder extends Seeder
             ];
         }
         
-        // RoleAssign::insert($authAssigns);
+        RoleAssign::insert($authAssigns);
     }
 }

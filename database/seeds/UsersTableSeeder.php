@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-// use Carbon\Carbon;
-// use App\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use App\User;
+use App\Repositories\UserRepository;
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,18 +16,25 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
     	$users = [];
+        $now = new Carbon;
+        $user = new User;
+        $repository = new UserRepository($user);
 
         for ($i=1; $i<=3; $i++) {
         	$status = rand(1, 2);
+            $uid = $repository->makeUid(32);
         	$users[] =[
                 "id" => $i,
-                "name" => "iamuser ".$i,
-                "password" => bcrypt("ilovelumtify"),
+                "uid" => $uid,
+                "name" => "iamuser " . $i,
+                "password" => Hash::make("ilovelumtify"),
                 "email" => sprintf("not_existed_email_%d@gmail.com", $i),
-                "status" => $status
+                "status" => $status,
+                "created_at" => $now,
+                "updated_at" => $now
             ];
         }
         
-        // User::insert($users);
+        $user->insert($users);
     }
 }

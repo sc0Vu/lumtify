@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     /**
-     * The primate key
+     * The primary key
      * 
      * @var string
      */
