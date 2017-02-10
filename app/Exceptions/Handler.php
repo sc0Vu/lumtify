@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($request->is("api")) {
+        if ($request->is("api*")) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],

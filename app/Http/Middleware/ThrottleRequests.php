@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Cache\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ThrottleRequests
 {
@@ -39,7 +40,7 @@ class ThrottleRequests
     {
         $key = $this->resolveRequestSignature($request);
         if ($this->limiter->tooManyAttempts($key, $maxAttempts, $decayMinutes)) {
-            return $this->buildResponse($key, $maxAttempts);
+            return $this->buildResponse($key, $maxAttempts, $request->is("api*"));
         }
         $this->limiter->hit($key, $decayMinutes);
         $response = $next($request);
@@ -69,11 +70,21 @@ class ThrottleRequests
      *
      * @param  string  $key
      * @param  int  $maxAttempts
+     * @param  boolean $isApi
      * @return \Illuminate\Http\Response
      */
-    protected function buildResponse($key, $maxAttempts)
+    protected function buildResponse($key, $maxAttempts, $isApi)
     {
-        $response = new Response('Too Many Attempts.', 429);
+        if ($isApi) {
+            $response = new JsonResponse([
+                'errs' => [],
+                'errFor' => [],
+                'msg' => 'Too Many Attempts.',
+                'success' => false
+            ], 429); 
+        } else {
+            $response = new Response('Too Many Attempts.', 429);
+        }
         $retryAfter = $this->limiter->availableIn($key);
         return $this->addHeaders(
             $response, $maxAttempts,
