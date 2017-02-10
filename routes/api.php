@@ -17,13 +17,9 @@ $app->get('test', function ()    {
 
 
 // auths
-$app->post('/auth/login', function () {
-    return "hello api";
-});
+$app->post('/auth/login', "AuthController@login");
 
-$app->post('/auth/logout', function () {
-    return "hello api";
-});
+$app->post('/auth/logout', ["middleware" => "api"], "AuthController@logout");
 
 // articles
 // $app->get('/articles', 'ArticleController@articles');

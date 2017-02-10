@@ -79,11 +79,11 @@ class ThrottleRequests
             $response = new JsonResponse([
                 'errs' => [],
                 'errFor' => [],
-                'msg' => 'Too Many Attempts.',
+                'msg' => trans('http.status.429'),
                 'success' => false
             ], 429); 
         } else {
-            $response = new Response('Too Many Attempts.', 429);
+            $response = new Response(trans('http.status.429'), 429);
         }
         $retryAfter = $this->limiter->availableIn($key);
         return $this->addHeaders(

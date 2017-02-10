@@ -34,7 +34,7 @@ class UserController extends Controller
             return response()->json([
                 "errs" => [],
                 "errFor" => $validator->errors(),
-                "msg" => "",
+                "msg" => trans("info.failed.validate"),
                 "success" => false
             ], 400);
         }
@@ -45,14 +45,14 @@ class UserController extends Controller
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
-                "msg" => "",
+                "msg" => trans("info.success.create"),
                 "success" => true
             ]);
         }
         return response()->json([
             "errs" => [],
             "errFor" => [],
-            "msg" => "",
+            "msg" => trans("info.failed.create"),
             "success" => false
         ], 500);
     }

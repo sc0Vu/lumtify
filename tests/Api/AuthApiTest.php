@@ -16,7 +16,25 @@ class AuthApiTest extends TestCase
     {
         $request = $this->get('/api/auth/login');
         $request->assertResponseStatus(405);
-        // $request->seeJson();
+        $request->seeJson();
+
+        $request = $this->post('/api/auth/login', []);
+        $request->assertResponseStatus(400);
+        $request->seeJson();
+
+        $request = $this->post('/api/auth/login', [
+            "email" => "not_existed_email_1@gmail.com",
+            "password" => "12345"
+        ]);
+        $request->assertResponseStatus(400);
+        $request->seeJson();
+
+        $request = $this->post('/api/auth/login', [
+            "email" => "not_existed_email_1@gmail.com",
+            "password" => "ilovelumtify"
+        ]);
+        $request->assertResponseStatus(200);
+        $request->seeJson(["token"]);
     }
 
     /**
@@ -28,6 +46,6 @@ class AuthApiTest extends TestCase
     {
         $request = $this->get('/api/auth/logout');
         $request->assertResponseStatus(405);
-        // $request->seeJson();
+        $request->seeJson();
     }
 }
