@@ -67,6 +67,10 @@ $app->routeMiddleware([
     'api' => App\Http\Middleware\JWTAuthenticate::class,
 ]);
 
+$app->routeMiddleware([
+    'throttle' => App\Http\Middleware\ThrottleRequests::class,
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -97,11 +101,17 @@ $app->withEloquent();
 |
 */
 
-$app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
+$app->group([
+    'namespace' => 'App\Http\Controllers'
+], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
 
-$app->group(['prefix' => 'api', 'namespace' => 'App\Http\Controllers\Api'], function ($app) {
+$app->group([
+    'prefix' => 'api',
+    'namespace' => 'App\Http\Controllers\Api',
+    'middleware' => 'throttle:20,1'
+], function ($app) {
     require __DIR__.'/../routes/api.php';
 });
 
