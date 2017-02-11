@@ -1,0 +1,17 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+
+install:
+  - composer install --optimize-autoloader --quiet
+
+notifications:
+  email:
+    recipients:
+      - alk03073135@gmail.com
+    on_success: always
+    on_failure: always
+
+script: phpunit -c phpunit.xml --coverage-text
