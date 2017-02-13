@@ -14,4 +14,8 @@ notifications:
     on_success: always
     on_failure: always
 
-script: vendor/bin/phpunit
+script:
+  -  mv .env.example .env
+  -  touch ./storage/app/lumtify.sqlite
+  -  php artisan jwt:secret
+  -  vendor/bin/phpunit
