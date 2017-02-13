@@ -15,7 +15,7 @@ notifications:
     on_failure: always
 
 script:
-  -  mv .env.example .env
+  -  cp ./.env.example ./.env
   -  touch ./storage/app/lumtify.sqlite
   -  php artisan jwt:secret
   -  vendor/bin/phpunit
