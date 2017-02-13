@@ -17,5 +17,6 @@ notifications:
 script:
   -  cp ./.env.example ./.env
   -  touch ./storage/app/lumtify.sqlite
+  -  php artisan migrate --seed
   -  php artisan jwt:secret
   -  vendor/bin/phpunit
