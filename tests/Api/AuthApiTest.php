@@ -14,38 +14,45 @@ class AuthApiTest extends TestCase
      */
     public function testLoginApi()
     {
-        $request = $this->get('/api/auth/login');
-        $request->assertResponseStatus(405);
-        $request->seeJson();
+        $response = $this->get('/api/auth/login');
+        $response->assertResponseStatus(405);
+        $response->seeJson(["success" => false]);
 
-        $request = $this->post('/api/auth/login', []);
-        $request->assertResponseStatus(400);
-        $request->seeJson();
+        $response = $this->post('/api/auth/login', []);
+        $response->assertResponseStatus(400);
+        $response->seeJson(["success" => false]);
 
-        $request = $this->post('/api/auth/login', [
+        $response = $this->post('/api/auth/login', [
             "email" => "not_existed_email_1@gmail.com",
             "password" => "12345"
         ]);
-        $request->assertResponseStatus(400);
-        $request->seeJson();
+        $response->assertResponseStatus(400);
+        $response->seeJson(["success" => false]);
 
-        $request = $this->post('/api/auth/login', [
+        $response = $this->post('/api/auth/login', [
             "email" => "not_existed_email_1@gmail.com",
             "password" => "ilovelumtify"
         ]);
-        $request->assertResponseStatus(200);
-        $request->seeJson(["token"]);
-    }
+        $response->assertResponseStatus(200);
+        $response->seeJson(["success" => true]);
 
-    /**
-     * Test logout api
-     *
-     * @return void
-     */
-    public function testLogoutApi()
-    {
-        $request = $this->get('/api/auth/logout');
-        $request->assertResponseStatus(405);
-        $request->seeJson();
+        $token = $response->response->getData(true)['token'];
+        $response = $this->get('/api/auth/user', [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertResponseStatus(200);
+        $response->seeJson(["success" => true]);
+
+        $response = $this->get('/api/auth/logout', [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertResponseStatus(200);
+        $response->seeJson(["success" => true]);
+
+        $response = $this->get('/api/auth/user', [
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response->assertResponseStatus(401);
+        $response->seeJson(["success" => false]);
     }
 }

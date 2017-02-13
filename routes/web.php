@@ -10,11 +10,3 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
-$app->get('test', function () use ($app) {
-    return 'hello lumen' . $app->version();
-});
-
-$app->get('/', function () use ($app) {
-    return 'hello lumen' . $app->version();
-});

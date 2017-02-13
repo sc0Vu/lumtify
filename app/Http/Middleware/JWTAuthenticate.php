@@ -3,14 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Factory as Auth;
+use Tymon\JWTAuth\JWTAuth;
 
 class JWTAuthenticate
 {
     /**
      * The authentication guard factory instance.
      *
-     * @var \Illuminate\Contracts\Auth\Factory
+     * @var \Tymon\JWTAuth\JWTAuth
      */
     protected $auth;
 
@@ -20,7 +20,7 @@ class JWTAuthenticate
      * @param  \Illuminate\Contracts\Auth\Factory  $auth
      * @return void
      */
-    public function __construct(Auth $auth)
+    public function __construct(JWTAuth $auth)
     {
         $this->auth = $auth;
     }
@@ -35,15 +35,37 @@ class JWTAuthenticate
      */
     public function handle($request, Closure $next, $guard = "api")
     {
-        if ($this->auth->guard($guard)->guest()) {
+        try {
+            if ($user = $this->auth->parseToken()->authenticate()) {
+                return $next($request);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
-                "msg" => 'Unauthorized.',
+                "msg" => $e->getMessage(),
+                "success" => false
+            ], 190);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => $e->getMessage(),
                 "success" => false
             ], 401);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => $e->getMessage(),
+                "success" => false
+            ], 500);
         }
-
-        return $next($request);
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => 'Unauthorized.',
+            "success" => false
+        ], 401);
     }
 }

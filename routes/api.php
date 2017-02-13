@@ -11,15 +11,10 @@
 |
 */
 
-$app->get('test', function ()    {
-    return "hello api";
-});
-
-
 // auths
 $app->post('/auth/login', "AuthController@login");
-
-$app->post('/auth/logout', ["middleware" => "api"], "AuthController@logout");
+$app->get('/auth/logout', ["middleware" => "api", "uses" => "AuthController@logout"]);
+$app->get('/auth/user', ["middleware" => "api", "uses" => "AuthController@user"]);
 
 // articles
 // $app->get('/articles', 'ArticleController@articles');

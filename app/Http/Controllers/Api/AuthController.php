@@ -4,20 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use Validator;
 use App\User;
+use Tymon\JWTAuth\JWTAuth;
 
 class AuthController extends Controller
 {
     /**
+     * @var \Tymon\JWTAuth\JWTAuth
+     */
+    protected $auth;
+
+    /**
      * Create a new controller instance.
      *
+     * @param  JWTAuth $auth
      * @return void
      */
-    // public function __construct()
-    // {
-    // }
+    public function __construct(JWTAuth $auth)
+    {
+        $this->auth = $auth;
+    }
     
     /**
      * login user
@@ -27,7 +34,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-    	$data = $request->all();
+    	$data = $request->only('email', 'password');
     	$validator = $this->validateLogin($data);
 
     	if ($validator->fails()) {
@@ -39,36 +46,67 @@ class AuthController extends Controller
     		], 400);
     	}
 
-    	$guard = $this->getGuard();
+    	$auth = $this->auth;
 
-    	if ($guard->attempt($data["email"], $data["password"])) {
-    		$token = $guard->token();
-
-    		return response()->json([
-    			"errs" => [],
-    			"errFor" => $validator->errors(),
-    			"msg" => trans("info.success.login"),
-    			"token" => $token,
-                "success" => true
-    		]);
-    	}
+        try {
+            if (! $token = $auth->attempt($data)) {
+                return response()->json([
+                    "errs" => [],
+                    "errFor" => $validator->errors(),
+                    "msg" => trans("info.failed.login"),
+                    "success" => false
+                ], 400);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => $e->getMessage(),
+                "success" => false
+            ], 500);
+        }
     	return response()->json([
     		"errs" => [],
-    		"errFor" => [],
-    		"msg" => trans("info.failed.login"),
-            "success" => false
-    	], 400);
+    		"errFor" => $validator->errors(),
+    		"msg" => trans("info.success.login"),
+    		"token" => $token,
+            "success" => true
+    	]);
     }
 
     /**
-     * logout user
+     * logout
      * 
      * @param  Request $request
      * @return json
      */
     public function logout(Request $request)
     {
-    	Auth::logout();
+        $this->auth->invalidate(true);
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "success" => true
+        ]);
+    }
+
+    /**
+     * user
+     * 
+     * @param  Request $request
+     * @return json
+     */
+    public function user(Request $request)
+    {
+        $user = $this->auth->user();
+    	return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "user" => $user,
+            "success" => true
+        ]);
     }
 
     /**
@@ -93,14 +131,4 @@ class AuthController extends Controller
      */
     // protected function validateLogout($data)
     // {}
-    
-    /**
-     * get guard
-     * 
-     * @return 
-     */
-    protected function getGuard()
-    {
-    	return Auth::guard('api');
-    }
 }
