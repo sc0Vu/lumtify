@@ -11,13 +11,21 @@ use App\Repositories\UserRepository;
 class UserController extends Controller
 {
     /**
+     * The user repository instance.
+     * 
+     * @var \App\User\UserRepository
+     */
+    protected $repository;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    // public function __construct()
-    // {
-    // }
+    public function __construct(UserRepository $repository)
+    {
+        $this->repository = $repository;
+    }
     
     /**
      * create user api
@@ -38,10 +46,7 @@ class UserController extends Controller
                 "success" => false
             ], 400);
         }
-        $user = new User;
-        $repository = new UserRepository($user);
-        
-        if ($repository->create($data)) {
+        if ($this->repository->create($data)) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],

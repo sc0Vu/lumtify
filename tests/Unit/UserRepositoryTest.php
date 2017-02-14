@@ -17,7 +17,7 @@ class UserRepositoryTest extends TestCase
     public function testMakeUid()
     {
         $user = new User;
-        $repository = new UserRepository($user);
+        $repository = new UserRepository();
         $uid = $repository->makeUid(32);
         $this->assertEquals(mb_strlen($uid), 32);
         $this->assertNull($user->where("uid", $uid)->first());
@@ -31,7 +31,7 @@ class UserRepositoryTest extends TestCase
     public function testCreate()
     {
         $user = new User;
-        $repository = new UserRepository($user);
+        $repository = new UserRepository();
         $result = $repository->create([
             "name" => "lumtify",
             "email" => "lumtify12345@gmail.com",

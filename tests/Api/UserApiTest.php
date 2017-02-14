@@ -21,7 +21,7 @@ class UserApiTest extends TestCase
             "pass_verify" => "12345",
         ]);
         $request->assertResponseStatus(400);
-        $request->seeJson();
+        $request->seeJson(["success" => false]);
 
         $request = $this->post("/api/users", [
             "name" => "numtify",
@@ -30,7 +30,7 @@ class UserApiTest extends TestCase
             "pass_verify" => "12345",
         ]);
         $request->assertResponseStatus(200);
-        $request->seeJson();
+        $request->seeJson(["success" => true]);
 
         $request = $this->post("/api/users", [
             "name" => "numtify",
@@ -39,7 +39,7 @@ class UserApiTest extends TestCase
             "pass_verify" => "12345",
         ]);
         $request->assertResponseStatus(400);
-        $request->seeJson();
+        $request->seeJson(["success" => false]);
 
         $request = $this->post("/api/users", [
             "name" => "numtify",
@@ -47,6 +47,6 @@ class UserApiTest extends TestCase
             "pass" => "12344",
         ]);
         $request->assertResponseStatus(400);
-        $request->seeJson();
+        $request->seeJson(["success" => false]);
     }
 }

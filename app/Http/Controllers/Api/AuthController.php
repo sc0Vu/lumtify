@@ -11,6 +11,8 @@ use Tymon\JWTAuth\JWTAuth;
 class AuthController extends Controller
 {
     /**
+     * The jwt auth instance.
+     * 
      * @var \Tymon\JWTAuth\JWTAuth
      */
     protected $auth;
@@ -45,7 +47,6 @@ class AuthController extends Controller
                 "success" => false
     		], 400);
     	}
-
     	$auth = $this->auth;
 
         try {

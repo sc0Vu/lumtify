@@ -17,7 +17,7 @@ class RoleRepositoryTest extends TestCase
     public function testGetRole()
     {
         $role = new Role;
-        $repository = new RoleRepository($role);
+        $repository = new RoleRepository();
         $this->assertEquals($repository->getRole("admin"), $role->where("name", "admin")->get());
         $this->assertEquals($repository->getRole("admin", true), $role->where("name", "admin")->with("users")->get());
     }

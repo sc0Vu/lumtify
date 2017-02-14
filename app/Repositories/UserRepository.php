@@ -7,24 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 
 class UserRepository
-{
-    /**
-     * The user model
-     * 
-     * @var App\User
-     */
-    protected $user;
-
-    /**
-     * construct
-     * 
-     * @param User $user
-     */
-	public function __construct(User $user)
-	{
-	    $this->user = $user;
-	}
-    
+{   
     /**
      * create user
      * 
@@ -33,16 +16,17 @@ class UserRepository
      */
     public function create($data)
     {
+        $user = new User;
         $uid = $this->makeUid();
 
-        $this->user->uid = $uid;
-        $this->user->name = $data["name"];
-        $this->user->email = $data["email"];
-        $this->user->password = Hash::make($data["pass"]);
-        $this->user->status = User::STATUS_ACTIVATED;
+        $user->uid = $uid;
+        $user->name = $data["name"];
+        $user->email = $data["email"];
+        $user->password = Hash::make($data["pass"]);
+        $user->status = User::STATUS_ACTIVATED;
         
         try {
-            return $this->user->save();
+            return $user->save();
         } catch (\Illuminate\Database\QueryException $e) {
             return false;
         }
@@ -57,7 +41,7 @@ class UserRepository
 	public function makeUid($length=32)
 	{
 		$uid = Str::random($length);
-		$user = $this->user->where("uid", $uid)->first();
+		$user = User::where("uid", $uid)->first();
 
 		if (empty($user)) {
 			return $uid;
