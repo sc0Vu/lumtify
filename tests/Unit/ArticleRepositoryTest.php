@@ -10,7 +10,7 @@ class ArticleRepositoryTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * Test get article
+     * Test get article.
      *
      * @return void
      */
@@ -24,7 +24,7 @@ class ArticleRepositoryTest extends TestCase
     }
 
     /**
-     * Test get articles
+     * Test get articles.
      *
      * @return void
      */

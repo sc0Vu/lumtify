@@ -7,7 +7,7 @@ use App\Role;
 class RoleRepository
 {
 	/**
-	 * get role users by name
+	 * Get role users by name.
 	 * 
 	 * @param  string $roleName
 	 * @param  boolean $withUsers

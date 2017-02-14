@@ -9,10 +9,10 @@ use App\User;
 class UserRepository
 {   
     /**
-     * create user
+     * Create user.
      * 
      * @param  array $data
-     * @return 
+     * @return  mixed
      */
     public function create($data)
     {
@@ -31,9 +31,21 @@ class UserRepository
             return false;
         }
     }
+
+    /**
+     * Get user.
+     * 
+     * @param  string $uid
+     * @param  array $status
+     * @return  \App\User
+     */
+    public function getUser($uid="", $status=[User::STATUS_ACTIVATED])
+    {
+        return User::where("uid", $uid)->whereIn("status", $status)->first();
+    }
     
     /**
-     * make user uid
+     * Make user uid.
      *
      * @param  integer $length
      * @return string

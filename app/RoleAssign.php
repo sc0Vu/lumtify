@@ -40,7 +40,7 @@ class RoleAssign extends Model
     /**
      * The role relation
      * 
-     * @return App\Role
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function role()
     {
@@ -50,7 +50,7 @@ class RoleAssign extends Model
     /**
      * The user relation
      * 
-     * @return App\User
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {

@@ -15,7 +15,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Gate::policy(\App\Article::class, \App\Policies\ArticlePolicy::class);
+        Gate::policy(\App\User::class, \App\Policies\UserPolicy::class);
     }
 
     /**

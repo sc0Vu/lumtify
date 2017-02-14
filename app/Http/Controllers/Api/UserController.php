@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Gate;
 use Validator;
 use App\User;
 use App\Repositories\UserRepository;
@@ -13,7 +14,7 @@ class UserController extends Controller
     /**
      * The user repository instance.
      * 
-     * @var \App\User\UserRepository
+     * @var \App\Repository\UserRepository
      */
     protected $repository;
 
@@ -28,10 +29,10 @@ class UserController extends Controller
     }
     
     /**
-     * create user api
+     * Create user api.
      * 
-     * @param  Request $request
-     * @return json
+     * @param  \Illuminate\Http\Request $request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
     {
@@ -61,9 +62,64 @@ class UserController extends Controller
             "success" => false
         ], 500);
     }
+
+    /**
+     * Users.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return  \Illuminate\Http\JsonResponse
+     */
+    // public function users(Request $request)
+    // {}
+
+    /**
+     * Read user.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return  \Illuminate\Http\JsonResponse
+     */
+    public function read(Request $request, $uid)
+    {
+        $repository = $this->repository;
+
+        if (!$this->validateUid($uid)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.400"),
+                "success" => false
+            ], 400);
+        }
+        
+        $user = $repository->getUser($uid);
+
+        if (empty($user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.404"),
+                "success" => false
+            ], 404);
+        }
+        if (Gate::denies("read", $user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "user" => $user,
+            "success" => true
+        ]);
+    }
     
     /**
-     * validate create request data
+     * Validate create request data.
      * 
      * @param  array $data
      * @return Validator
@@ -76,5 +132,19 @@ class UserController extends Controller
             "pass" => "required",
             "pass_verify" => "required|same:pass"
         ]);
+    }
+
+    /**
+     * Validate user uid.
+     * 
+     * @param  string $uid
+     * @return boolean
+     */
+    protected function validateUid($uid="")
+    {
+        if (preg_match("/[a-zA-Z0-9]{32}/", $uid)) {
+            return true;
+        }
+        return false;
     }
 }

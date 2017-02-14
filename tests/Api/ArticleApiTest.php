@@ -10,7 +10,7 @@ class ArticleApiTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * Test get article api
+     * Test get article api.
      *
      * @return void
      */
@@ -24,7 +24,7 @@ class ArticleApiTest extends TestCase
     }
 
     /**
-     * Test get articles api
+     * Test get articles api.
      *
      * @return void
      */

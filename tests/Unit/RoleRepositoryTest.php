@@ -10,7 +10,7 @@ class RoleRepositoryTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * Test get role
+     * Test get role.
      *
      * @return void
      */

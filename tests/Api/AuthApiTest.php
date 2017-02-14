@@ -8,7 +8,7 @@ class AuthApiTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * Test login api
+     * Test login api.
      *
      * @return void
      */

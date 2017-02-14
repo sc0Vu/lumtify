@@ -7,7 +7,27 @@ use App\Article;
 class ArticleRepository
 {
 	/**
-	 * get single article
+     * Create article.
+     * 
+     * @param  array $data
+     * @param  \App\User $user
+     * @return 
+     */
+    public function create($data, $user)
+    {
+        $article = new Article;
+
+        $article->user_id = $user->id;
+        
+        try {
+            return $article->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return false;
+        }
+    }
+
+	/**
+	 * Get single article.
 	 * 
 	 * @param  string $link
 	 * @param  integer $status
@@ -25,7 +45,7 @@ class ArticleRepository
 	}
 
 	/**
-	 * get articles
+	 * Get articles.
 	 * 
 	 * @param  integer $page
 	 * @param  integer $limit

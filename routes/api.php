@@ -18,13 +18,14 @@ $app->get('/auth/user', ["middleware" => "api", "uses" => "AuthController@user"]
 
 // articles
 // $app->get('/articles', 'ArticleController@articles');
-// $app->post('/articles', 'ArticleController@update');
-// $app->get('/articles/{link}', 'ArticleController@read')->where(['link' => '/^[a-zA-Z0-9]*$/']);
-// $app->put('/articles/{link}', 'ArticleController@update')->where(['link' => '/^[a-zA-Z0-9]*$/']);
-// $app->delete('/articles/{link}', 'ArticleController@delete')->where(['link' => '/^[a-zA-Z0-9]*$/']);
+// $app->post('/articles', 'ArticleController@create');
+// $app->get('/articles/{link}', 'ArticleController@read');
+// $app->put('/articles/{link}', 'ArticleController@update');
+// $app->delete('/articles/{link}', 'ArticleController@delete');
+
 // users
 // $app->get('/users', 'UserController@users');
-// $app->get('/users{uid}', 'UserController@read')->where(['uid' => '/^[a-zA-Z0-9]{32}$/']);
-// $app->put('/users{uid}', 'UserController@update')->where(['uid' => '/^[a-zA-Z0-9]{32}$/']);
+$app->get('/users/{uid}', 'UserController@read');
+// $app->put('/users/{uid}', 'UserController@update');
 $app->post('/users', "UserController@create");
-// $app->delete('/users{uid}', 'UserController@delete')->where(['uid' => '/^[a-zA-Z0-9]{32}$/']);
+// $app->delete('/users/{uid}', 'UserController@delete');

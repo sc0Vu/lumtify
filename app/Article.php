@@ -56,7 +56,7 @@ class Article extends Model
     /**
      * The author relation
      * 
-     * @return App\User
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function author()
     {

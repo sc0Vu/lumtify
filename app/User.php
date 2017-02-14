@@ -45,7 +45,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        "id", "password"
+        "id", "password", "status"
     ];
 
     public function getJWTIdentifier()
@@ -56,5 +56,53 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    
+    /**
+     * The roles relation.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function roles()
+    {
+        return $this->hasMany("App\RoleAssign", "user_id", "id");
+    }
+
+    /**
+     * The user is admin.
+     * 
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        $roles = $this->roles()->with("role")->get();
+        $isAdmin = false;
+
+        foreach ($roles as &$role) {
+            if ($role->role->name === "admin") {
+                $isAdmin = true;
+                break;
+            }
+        }
+        return $isAdmin;
+    }
+
+    /**
+     * The user is editor.
+     * 
+     * @return boolean
+     */
+    public function isEditor()
+    {
+        $roles = $this->roles()->with("role")->get();
+        $isEditor = false;
+
+        foreach ($roles as &$role) {
+            if ($role->role->name === "editor") {
+                $isEditor = true;
+                break;
+            }
+        }
+        return $isEditor;
     }
 }
