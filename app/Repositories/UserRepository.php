@@ -41,6 +41,9 @@ class UserRepository
      */
     public function getUser($uid="", $status=[User::STATUS_ACTIVATED])
     {
+        if (!is_array($status)) {
+            $status = [$status];
+        }
         return User::where("uid", $uid)->whereIn("status", $status)->first();
     }
     

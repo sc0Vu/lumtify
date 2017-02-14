@@ -52,7 +52,7 @@ class UserRepositoryTest extends TestCase
      */
     public function testGetUser()
     {
-        $user = User::where("status", User::STATUS_ACTIVATED)->first();
+        $user = User::where("status", [User::STATUS_ACTIVATED])->first();
 
         $repository = new UserRepository();
         $result = $repository->getUser($user->uid);
