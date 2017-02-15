@@ -80,14 +80,20 @@ class UserApiTest extends TestCase
         
         if ($user->isAdmin()) {
             $user = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
-            $response = $this->get("/api/users/" . $user->uid);
-            $response->assertResponseStatus(200);
-            $response->seeJson(["success" => true]);
+            
+            if (!empty($user)) {
+                $response = $this->get("/api/users/" . $user->uid);
+                $response->assertResponseStatus(200);
+                $response->seeJson(["success" => true]);
+            }
         } else {
             $user = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
-            $response = $this->get("/api/users/" . $user->uid);
-            $response->assertResponseStatus(403);
-            $response->seeJson(["success" => false]);
+            
+            if (!empty($user)) {
+                $response = $this->get("/api/users/" . $user->uid);
+                $response->assertResponseStatus(403);
+                $response->seeJson(["success" => false]);
+            }
         }
     }
 
