@@ -105,4 +105,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
         return $isEditor;
     }
+
+    /**
+     * Merge data.
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function mergeData($data)
+    {
+        $this->attributes = array_merge($this->attributes, $data);
+    }
 }

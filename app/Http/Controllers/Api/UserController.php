@@ -27,11 +27,20 @@ class UserController extends Controller
     {
         $this->repository = $repository;
     }
+
+    /**
+     * Users.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    // public function users(Request $request)
+    // {}
     
     /**
      * Create user api.
      * 
-     * @param  \Illuminate\Http\Request $request $request
+     * @param \Illuminate\Http\Request $request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
@@ -64,19 +73,10 @@ class UserController extends Controller
     }
 
     /**
-     * Users.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return  \Illuminate\Http\JsonResponse
-     */
-    // public function users(Request $request)
-    // {}
-
-    /**
      * Read user.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return  \Illuminate\Http\JsonResponse
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function read(Request $request, $uid)
     {
@@ -119,9 +119,88 @@ class UserController extends Controller
     }
     
     /**
+     * Update user.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param string $uid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $uid)
+    {
+        $repository = $this->repository;
+
+        if (!$this->validateUid($uid)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.400"),
+                "success" => false
+            ], 400);
+        }
+        
+        $user = $repository->getUser($uid);
+
+        if (empty($user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.404"),
+                "success" => false
+            ], 404);
+        }
+        if (Gate::denies("update", $user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        $data = $request->all();
+        $validator = $this->validateUpdate($data, $user->id);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => $validator->errors(),
+                "msg" => trans("info.failed.validate"),
+                "success" => false
+            ], 400);
+        }
+        if ($repository->update($user, $data)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("info.success.update"),
+                "success" => true
+            ]);
+        }
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => trans("info.failed.update"),
+            "success" => false
+        ], 500);
+    }
+
+    /**
+     * Validate user uid.
+     * 
+     * @param string $uid
+     * @return boolean
+     */
+    protected function validateUid($uid="")
+    {
+        if (preg_match("/[a-zA-Z0-9]{32}/", $uid)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Validate create request data.
      * 
-     * @param  array $data
+     * @param array $data
      * @return Validator
      */
     protected function validateCreate($data)
@@ -135,16 +214,25 @@ class UserController extends Controller
     }
 
     /**
-     * Validate user uid.
+     * Validate update request data.
      * 
-     * @param  string $uid
-     * @return boolean
+     * @param array $data
+     * @param integer $userId
+     * @return Validator
      */
-    protected function validateUid($uid="")
+    protected function validateUpdate($data, $userId)
     {
-        if (preg_match("/[a-zA-Z0-9]{32}/", $uid)) {
-            return true;
+        if (isset($data["pass"]) || isset($data["pass_verify"])) {
+            return Validator::make($data, [
+                "name" => "string|max:255",
+                "email" => "email|string|max:255|unique:users,email,id," . $userId,
+                "pass" => "required",
+                "pass_verify" => "required|same:pass"
+            ]);
         }
-        return false;
+        return Validator::make($data, [
+            "name" => "string|max:255",
+            "email" => "email|string|max:255|unique:users,email,id," . $userId,
+        ]);
     }
 }

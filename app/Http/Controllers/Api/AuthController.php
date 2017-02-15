@@ -31,8 +31,8 @@ class AuthController extends Controller
     /**
      * login user
      * 
-     * @param  Request $request
-     * @return json
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
@@ -78,8 +78,8 @@ class AuthController extends Controller
     /**
      * logout
      * 
-     * @param  Request $request
-     * @return json
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function logout(Request $request)
     {
@@ -95,8 +95,8 @@ class AuthController extends Controller
     /**
      * user
      * 
-     * @param  Request $request
-     * @return json
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function user(Request $request)
     {
@@ -109,11 +109,29 @@ class AuthController extends Controller
             "success" => true
         ]);
     }
+    
+    /**
+     * Refresh token.
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
+    {
+        $token = $this->auth->parseToken();
+        $token = $token->refresh();
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "token" => $token,
+            "success" => true
+        ]);
+    }
 
     /**
      * validate login
      * 
-     * @param  array $data
+     * @param array $data
      * @return Validator
      */
     protected function validateLogin($data)

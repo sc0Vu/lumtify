@@ -61,4 +61,31 @@ class UserRepositoryTest extends TestCase
         $result = $repository->getUser("12345678900987654321");
         $this->assertNull($result);
     }
+
+    /**
+     * Test update.
+     * 
+     * @return boolean
+     */
+    public function testUpdate()
+    {
+        $user = User::where("status", [User::STATUS_ACTIVATED])->first();
+        $repository = new UserRepository();
+        $data = [
+            "name" => "lumtify_user",
+        ];
+        $repository->update($user, $data);
+        $userA = $repository->getUser($user->uid);
+        $this->assertEquals($user, $userA);
+
+        $data["email"] = "test_lumtify@gmail.com";
+        $repository->update($user, $data);
+        $userA = $repository->getUser($user->uid);
+        $this->assertEquals($user, $userA);
+
+        $data["pass"] = "_simple_password_";
+        $repository->update($user, $data);
+        $userA = $repository->getUser($user->uid);
+        $this->assertEquals($user, $userA);
+    }
 }

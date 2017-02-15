@@ -15,6 +15,7 @@
 $app->post('/auth/login', "AuthController@login");
 $app->get('/auth/logout', ["middleware" => "api", "uses" => "AuthController@logout"]);
 $app->get('/auth/user', ["middleware" => "api", "uses" => "AuthController@user"]);
+$app->get('/auth/refresh', ["middleware" => "api", "uses" => "AuthController@refresh"]);
 
 // articles
 // $app->get('/articles', 'ArticleController@articles');
@@ -25,7 +26,7 @@ $app->get('/auth/user', ["middleware" => "api", "uses" => "AuthController@user"]
 
 // users
 // $app->get('/users', 'UserController@users');
-$app->get('/users/{uid}', 'UserController@read');
-// $app->put('/users/{uid}', 'UserController@update');
 $app->post('/users', "UserController@create");
+$app->get('/users/{uid}', 'UserController@read');
+$app->put('/users/{uid}', 'UserController@update');
 // $app->delete('/users/{uid}', 'UserController@delete');

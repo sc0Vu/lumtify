@@ -11,8 +11,8 @@ class UserRepository
     /**
      * Create user.
      * 
-     * @param  array $data
-     * @return  mixed
+     * @param array $data
+     * @return boolean
      */
     public function create($data)
     {
@@ -33,11 +33,36 @@ class UserRepository
     }
 
     /**
+     * Update user.
+     *
+     * @param \App\User $user
+     * @param array $data
+     * @return mixed
+     */
+    public function update(User $user, $data)
+    {
+        if (isset($data["name"])) {
+            $user->name = $data["name"];
+        }
+        if (isset($data["email"])) {
+            $user->email = $data["email"];
+        }
+        if (isset($data["pass"])) {
+            $user->password = Hash::make($data["pass"]);
+        }
+        try {
+            return $user->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return false;
+        }
+    }
+
+    /**
      * Get user.
      * 
-     * @param  string $uid
-     * @param  array $status
-     * @return  \App\User
+     * @param string $uid
+     * @param array $status
+     * @return \App\User
      */
     public function getUser($uid="", $status=[User::STATUS_ACTIVATED])
     {
@@ -50,7 +75,7 @@ class UserRepository
     /**
      * Make user uid.
      *
-     * @param  integer $length
+     * @param integer $length
      * @return string
      */
 	public function makeUid($length=32)

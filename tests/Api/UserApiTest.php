@@ -90,4 +90,48 @@ class UserApiTest extends TestCase
             $response->seeJson(["success" => false]);
         }
     }
+
+    /**
+     * Test put users api.
+     *
+     * @return void
+     */
+    public function testPutUsersApi()
+    {
+        $user = User::where("status", [User::STATUS_ACTIVATED])->first();
+        $response = $this->put("/api/users/" . $user->uid, [
+            "name" => "numtify_test_put"
+        ]);
+        $response->assertResponseStatus(403);
+        $response->seeJson(["success" => false]);
+
+        $this->actingAs($user, "api");
+
+        $response = $this->put("/api/users/" . $user->uid, [
+            "name" => "numtify_test_put"
+        ]);
+        $response->assertResponseStatus(200);
+        $response->seeJson(["success" => true]);
+        
+        $response = $this->put("/api/users/" . $user->uid, [
+            "email" => "numtify_test_put"
+        ]);
+        $response->assertResponseStatus(400);
+        $response->seeJson(["success" => false]);
+
+        $response = $this->put("/api/users/" . $user->uid, [
+            "name" => "numtify",
+            "email" => "numtify@gmail.com",
+            "pass" => "12345",
+        ]);
+        $response->assertResponseStatus(400);
+        $response->seeJson(["success" => false]);
+
+        $response = $this->put("/api/users/" . $user->uid, [
+            "pass" => "12345",
+            "pass_verify" => "12345"
+        ]);
+        $response->assertResponseStatus(200);
+        $response->seeJson(["success" => true]);
+    }
 }
