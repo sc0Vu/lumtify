@@ -69,6 +69,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * The articles relation.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function articles()
+    {
+        return $this->hasMany("App\Article", "user_id", "id");
+    }
+
+    /**
      * The user is admin.
      * 
      * @return boolean

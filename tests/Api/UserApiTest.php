@@ -140,4 +140,35 @@ class UserApiTest extends TestCase
         $response->assertResponseStatus(200);
         $response->seeJson(["success" => true]);
     }
+
+    /**
+     * Test delete users api.
+     *
+     * @return void
+     */
+    public function testDeleteUsersApi()
+    {
+        $user = User::where("status", [User::STATUS_ACTIVATED])->first();
+        $response = $this->delete("/api/users/" . $user->uid);
+        $response->assertResponseStatus(403);
+        $response->seeJson(["success" => false]);
+
+        $this->actingAs($user, "api");
+        
+        $response = $this->delete("/api/users/" . $user->uid);
+        $response->assertResponseStatus(403);
+        $response->seeJson(["success" => false]);
+
+        if ($user->isAdmin()) {
+            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->with("articles")->first();
+            $response = $this->delete("/api/users/" . $userA->uid);
+            $response->assertResponseStatus(200);
+            $response->seeJson(["success" => true]);
+        } else {
+            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->with("articles")->first();
+            $response = $this->delete("/api/users/" . $userA->uid);
+            $response->assertResponseStatus(403);
+            $response->seeJson(["success" => false]);
+        }
+    }
 }

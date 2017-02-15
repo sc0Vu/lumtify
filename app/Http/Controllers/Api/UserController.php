@@ -184,6 +184,60 @@ class UserController extends Controller
     }
 
     /**
+     * Delete user.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param string $uid
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request, $uid)
+    {
+        $repository = $this->repository;
+
+        if (!$this->validateUid($uid)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.400"),
+                "success" => false
+            ], 400);
+        }
+        
+        $user = $repository->getUser($uid);
+
+        if (empty($user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.404"),
+                "success" => false
+            ], 404);
+        }
+        if (Gate::denies("delete", $user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        if ($repository->delete($user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("info.success.delete"),
+                "success" => true
+            ]);
+        }
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => trans("info.failed.delete"),
+            "success" => false
+        ], 500);
+    }
+
+    /**
      * Validate user uid.
      * 
      * @param string $uid

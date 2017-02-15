@@ -88,4 +88,21 @@ class UserRepositoryTest extends TestCase
         $userA = $repository->getUser($user->uid);
         $this->assertEquals($user, $userA);
     }
+
+    /**
+     * Test delete.
+     * 
+     * @return boolean
+     */
+    public function testDelete()
+    {
+        $user = User::where("status", [User::STATUS_ACTIVATED])->first();
+        $repository = new UserRepository();
+        $repository->delete($user);
+        $userA = $repository->getUser($user->uid);
+        $this->assertNull($userA);
+
+        $article = $user->articles()->first();
+        $this->assertNull($article);
+    }
 }

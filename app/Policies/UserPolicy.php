@@ -35,7 +35,9 @@ class UserPolicy
     public function before($user, $ability)
     {
         if ($user->isAdmin()) {
-            return true;
+            if ($ability !== 'delete') {
+                return true;
+            }
         }
         if (empty($this->roles)) {
             $this->roles = $user->roles()->with('role')->get();
@@ -81,6 +83,9 @@ class UserPolicy
      */
     public function delete(User $user, User $userChecked)
     {
+        if ($user->isAdmin() && ($user->id !== $userChecked->id)) {
+            return true;
+        }
         return false;
     }
 }

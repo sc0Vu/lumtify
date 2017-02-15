@@ -33,6 +33,21 @@ class UserRepository
     }
 
     /**
+     * Get user.
+     * 
+     * @param string $uid
+     * @param array $status
+     * @return \App\User
+     */
+    public function getUser($uid="", $status=[User::STATUS_ACTIVATED])
+    {
+        if (!is_array($status)) {
+            $status = [$status];
+        }
+        return User::where("uid", $uid)->whereIn("status", $status)->first();
+    }
+
+    /**
      * Update user.
      *
      * @param \App\User $user
@@ -56,20 +71,27 @@ class UserRepository
             return false;
         }
     }
-
+    
     /**
-     * Get user.
+     * Delete user.
      * 
-     * @param string $uid
-     * @param array $status
-     * @return \App\User
+     * @param User $user
+     * @return boolean
      */
-    public function getUser($uid="", $status=[User::STATUS_ACTIVATED])
+    public function delete(User $user)
     {
-        if (!is_array($status)) {
-            $status = [$status];
+        if (!$user->articles) {
+            $articles = $user->articles()->get();
+        } else {
+            $articles = $user->articles;
         }
-        return User::where("uid", $uid)->whereIn("status", $status)->first();
+        if ($user->forceDelete()) {
+            foreach ($articles as $article) {
+                $article->forceDelete();
+            }
+            return true;
+        }
+        return false;
     }
     
     /**
