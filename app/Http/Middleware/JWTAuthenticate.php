@@ -59,7 +59,7 @@ class JWTAuthenticate
                 "errFor" => [],
                 "msg" => $e->getMessage(),
                 "success" => false
-            ], 500);
+            ], 401);
         }
         return response()->json([
             "errs" => [],

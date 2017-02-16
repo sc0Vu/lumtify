@@ -37,7 +37,7 @@ class UserController extends Controller
     public function users(Request $request)
     {
         $user = new User;
-        
+
         if (Gate::denies("users", $user)) {
             return response()->json([
                 "errs" => [],
@@ -98,12 +98,11 @@ class UserController extends Controller
      * Read user.
      *
      * @param \Illuminate\Http\Request $request
+     * @param string $uid
      * @return \Illuminate\Http\JsonResponse
      */
     public function read(Request $request, $uid)
     {
-        $repository = $this->repository;
-
         if (!$this->validateUid($uid)) {
             return response()->json([
                 "errs" => [],
@@ -113,7 +112,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $repository->read($uid);
+        $user = $this->repository->read($uid);
 
         if (empty($user)) {
             return response()->json([
@@ -149,8 +148,6 @@ class UserController extends Controller
      */
     public function update(Request $request, $uid)
     {
-        $repository = $this->repository;
-
         if (!$this->validateUid($uid)) {
             return response()->json([
                 "errs" => [],
@@ -160,7 +157,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $repository->read($uid);
+        $user = $this->repository->read($uid);
 
         if (empty($user)) {
             return response()->json([
@@ -189,7 +186,7 @@ class UserController extends Controller
                 "success" => false
             ], 400);
         }
-        if ($repository->update($user, $data)) {
+        if ($this->repository->update($user, $data)) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
@@ -214,8 +211,6 @@ class UserController extends Controller
      */
     public function delete(Request $request, $uid)
     {
-        $repository = $this->repository;
-
         if (!$this->validateUid($uid)) {
             return response()->json([
                 "errs" => [],
@@ -225,7 +220,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $repository->read($uid);
+        $user = $this->repository->read($uid);
 
         if (empty($user)) {
             return response()->json([

@@ -58,12 +58,9 @@ class UserRepository
      * @param array $status
      * @return \App\User
      */
-    public function read($uid="", $status=[User::STATUS_ACTIVATED])
+    public function read($uid="", $status=User::STATUS_ACTIVATED)
     {
-        if (!is_array($status)) {
-            $status = [$status];
-        }
-        return User::where("uid", $uid)->whereIn("status", $status)->first();
+        return User::where("uid", $uid)->where("status", $status)->first();
     }
 
     /**

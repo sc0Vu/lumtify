@@ -18,9 +18,9 @@ class ArticleRepositoryTest extends TestCase
     {
         $article = new Article;
         $repository = new ArticleRepository();
-        $this->assertEquals($repository->getArticle("articles80"), $article->where("title", "article80")->first());
-        $this->assertEquals($repository->getArticle("articles80", Article::STATUS_DRAFT), $article->where("title", "article80")->where("status", Article::STATUS_DRAFT)->first());
-        $this->assertEquals($repository->getArticle("articles80", Article::STATUS_PUBLISHED, true), $article->where("title", "article80")->where("status", Article::STATUS_PUBLISHED)->with("author")->first());
+        $this->assertEquals($repository->read("articles80"), $article->where("title", "article80")->first());
+        $this->assertEquals($repository->read("articles80", Article::STATUS_DRAFT), $article->where("title", "article80")->where("status", Article::STATUS_DRAFT)->first());
+        $this->assertEquals($repository->read("articles80", Article::STATUS_PUBLISHED, true), $article->where("title", "article80")->where("status", Article::STATUS_PUBLISHED)->with("author")->first());
     }
 
     /**
@@ -32,7 +32,7 @@ class ArticleRepositoryTest extends TestCase
     {
         $article = new Article;
         $repository = new ArticleRepository();
-        $this->assertEquals($repository->getArticles(1, 10, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]), $article->paginate(10));
-        $this->assertEquals($repository->getArticles(1, 10, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], ["*"], "page", true), $article->with("author")->paginate(10));
+        $result = $repository->articles(10, ["*"], "page", 1, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]);
+        $this->assertEquals(10, count($result));
     }
 }

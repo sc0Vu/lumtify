@@ -7,17 +7,38 @@ use App\Article;
 class ArticleRepository
 {
 	/**
+	 * Get articles.
+	 * 
+	 * @param int $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param int $page
+     * @param array $status
+	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+	 */
+	public function articles($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[Article::STATUS_PUBLISHED])
+	{
+		if (!is_array($status)) {
+			$status = [$status];
+		}
+		return Article::whereIn("status", $status)->with("author")->paginate($perPage, $columns, $pageName, $page);
+	}
+
+	/**
      * Create article.
      * 
      * @param  array $data
-     * @param  \App\User $user
      * @return 
      */
-    public function create($data, $user)
+    public function create($data)
     {
         $article = new Article;
-
-        $article->user_id = $user->id;
+        $article->user_id = $data["user_id"];
+        $article->title = $data["title"];
+        $article->short_description = $data["short_description"];
+        $article->content = $data["content"];
+        $article->thumbnail = $data["thumbnail"];
+        $article->status = $data["status"];
         
         try {
             return $article->save();
@@ -27,40 +48,14 @@ class ArticleRepository
     }
 
 	/**
-	 * Get single article.
+	 * Get article.
 	 * 
 	 * @param  string $link
 	 * @param  integer $status
-	 * @param  boolean $withAuthor
 	 * @return array || null
 	 */
-	public function getArticle($link, $status=Article::STATUS_PUBLISHED, $withAuthor=false)
+	public function read($link, $status=Article::STATUS_PUBLISHED)
 	{
-		$query = Article::where("link", $link)->where("status", $status);
-		                    
-        if ($withAuthor) {
-        	$query->with("author");
-        }
-		return $query->first();
-	}
-
-	/**
-	 * Get articles.
-	 * 
-	 * @param  integer $page
-	 * @param  integer $limit
-	 * @param  array  $status
-	 * @param  array  $columns
-	 * @param  boolean $withAuthor
-	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-	 */
-	public function getArticles($page, $limit, $status=[Article::STATUS_PUBLISHED], $columns=["*"], $pageName="page", $withAuthor=false)
-	{
-		$query = Article::whereIn("status", $status);
-
-		if ($withAuthor) {
-        	$query->with("author");
-        }
-		return $query->paginate($limit, $columns, $pageName, $page);
+		return Article::where("link", $link)->where("status", $status)->with("author")->first();
 	}
 }

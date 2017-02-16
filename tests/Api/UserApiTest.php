@@ -18,12 +18,14 @@ class UserApiTest extends TestCase
         $user = User::where("status", [User::STATUS_ACTIVATED])->first();
 
         $response = $this->get("/api/users");
-        $response->assertResponseStatus(403);
+        $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
         if ($user->isAdmin()) {
-            $this->actingAs($user);
-            $response = $this->get("/api/users?per=10");
+            $token = $this->app['auth']->guard("api")->fromUser($user);
+            $response = $this->get("/api/users?per=10", [
+                'Authorization' => 'Bearer ' . $token
+            ]);
             $response->assertResponseStatus(200);
             $response->seeJson(["success" => true]);
             $result = $response->response->getData(true);
@@ -84,20 +86,24 @@ class UserApiTest extends TestCase
         $user = User::where("status", [User::STATUS_ACTIVATED])->first();
 
         $response = $this->get("/api/users/1234567890");
-        $response->assertResponseStatus(400);
+        $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
         $response = $this->get("/api/users/" . $user->uid);
-        $response->assertResponseStatus(403);
+        $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
-        $this->actingAs($user);
+        $token = $this->app['auth']->guard("api")->fromUser($user);
 
-        $response = $this->get("/api/users/1234567890");
+        $response = $this->get("/api/users/1234567890", [
+            'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertResponseStatus(400);
         $response->seeJson(["success" => false]);
 
-        $response = $this->get("/api/users/" . $user->uid);
+        $response = $this->get("/api/users/" . $user->uid, [
+            'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertResponseStatus(200);
         $response->seeJson(["success" => true]);
         
@@ -105,7 +111,9 @@ class UserApiTest extends TestCase
             $user = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
             
             if (!empty($user)) {
-                $response = $this->get("/api/users/" . $user->uid);
+                $response = $this->get("/api/users/" . $user->uid, [
+                    'Authorization' => 'Bearer ' . $token
+                ]);
                 $response->assertResponseStatus(200);
                 $response->seeJson(["success" => true]);
             }
@@ -113,7 +121,9 @@ class UserApiTest extends TestCase
             $user = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
             
             if (!empty($user)) {
-                $response = $this->get("/api/users/" . $user->uid);
+                $response = $this->get("/api/users/" . $user->uid, [
+                    'Authorization' => 'Bearer ' . $token
+                ]);
                 $response->assertResponseStatus(403);
                 $response->seeJson(["success" => false]);
             }
@@ -131,19 +141,23 @@ class UserApiTest extends TestCase
         $response = $this->put("/api/users/" . $user->uid, [
             "name" => "numtify_test_put"
         ]);
-        $response->assertResponseStatus(403);
+        $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
-        $this->actingAs($user, "api");
+        $token = $this->app['auth']->guard("api")->fromUser($user);
 
         $response = $this->put("/api/users/" . $user->uid, [
             "name" => "numtify_test_put"
+        ], [
+            'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertResponseStatus(200);
         $response->seeJson(["success" => true]);
         
         $response = $this->put("/api/users/" . $user->uid, [
             "email" => "numtify_test_put"
+        ], [
+            'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertResponseStatus(400);
         $response->seeJson(["success" => false]);
@@ -152,6 +166,8 @@ class UserApiTest extends TestCase
             "name" => "numtify",
             "email" => "numtify@gmail.com",
             "pass" => "12345",
+        ], [
+            'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertResponseStatus(400);
         $response->seeJson(["success" => false]);
@@ -159,6 +175,8 @@ class UserApiTest extends TestCase
         $response = $this->put("/api/users/" . $user->uid, [
             "pass" => "12345",
             "pass_verify" => "12345"
+        ], [
+            'Authorization' => 'Bearer ' . $token
         ]);
         $response->assertResponseStatus(200);
         $response->seeJson(["success" => true]);
@@ -173,23 +191,29 @@ class UserApiTest extends TestCase
     {
         $user = User::where("status", [User::STATUS_ACTIVATED])->first();
         $response = $this->delete("/api/users/" . $user->uid);
-        $response->assertResponseStatus(403);
+        $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
-        $this->actingAs($user, "api");
+        $token = $this->app['auth']->guard("api")->fromUser($user);
         
-        $response = $this->delete("/api/users/" . $user->uid);
+        $response = $this->delete("/api/users/" . $user->uid, [], [
+            'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertResponseStatus(403);
         $response->seeJson(["success" => false]);
 
         if ($user->isAdmin()) {
             $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
-            $response = $this->delete("/api/users/" . $userA->uid);
+            $response = $this->delete("/api/users/" . $userA->uid, [], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
             $response->assertResponseStatus(200);
             $response->seeJson(["success" => true]);
         } else {
             $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
-            $response = $this->delete("/api/users/" . $userA->uid);
+            $response = $this->delete("/api/users/" . $userA->uid, [], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
             $response->assertResponseStatus(403);
             $response->seeJson(["success" => false]);
         }

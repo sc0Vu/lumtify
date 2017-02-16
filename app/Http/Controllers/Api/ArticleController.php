@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Log;
 use Gate;
 use Validator;
 use App\Article;
@@ -27,18 +28,49 @@ class ArticleController extends Controller
     {
         $this->repository = $repository;
     }
+
+    /**
+     * Articles.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function articles(Request $request)
+    {
+        $user = new User;
+        
+        if (Gate::denies("users", $user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        $query = $request->query();
+        $page = isset($qurey["page"]) ? (preg_match("/^[\d]*$/", $query["page"]) ? $query["page"] : 1): 1;
+        $per = isset($qurey["per"]) ? (preg_match("/^[\d]*$/", $query["per"]) ? $query["per"] : 10): 10;;
+        $users = $this->repository->users($per, ["*"], "page", $page, [User::STATUS_ACTIVATED, User::STATUS_BANNED]);
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "success" => true,
+            "users" => $users
+        ]);
+    }
     
     /**
-     * create article api.
+     * Create article.
      * 
-     * @param  Request $request
-     * @return json
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
     {
-        $repository = $this->repository;
+        $article = new Article;
 
-        if (Gate::denies("create", $repository)) {
+        if (Gate::denies("create", $article)) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
@@ -57,6 +89,7 @@ class ArticleController extends Controller
                 "success" => false
             ], 400);
         }
+        $repository = $this->repository;
         if ($repository->create($data)) {
             return response()->json([
                 "errs" => [],
@@ -72,20 +105,72 @@ class ArticleController extends Controller
             "success" => false
         ], 500);
     }
+
+    /**
+     * Read article.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $link
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function read(Request $request, $link)
+    {
+        if (!$this->validateLink($link)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.400"),
+                "success" => false
+            ], 400);
+        }
+        
+        $article = $this->repository->read($link);
+
+        if (empty($article)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.404"),
+                "success" => false
+            ], 404);
+        }
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "article" => $article,
+            "success" => true
+        ]);
+    }
     
     /**
-     * validate create request data
+     * Validate create request data.
      * 
-     * @param  array $data
+     * @param array $data
      * @return Validator
      */
     protected function validateCreate($data)
     {
         return Validator::make($data, [
-            "name" => "required|string|max:255",
-            "email" => "required|email|string|max:255|unique:users,email",
-            "pass" => "required",
-            "pass_verify" => "required|same:pass"
+            "title" => "required|string|max:255",
+            "short_description" => "required|email|string|max:255|unique:users,email",
+            "content" => "required",
+            "thumbnail" => "required",
+            "status" => "required|same:pass"
         ]);
+    }
+
+    /**
+     * Validate link.
+     * 
+     * @param string $link
+     * @return boolean
+     */
+    public function validateLink($link)
+    {
+        if (!preg_match("/[+&=%'\"\\\s]+/", $link)) {
+            return true;
+        }
+        return false;
     }
 }
