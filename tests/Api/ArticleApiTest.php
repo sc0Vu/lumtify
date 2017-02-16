@@ -2,12 +2,87 @@
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
+use App\User;
 use App\Article;
 use App\Repositories\ArticleRepository;
 
 class ArticleApiTest extends TestCase
 {
     use DatabaseTransactions;
+    
+    /**
+     * Test get articles api.
+     *
+     * @return void
+     */
+    public function testGetArticles()
+    {
+        $response = $this->get("/api/articles");
+        $response->assertResponseStatus(200);
+        $response->seeJson(["success" => true]);
+    }
+
+    /**
+     * Test post articles api.
+     *
+     * @return void
+     */
+    public function testPostArticlesApi()
+    {
+        $user = User::where("status", User::STATUS_ACTIVATED)->first();
+        $response = $this->post("/api/articles", [
+            "title" => "Hello lumtify!",
+            "link" => "yotest",
+            "short_description" => "Hello lumtify!",
+            "content" => "Hello lumtify!",
+            "thumbnail" => "https://blog.ptrgl.com",
+            "status" => 1
+        ]);
+        $response->assertResponseStatus(401);
+        $response->seeJson(["success" => false]);
+
+        $token = $this->app["auth"]->guard("api")->fromUser($user);
+        if ($user->isAdmin() || $user->isEditor()) {
+            $response = $this->post("/api/articles", [
+                "title" => "Hello lumtify!",
+                "link" => "yotest",
+                "short_description" => "Hello lumtify!",
+                "content" => "Hello lumtify!",
+                "thumbnail" => "https://blog.ptrgl.com",
+                "status" => 4
+            ], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(400);
+            $response->seeJson(["success" => false]);
+
+            $response = $this->post("/api/articles", [
+                "title" => "Hello lumtify!",
+                "link" => "yotest",
+                "short_description" => "Hello lumtify!",
+                "content" => "Hello lumtify!",
+                "thumbnail" => "https://blog.ptrgl.com",
+                "status" => 1
+            ], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(200);
+            $response->seeJson(["success" => true]);
+        } else {
+            $response = $this->post("/api/articles", [
+                "title" => "Hello lumtify!",
+                "link" => "yotest",
+                "short_description" => "Hello lumtify!",
+                "content" => "Hello lumtify!",
+                "thumbnail" => "https://blog.ptrgl.com",
+                "status" => 1
+            ], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(403);
+            $response->seeJson(["success" => false]);
+        }
+    }
 
     /**
      * Test get article api.
@@ -30,17 +105,4 @@ class ArticleApiTest extends TestCase
         $response->assertResponseStatus(200);
         $response->seeJson(["success" => true]);
     }
-
-    /**
-     * Test get articles api.
-     *
-     * @return void
-     */
-    // public function testGetArticles()
-    // {
-    //     $article = new Article;
-    //     $repository = new ArticleRepository($article);
-    //     $this->assertEquals($repository->getArticles(1, 10, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]), $article->paginate(10));
-    //     $this->assertEquals($repository->getArticles(1, 10, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], ["*"], "page", true), $article->with("author")->paginate(10));
-    // }
 }

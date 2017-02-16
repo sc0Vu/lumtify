@@ -22,7 +22,7 @@ class UserApiTest extends TestCase
         $response->seeJson(["success" => false]);
 
         if ($user->isAdmin()) {
-            $token = $this->app['auth']->guard("api")->fromUser($user);
+            $token = $this->app["auth"]->guard("api")->fromUser($user);
             $response = $this->get("/api/users?per=10", [
                 'Authorization' => 'Bearer ' . $token
             ]);
@@ -93,7 +93,7 @@ class UserApiTest extends TestCase
         $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
-        $token = $this->app['auth']->guard("api")->fromUser($user);
+        $token = $this->app["auth"]->guard("api")->fromUser($user);
 
         $response = $this->get("/api/users/1234567890", [
             'Authorization' => 'Bearer ' . $token
@@ -144,7 +144,7 @@ class UserApiTest extends TestCase
         $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
-        $token = $this->app['auth']->guard("api")->fromUser($user);
+        $token = $this->app["auth"]->guard("api")->fromUser($user);
 
         $response = $this->put("/api/users/" . $user->uid, [
             "name" => "numtify_test_put"
@@ -194,7 +194,7 @@ class UserApiTest extends TestCase
         $response->assertResponseStatus(401);
         $response->seeJson(["success" => false]);
 
-        $token = $this->app['auth']->guard("api")->fromUser($user);
+        $token = $this->app["auth"]->guard("api")->fromUser($user);
         
         $response = $this->delete("/api/users/" . $user->uid, [], [
             'Authorization' => 'Bearer ' . $token

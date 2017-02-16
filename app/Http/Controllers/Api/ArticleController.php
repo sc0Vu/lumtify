@@ -37,26 +37,16 @@ class ArticleController extends Controller
      */
     public function articles(Request $request)
     {
-        $user = new User;
-        
-        if (Gate::denies("users", $user)) {
-            return response()->json([
-                "errs" => [],
-                "errFor" => [],
-                "msg" => trans("http.status.403"),
-                "success" => false
-            ], 403);
-        }
         $query = $request->query();
         $page = isset($qurey["page"]) ? (preg_match("/^[\d]*$/", $query["page"]) ? $query["page"] : 1): 1;
         $per = isset($qurey["per"]) ? (preg_match("/^[\d]*$/", $query["per"]) ? $query["per"] : 10): 10;;
-        $users = $this->repository->users($per, ["*"], "page", $page, [User::STATUS_ACTIVATED, User::STATUS_BANNED]);
+        $articles = $this->repository->articles($per, ["*"], "page", $page, [Article::STATUS_PUBLISHED]);
         return response()->json([
             "errs" => [],
             "errFor" => [],
             "msg" => "",
             "success" => true,
-            "users" => $users
+            "articles" => $articles
         ]);
     }
     
@@ -89,8 +79,7 @@ class ArticleController extends Controller
                 "success" => false
             ], 400);
         }
-        $repository = $this->repository;
-        if ($repository->create($data)) {
+        if ($this->repository->create($data)) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
@@ -153,10 +142,11 @@ class ArticleController extends Controller
     {
         return Validator::make($data, [
             "title" => "required|string|max:255",
+            "link" => "required|alpha_dash",
             "short_description" => "required|email|string|max:255|unique:users,email",
             "content" => "required",
-            "thumbnail" => "required",
-            "status" => "required|same:pass"
+            "thumbnail" => "required|max:255|active_url",
+            "status" => "required|same:pass|in:1,2,3"
         ]);
     }
 
