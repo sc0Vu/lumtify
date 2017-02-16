@@ -25,7 +25,7 @@ $app->get('/auth/refresh', ["middleware" => "api", "uses" => "AuthController@ref
 // $app->delete('/articles/{link}', 'ArticleController@delete');
 
 // users
-// $app->get('/users', 'UserController@users');
+$app->get('/users', 'UserController@users');
 $app->post('/users', "UserController@create");
 $app->get('/users/{uid}', 'UserController@read');
 $app->put('/users/{uid}', 'UserController@update');

@@ -7,6 +7,29 @@ use App\User;
 class UserApiTest extends TestCase
 {
     use DatabaseTransactions;
+    
+    /**
+     * Test get users api.
+     * 
+     * @return void
+     */
+    public function testGetUsersApi()
+    {
+        $user = User::where("status", [User::STATUS_ACTIVATED])->first();
+
+        $response = $this->get("/api/users");
+        $response->assertResponseStatus(403);
+        $response->seeJson(["success" => false]);
+
+        if ($user->isAdmin()) {
+            $this->actingAs($user);
+            $response = $this->get("/api/users?per=10");
+            $response->assertResponseStatus(200);
+            $response->seeJson(["success" => true]);
+            $result = $response->response->getData(true);
+            $this->assertEquals(count($result["users"]["data"]), 10);
+        }
+    }
 
     /**
      * Test post users api.
@@ -52,11 +75,11 @@ class UserApiTest extends TestCase
     }
 
     /**
-     * Test get users api.
+     * Test get user api.
      * 
      * @return boolean
      */
-    public function testGetUsersApi()
+    public function testGetUserApi()
     {
         $user = User::where("status", [User::STATUS_ACTIVATED])->first();
 
@@ -160,12 +183,12 @@ class UserApiTest extends TestCase
         $response->seeJson(["success" => false]);
 
         if ($user->isAdmin()) {
-            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->with("articles")->first();
+            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
             $response = $this->delete("/api/users/" . $userA->uid);
             $response->assertResponseStatus(200);
             $response->seeJson(["success" => true]);
         } else {
-            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->with("articles")->first();
+            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
             $response = $this->delete("/api/users/" . $userA->uid);
             $response->assertResponseStatus(403);
             $response->seeJson(["success" => false]);

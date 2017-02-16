@@ -34,8 +34,30 @@ class UserController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    // public function users(Request $request)
-    // {}
+    public function users(Request $request)
+    {
+        $user = new User;
+        
+        if (Gate::denies("users", $user)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        $query = $request->query();
+        $page = isset($qurey["page"]) ? (preg_match("/^[\d]*$/", $query["page"]) ? $query["page"] : 1): 1;
+        $per = isset($qurey["per"]) ? (preg_match("/^[\d]*$/", $query["per"]) ? $query["per"] : 10): 10;;
+        $users = $this->repository->users($per, ["*"], "page", $page, [User::STATUS_ACTIVATED, User::STATUS_BANNED]);
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => "",
+            "success" => true,
+            "users" => $users
+        ]);
+    }
     
     /**
      * Create user api.
@@ -91,7 +113,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $repository->getUser($uid);
+        $user = $repository->read($uid);
 
         if (empty($user)) {
             return response()->json([
@@ -138,7 +160,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $repository->getUser($uid);
+        $user = $repository->read($uid);
 
         if (empty($user)) {
             return response()->json([
@@ -203,7 +225,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $repository->getUser($uid);
+        $user = $repository->read($uid);
 
         if (empty($user)) {
             return response()->json([

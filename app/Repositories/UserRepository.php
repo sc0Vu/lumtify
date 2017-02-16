@@ -8,7 +8,25 @@ use DB;
 use App\User;
 
 class UserRepository
-{   
+{
+    /**
+     * Get users.
+     * 
+     * @param int $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param int $page
+     * @param array $status
+     * @return \App\User
+     */
+    public function users($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[User::STATUS_ACTIVATED])
+    {
+        if (!is_array($status)) {
+            $status = [$status];
+        }
+        return User::whereIn("status", $status)->paginate($perPage, $columns, $pageName, $page);
+    }
+
     /**
      * Create user.
      * 
@@ -40,7 +58,7 @@ class UserRepository
      * @param array $status
      * @return \App\User
      */
-    public function getUser($uid="", $status=[User::STATUS_ACTIVATED])
+    public function read($uid="", $status=[User::STATUS_ACTIVATED])
     {
         if (!is_array($status)) {
             $status = [$status];

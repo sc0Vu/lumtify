@@ -23,6 +23,18 @@ class UserRepositoryTest extends TestCase
     }
 
     /**
+     * Test users.
+     * 
+     * @return boolean
+     */
+    public function testUsers()
+    {
+        $repository = new UserRepository();
+        $result = $repository->users(10);
+        $this->assertEquals(count($result), 10);
+    }
+
+    /**
      * Test create.
      * 
      * @return boolean
@@ -50,15 +62,15 @@ class UserRepositoryTest extends TestCase
      * 
      * @return boolean
      */
-    public function testGetUser()
+    public function testRead()
     {
         $user = User::where("status", [User::STATUS_ACTIVATED])->first();
 
         $repository = new UserRepository();
-        $result = $repository->getUser($user->uid);
+        $result = $repository->read($user->uid);
         $this->assertEquals($result, $user);
 
-        $result = $repository->getUser("12345678900987654321");
+        $result = $repository->read("12345678900987654321");
         $this->assertNull($result);
     }
 
@@ -75,17 +87,17 @@ class UserRepositoryTest extends TestCase
             "name" => "lumtify_user",
         ];
         $repository->update($user, $data);
-        $userA = $repository->getUser($user->uid);
+        $userA = $repository->read($user->uid);
         $this->assertEquals($user, $userA);
 
         $data["email"] = "test_lumtify@gmail.com";
         $repository->update($user, $data);
-        $userA = $repository->getUser($user->uid);
+        $userA = $repository->read($user->uid);
         $this->assertEquals($user, $userA);
 
         $data["pass"] = "_simple_password_";
         $repository->update($user, $data);
-        $userA = $repository->getUser($user->uid);
+        $userA = $repository->read($user->uid);
         $this->assertEquals($user, $userA);
     }
 
@@ -99,7 +111,7 @@ class UserRepositoryTest extends TestCase
         $user = User::where("status", [User::STATUS_ACTIVATED])->first();
         $repository = new UserRepository();
         $this->assertTrue($repository->delete($user));
-        $userA = $repository->getUser($user->uid);
+        $userA = $repository->read($user->uid);
         $this->assertNull($userA);
 
         $article = $user->articles()->first();

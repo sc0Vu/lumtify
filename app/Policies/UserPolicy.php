@@ -28,9 +28,9 @@ class UserPolicy
     /**
      * before all check
      * 
-     * @param  App\User $user
-     * @param   string $ability
-     * @return  boolean
+     * @param App\User $user
+     * @param string $ability
+     * @return boolean
      */
     public function before($user, $ability)
     {
@@ -43,13 +43,25 @@ class UserPolicy
             $this->roles = $user->roles()->with('role')->get();
         }
     }
+
+    /**
+     * The users policy.
+     * 
+     * @param User $user
+     * @param User $userChecked
+     * @return boolean
+     */
+    public function users(User $user, User $userChecked)
+    {
+        return false;
+    }
     
     /**
      * The read user policy.
      * 
-     * @param  User  $user
-     * @param  User  $userChecked
-     * @return  boolean
+     * @param User $user
+     * @param User $userChecked
+     * @return boolean
      */
     public function read(User $user, User $userChecked)
     {
@@ -62,9 +74,9 @@ class UserPolicy
     /**
      * The update user policy.
      * 
-     * @param  User  $user
-     * @param  User  $userChecked
-     * @return  boolean
+     * @param User $user
+     * @param User $userChecked
+     * @return boolean
      */
     public function update(User $user, User $userChecked)
     {
@@ -77,9 +89,9 @@ class UserPolicy
     /**
      * The delete user policy.
      * 
-     * @param  User  $user
-     * @param  User  $userChecked
-     * @return  boolean
+     * @param User $user
+     * @param User $userChecked
+     * @return boolean
      */
     public function delete(User $user, User $userChecked)
     {
