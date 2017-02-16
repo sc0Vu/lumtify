@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
         $user = new User;
         $repository = new UserRepository($user);
 
-        for ($i=1; $i<=3; $i++) {
+        for ($i=1; $i<=80; $i++) {
         	$status = rand(1, 2);
             $uid = $repository->makeUid(32);
         	$users[] =[
