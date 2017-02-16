@@ -21,6 +21,7 @@ class UserController extends Controller
     /**
      * Create a new controller instance.
      *
+     * @param \App\Repositories\UserRepository $repository
      * @return void
      */
     public function __construct(UserRepository $repository)

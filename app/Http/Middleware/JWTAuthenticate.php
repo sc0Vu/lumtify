@@ -17,7 +17,7 @@ class JWTAuthenticate
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
+     * @param  \Tymon\JWTAuth\JWTAuth  $auth
      * @return void
      */
     public function __construct(JWTAuth $auth)

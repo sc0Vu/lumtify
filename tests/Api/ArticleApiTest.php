@@ -29,7 +29,7 @@ class ArticleApiTest extends TestCase
      */
     public function testPostArticlesApi()
     {
-        $user = User::where("status", User::STATUS_ACTIVATED)->first();
+        $user = User::where("id", 1)->first();
         $response = $this->post("/api/articles", [
             "title" => "Hello lumtify!",
             "link" => "yotest",

@@ -97,8 +97,11 @@ class UserRepository
     public function delete(User $user)
     {
         DB::beginTransaction();
-        $deletedCount = $user->articles()->delete();
+        $articles = $user->articles();
 
+        if ($articles) {
+            $articles->delete();
+        }
         if ($user->delete()) {
             DB::commit();
             return true;

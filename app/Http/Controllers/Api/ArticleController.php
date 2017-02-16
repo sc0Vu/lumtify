@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\JWTAuth;
 use Log;
 use Gate;
 use Validator;
@@ -20,13 +21,23 @@ class ArticleController extends Controller
     protected $repository;
 
     /**
+     * The authentication guard factory instance.
+     *
+     * @var \Tymon\JWTAuth\JWTAuth
+     */
+    protected $auth;
+
+    /**
      * Create a new controller instance.
      *
+     * @param \App\Repositories\ArticleRepository $repository
+     * @param \Tymon\JWTAuth\JWTAuth  $auth
      * @return void
      */
-    public function __construct(ArticleRepository $repository)
+    public function __construct(ArticleRepository $repository, JWTAuth $auth)
     {
         $this->repository = $repository;
+        $this->auth = $auth;
     }
 
     /**
@@ -79,6 +90,9 @@ class ArticleController extends Controller
                 "success" => false
             ], 400);
         }
+
+        $data["user_id"] = $this->auth->user()->id;
+
         if ($this->repository->create($data)) {
             return response()->json([
                 "errs" => [],
@@ -143,10 +157,10 @@ class ArticleController extends Controller
         return Validator::make($data, [
             "title" => "required|string|max:255",
             "link" => "required|alpha_dash",
-            "short_description" => "required|email|string|max:255|unique:users,email",
+            "short_description" => "required|string|max:255|unique:users,email",
             "content" => "required",
             "thumbnail" => "required|max:255|active_url",
-            "status" => "required|same:pass|in:1,2,3"
+            "status" => "required|in:1,2,3"
         ]);
     }
 

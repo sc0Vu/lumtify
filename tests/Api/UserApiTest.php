@@ -201,16 +201,15 @@ class UserApiTest extends TestCase
         ]);
         $response->assertResponseStatus(403);
         $response->seeJson(["success" => false]);
+        $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
 
         if ($user->isAdmin()) {
-            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
             $response = $this->delete("/api/users/" . $userA->uid, [], [
                 'Authorization' => 'Bearer ' . $token
             ]);
             $response->assertResponseStatus(200);
             $response->seeJson(["success" => true]);
         } else {
-            $userA = User::where("status", [User::STATUS_ACTIVATED])->where("uid", "!=", $user->uid)->first();
             $response = $this->delete("/api/users/" . $userA->uid, [], [
                 'Authorization' => 'Bearer ' . $token
             ]);
