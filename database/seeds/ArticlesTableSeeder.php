@@ -17,7 +17,7 @@ class ArticlesTableSeeder extends Seeder
         $now = new Carbon;
 
         for ($i=1; $i<=80; $i++) {
-        	$user = rand(1, 2);
+        	$user = rand(1, 3);
         	$status = rand(1, 3);
         	$articles[] = [
                 "id" => $i,

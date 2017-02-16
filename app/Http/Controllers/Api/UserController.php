@@ -239,7 +239,7 @@ class UserController extends Controller
                 "success" => false
             ], 403);
         }
-        if ($repository->delete($user)) {
+        if ($this->repository->delete($user)) {
             return response()->json([
                 "errs" => [],
                 "errFor" => [],
