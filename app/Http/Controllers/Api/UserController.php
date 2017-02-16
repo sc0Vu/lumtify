@@ -221,7 +221,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $this->repository->read($uid);
+        $user = $this->repository->read($uid, [User::STATUS_BANNED, User::STATUS_ACTIVATED]);
 
         if (empty($user)) {
             return response()->json([

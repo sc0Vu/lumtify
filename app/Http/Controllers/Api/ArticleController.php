@@ -227,7 +227,7 @@ class ArticleController extends Controller
             ], 400);
         }
         
-        $article = $this->repository->read($link);
+        $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]);
 
         if (empty($article)) {
             return response()->json([

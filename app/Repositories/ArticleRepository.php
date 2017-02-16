@@ -58,7 +58,10 @@ class ArticleRepository
 	 */
 	public function read($link, $status=Article::STATUS_PUBLISHED)
 	{
-		return Article::where("link", $link)->where("status", $status)->with("author")->first();
+		if (!is_array($status)) {
+			$status = [$status];
+		}
+		return Article::where("link", $link)->whereIn("status", $status)->with("author")->first();
 	}
 
 	/**
