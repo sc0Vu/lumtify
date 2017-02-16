@@ -26,7 +26,7 @@ class Article extends Model
      * 
      * @var string
      */
-    public $primary = "link";
+    public $primary = "id";
     
     /**
      * The table
@@ -50,7 +50,7 @@ class Article extends Model
      * @var array
      */
     protected $hidden = [
-        "user_id", "status"
+        "id", "user_id", "status"
     ];
 
     /**

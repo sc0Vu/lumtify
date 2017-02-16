@@ -20,6 +20,7 @@ class ArticlesTableSeeder extends Seeder
         	$user = rand(1, 2);
         	$status = rand(1, 3);
         	$articles[] = [
+                "id" => $i,
         	    "title" => "article #" . $i,
         	    "short_description" => "article short description " . $i,
         	    "content" => "article content " . $i,

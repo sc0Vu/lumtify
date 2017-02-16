@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use DB;
 use App\User;
 
 class UserRepository
@@ -80,17 +81,14 @@ class UserRepository
      */
     public function delete(User $user)
     {
-        if (!$user->articles) {
-            $articles = $user->articles()->get();
-        } else {
-            $articles = $user->articles;
-        }
-        if ($user->forceDelete()) {
-            foreach ($articles as $article) {
-                $article->forceDelete();
-            }
+        DB::beginTransaction();
+        $deletedCount = $user->articles()->delete();
+
+        if ($user->delete()) {
+            DB::commit();
             return true;
         }
+        DB::rollback();
         return false;
     }
     
