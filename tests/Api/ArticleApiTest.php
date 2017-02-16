@@ -42,6 +42,7 @@ class ArticleApiTest extends TestCase
         $response->seeJson(["success" => false]);
 
         $token = $this->app["auth"]->guard("api")->fromUser($user);
+
         if ($user->isAdmin() || $user->isEditor()) {
             $response = $this->post("/api/articles", [
                 "title" => "Hello lumtify!",
@@ -104,5 +105,71 @@ class ArticleApiTest extends TestCase
         $response = $this->get("/api/articles/" . $article->link);
         $response->assertResponseStatus(200);
         $response->seeJson(["success" => true]);
+    }
+
+    /**
+     * Test put articles api.
+     *
+     * @return void
+     */
+    public function testPutArticlesApi()
+    {
+        $user = User::where("id", 1)->first();
+        $article = $user->articles()->where("status", Article::STATUS_PUBLISHED)->first();
+        $response = $this->put("/api/articles/" . $article->link, [
+            "title" => "Hello lumtify!",
+        ]);
+        $response->assertResponseStatus(401);
+        $response->seeJson(["success" => false]);
+
+        $token = $this->app["auth"]->guard("api")->fromUser($user);
+
+        if ($user->isAdmin() || $user->isEditor()) {
+            $response = $this->put("/api/articles/" . $article->link, [
+                "title" => "Hello lumtify!",
+            ], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(200);
+            $response->seeJson(["success" => true]);
+        } else {
+            $response = $this->put("/api/articles/" . $article->link, [
+                "title" => "Hello lumtify!",
+            ], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(403);
+            $response->seeJson(["success" => false]);
+        }
+    }
+
+    /**
+     * Test delete articles api.
+     *
+     * @return void
+     */
+    public function testDeleteArticlesApi()
+    {
+        $user = User::where("id", 1)->first();
+        $article = $user->articles()->where("status", Article::STATUS_PUBLISHED)->first();
+        $response = $this->delete("/api/articles/" . $article->link);
+        $response->assertResponseStatus(401);
+        $response->seeJson(["success" => false]);
+
+        $token = $this->app["auth"]->guard("api")->fromUser($user);
+
+        if ($user->isAdmin() || $user->isEditor()) {
+            $response = $this->delete("/api/articles/" . $article->link, [], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(200);
+            $response->seeJson(["success" => true]);
+        } else {
+            $response = $this->delete("/api/articles/" . $article->link, [], [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(403);
+            $response->seeJson(["success" => false]);
+        }
     }
 }

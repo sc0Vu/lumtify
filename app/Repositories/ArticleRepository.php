@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use DB;
 use App\Article;
 
 class ArticleRepository
@@ -28,7 +29,7 @@ class ArticleRepository
      * Create article.
      * 
      * @param array $data
-     * @return 
+     * @return boolean
      */
     public function create($data)
     {
@@ -63,9 +64,9 @@ class ArticleRepository
 	/**
      * Update article.
      *
-     * @param App\Article $article
+     * @param \App\Article $article
      * @param array $data
-     * @return 
+     * @return boolean
      */
     public function update(Article $article, $data)
     {
@@ -92,5 +93,23 @@ class ArticleRepository
         } catch (\Illuminate\Database\QueryException $e) {
             return false;
         }
+    }
+
+    /**
+     * Delete article.
+     * 
+     * @param \App\Article $article
+     * @return boolean
+     */
+    public function delete(Article $article)
+    {
+    	DB::beginTransaction();
+
+    	if ($article->delete()) {
+    		DB::commit();
+    		return true;
+    	}
+    	DB::rollback();
+    	return false;
     }
 }

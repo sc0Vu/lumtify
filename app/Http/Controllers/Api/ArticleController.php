@@ -145,7 +145,122 @@ class ArticleController extends Controller
             "success" => true
         ]);
     }
+
+    /**
+     * Update article.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $link
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $link)
+    {
+        if (!$this->validateLink($link)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.400"),
+                "success" => false
+            ], 400);
+        }
+        
+        $article = $this->repository->read($link);
+
+        if (empty($article)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.404"),
+                "success" => false
+            ], 404);
+        }
+        if (Gate::denies("update", $article)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        $data = $request->all();
+        $validator = $this->validateUpdate($data, $article->link);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => $validator->errors(),
+                "msg" => trans("info.failed.validate"),
+                "success" => false
+            ], 400);
+        }
+        if ($this->repository->update($article, $data)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("info.success.update"),
+                "success" => true
+            ]);
+        }
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => trans("info.failed.update"),
+            "success" => false
+        ], 500);
+    }
     
+    /**
+     * Delete article.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string $link
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request, $link)
+    {
+        if (!$this->validateLink($link)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.400"),
+                "success" => false
+            ], 400);
+        }
+        
+        $article = $this->repository->read($link);
+
+        if (empty($article)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.404"),
+                "success" => false
+            ], 404);
+        }
+        if (Gate::denies("delete", $article)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("http.status.403"),
+                "success" => false
+            ], 403);
+        }
+        if ($this->repository->delete($article)) {
+            return response()->json([
+                "errs" => [],
+                "errFor" => [],
+                "msg" => trans("info.success.delete"),
+                "success" => true
+            ]);
+        }
+        return response()->json([
+            "errs" => [],
+            "errFor" => [],
+            "msg" => trans("info.failed.delete"),
+            "success" => false
+        ], 500);
+    }
+
     /**
      * Validate create request data.
      * 
@@ -156,11 +271,30 @@ class ArticleController extends Controller
     {
         return Validator::make($data, [
             "title" => "required|string|max:255",
-            "link" => "required|alpha_dash",
+            "link" => "required|alpha_dash|unique:articles,link",
             "short_description" => "required|string|max:255|unique:users,email",
             "content" => "required",
             "thumbnail" => "required|max:255|active_url",
             "status" => "required|in:1,2,3"
+        ]);
+    }
+
+    /**
+     * Validate update request data.
+     * 
+     * @param array $data
+     * @param integer $articleId
+     * @return Validator
+     */
+    protected function validateUpdate($data, $articleId)
+    {
+        return Validator::make($data, [
+            "title" => "string|max:255",
+            "link" => "alpha_dash|unique:articles,link,id," . $articleId,
+            "short_description" => "string|max:255|unique:users,email",
+            "content" => "",
+            "thumbnail" => "max:255|active_url",
+            "status" => "in:1,2,3"
         ]);
     }
 

@@ -21,8 +21,8 @@ $app->get('/auth/refresh', ['middleware' => 'api', 'uses' => 'AuthController@ref
 $app->get('/articles', 'ArticleController@articles');
 $app->post('/articles', ['middleware' => 'api', 'uses' => 'ArticleController@create']);
 $app->get('/articles/{link}', 'ArticleController@read');
-// $app->put('/articles/{link}', ['middleware' => 'api', 'uses' => 'ArticleController@update']);
-// $app->delete('/articles/{link}', ['middleware' => 'api', 'uses' => 'ArticleController@delete']);
+$app->put('/articles/{link}', ['middleware' => 'api', 'uses' => 'ArticleController@update']);
+$app->delete('/articles/{link}', ['middleware' => 'api', 'uses' => 'ArticleController@delete']);
 
 // users
 $app->get('/users', ['middleware' => 'api', 'uses' => 'UserController@users']);

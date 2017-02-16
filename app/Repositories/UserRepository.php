@@ -91,7 +91,7 @@ class UserRepository
     /**
      * Delete user.
      * 
-     * @param User $user
+     * @param \App\User $user
      * @return boolean
      */
     public function delete(User $user)

@@ -54,4 +54,35 @@ class ArticleRepositoryTest extends TestCase
         $this->assertEquals($repository->read("articles80", Article::STATUS_DRAFT), $article->where("title", "article80")->where("status", Article::STATUS_DRAFT)->first());
         $this->assertEquals($repository->read("articles80", Article::STATUS_PUBLISHED, true), $article->where("title", "article80")->where("status", Article::STATUS_PUBLISHED)->with("author")->first());
     }
+
+    /**
+     * Test update article.
+     * 
+     * @return void
+     */
+    public function testUpdate()
+    {
+        $article = Article::first();
+        $repository = new ArticleRepository();
+        $this->assertTrue($repository->update($article, [
+            "title" => "Hello lumtify!",
+            "link" => "yotest",
+            "short_description" => "Hello lumtify!",
+            "content" => "Hello lumtify!",
+            "thumbnail" => "https://blog.ptrgl.com",
+            "status" => 1
+        ]));
+    }
+
+    /**
+     * Test delete article.
+     * 
+     * @return void
+     */
+    public function testDelete()
+    {
+        $article = Article::first();
+        $repository = new ArticleRepository();
+        $this->assertTrue($repository->delete($article));
+    }
 }
