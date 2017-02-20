@@ -10,3 +10,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
+$app->get("/", "HomeController@index");
+
+$app->get("/about", "HomeController@index");

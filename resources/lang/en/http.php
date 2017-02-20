@@ -2,8 +2,9 @@
 
 return [
     "status" => [
-        404 => "Not Found",
+        404 => "Not found",
         405 => "Method not allowed",
-        429 => "Too many requests!"
+        429 => "Too many requests",
+        500 => "Server error"
     ]
 ];
