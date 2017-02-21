@@ -12,6 +12,10 @@ lumtify is a blog cms build with lumen and vuetify
 PHP
 
     composer install
+    
+    touch database/lumtify.sqlite
+
+    php artisan migrate
 
 Frontend
     
