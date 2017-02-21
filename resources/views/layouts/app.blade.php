@@ -21,27 +21,11 @@
     <![endif]-->
 </head>
 <body>
-    <v-app id="wrapper" top-navbar>
-        <v-toolbar>
-            <v-toolbar-title>Lumtify</v-toolbar-title>
-            <v-toolbar-items>
-                <v-menu bottom origin="top right" transition="v-scale-transition">
-                    <v-btn dark icon slot="activator">
-                        <v-icon>more_vert</v-icon>
-                    </v-btn>
-                    <v-list>
-                        <v-list-item>
-                            <v-list-tile>
-                                <v-list-tile-title>Log Out</v-list-tile-title>
-                            </v-list-tile>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
-            </v-toolbar-items>
-        </v-toolbar>
+    <v-app id="app" top-navbar>
+        <page-header></page-header>
         <main>
             <v-content>
-                <v-container fluid>
+                <v-container>
                     <transition appear>
                         <router-view></router-view>
                     </transition>

@@ -15,13 +15,15 @@ PHP
 
 Frontend
     
-    npm install
+    npm install // yarn install
+
+    gulp
     
 ## Test
 
 PHP
 
-    mv .env.example .env && touch storage/database/lumtify.sqlite && php artisan migrate --seed
+    mv .env.example .env && touch database/lumtify.sqlite && php artisan migrate --seed
 
     vendor/bin/phpunit
 
