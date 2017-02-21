@@ -48,8 +48,8 @@ class UserController extends Controller
             ], 403);
         }
         $query = $request->query();
-        $page = isset($qurey["page"]) ? (preg_match("/^[\d]*$/", $query["page"]) ? $query["page"] : 1): 1;
-        $per = isset($qurey["per"]) ? (preg_match("/^[\d]*$/", $query["per"]) ? $query["per"] : 10): 10;;
+        $page = isset($query["page"]) ? (preg_match("/[\d]+/", $query["page"]) ? $query["page"] : 1): 1;
+        $per = isset($query["per"]) ? (preg_match("/[\d]+/", $query["per"]) ? $query["per"] : 10): 10;;
         $users = $this->repository->users($per, ["*"], "page", $page, [User::STATUS_ACTIVATED, User::STATUS_BANNED]);
         return response()->json([
             "errs" => [],
