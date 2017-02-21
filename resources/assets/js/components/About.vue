@@ -3,9 +3,12 @@
 <template>
 <div>
     <h1>About Lumtify</h1>
-    <p>Lumen + Vuetify blog</p>
-    <p>A blog cms build with lumen(jwt-api) and vuetify.</p>
-    <p>Author: Peter Lai <a href="mailto:alk03073135@gmail.com"><v-icon>email</v-icon></a></p>
+    <div>
+        <p>Lumen + Vuetify blog</p>
+        <p>A blog cms build with lumen(jwt-api) and vuetify.</p>
+        <p>Author: Peter Lai</p>
+        <p><a href="https://github.com/sc0Vu/lumtify">Github</a></p>
+    </div>
 </div>
 </template>
 

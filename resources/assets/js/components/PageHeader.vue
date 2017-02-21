@@ -2,7 +2,9 @@
 
 <template>
 <v-toolbar>
-    <v-toolbar-title>Lumtify</v-toolbar-title>
+    <v-toolbar-title>
+        <h4 class="white--text">Lumtify - Lumen + Vuetify Blog</h4>
+    </v-toolbar-title>
     <v-toolbar-items>
         <v-toolbar-item href="/about" ripple router>About</v-toolbar-item>
         <v-menu bottom origin="top right" transition="v-scale-transition">

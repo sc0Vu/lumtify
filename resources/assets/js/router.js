@@ -4,14 +4,11 @@
 
 import VueRouter from 'vue-router';
 
-// const Home = resolve => require(['./components/Home.vue'], resolve);
+const Home = resolve => require(['./components/Home.vue'], resolve);
+const About = resolve => require(['./components/About.vue'], resolve);
+const Article = resolve => require(['./components/Article.vue'], resolve);
 // const Login = resolve => require(['./components/Login.vue'], resolve)
 // const Register = resolve => require(['./components/Register.vue'], resolve)
-// const About = resolve => require(['./components/About.vue'], resolve);
-
-import Home from './components/Home.vue'
-
-import About from './components/About.vue'
 
 export default new VueRouter({
     mode: 'history',
@@ -19,6 +16,7 @@ export default new VueRouter({
     routes: [
         { name: 'home', path: '/', component: Home },
         { name: 'about', path: '/about', component: About },
+        { name: 'article', path: '/article/:link', component: Article },
         // { path: '/login', component: Login },
         // { path: '/register', component: Register },
     ],

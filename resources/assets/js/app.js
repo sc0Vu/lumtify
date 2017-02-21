@@ -2,15 +2,17 @@ import Vue from 'vue';
 
 import VueRouter from 'vue-router';
 
-import router from './router';
+import VueResource from 'vue-resource';
 
 import Vuetify from 'vuetify';
 
+import router from './router';
+
 Vue.use(VueRouter);
 
-Vue.use(Vuetify);
+Vue.use(VueResource);
 
-require('vue-resource');
+Vue.use(Vuetify);
 
 // const token = "1234";
 
