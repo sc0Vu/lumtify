@@ -2,6 +2,13 @@
 
 <template>
 <v-row>
+    <v-col xs12="xs12" class="text-xs-center" v-if="loading">
+    	<v-progress-circular 
+		    indeterminate 
+		    v-bind:size="50" 
+		    class="primary--text" 
+		  />
+    </v-col>
     <v-col xs4="xs4" v-for="article in articles">
         <v-card style="margin-bottom: 15px;">
             <v-card-row class="blue-grey darken-1">
@@ -21,6 +28,16 @@
             </v-card-row>
         </v-card>
     </v-col>
+    <v-col xs12="xs12" class="text-xs-center" v-if="next_page_url">
+    	<v-btn 
+		    info
+		    v-on:click.native="fetch" 
+		    v-bind:disabled="!next_page_url || loading"
+		    class="white--text"
+		>
+		    Load More
+		</v-btn>
+    </v-col>
 </v-row>
 </template>
 
@@ -33,11 +50,12 @@ export default {
 			total: 0,
 			per_page: 9,
 			current_page: 1,
-			last_page: 3,
-			next_page_url: "",
+			last_page: 0,
+			next_page_url: null,
 			prev_page_url: null,
 			from: 0,
 			to: 0,
+			loading: true
 		}
 	},
 	created () {
@@ -45,6 +63,11 @@ export default {
     },
 	methods: {
 		fetch () {
+			if (this.last_page > this.current_page) {
+				this.current_page += 1
+			}
+
+			this.loading = true
 			this.$http.get('/api/articles?page=' + this.current_page + '&per=' + this.per_page).then((res) => {
 				var data = res.body
 
@@ -57,12 +80,13 @@ export default {
 			        this.prev_page_url = data.articles.prev_page_url
 			        this.from = data.articles.from
 			        this.to = data.articles.to
-			        this.articles = data.articles.data
+			        this.articles = this.articles.concat(data.articles.data)
 				}
 			}).catch((err) => {
 				console.log(err)
 			}).then(() => {
 				console.log('Finished')
+				this.loading = false
 			})
 		}
 	},

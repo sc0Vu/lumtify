@@ -14,13 +14,14 @@ Vue.use(VueResource);
 
 Vue.use(Vuetify);
 
-// const token = "1234";
+// set up jwt auth
+const token = localStorage.getItem('lumtify') || '';
 
-// Vue.http.interceptors.push((request, next) => {
-//     request.headers.set('Authorization', 'Bearer ' + token)
+Vue.http.interceptors.push((request, next) => {
+    request.headers.set('Authorization', 'Bearer ' + token);
 
-//     next();
-// });
+    next();
+});
 
 import PageHeader from './components/PageHeader.vue';
 

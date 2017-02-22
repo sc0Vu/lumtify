@@ -13,8 +13,11 @@
             </v-btn>
             <v-list>
                 <v-list-item v-if="!auth" href="/about" ripple router>
-                    <v-list-tile>
+                    <v-list-tile href="/login" ripple router>
                         <v-list-tile-title>Login</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile>
+                        <v-list-tile-title>Register</v-list-tile-title>
                     </v-list-tile>
                 </v-list-item>
 
@@ -42,6 +45,12 @@ export default {
 		return {
 			auth: false
 		}
-	}
+	},
+    // methods: {
+    //     auth () {}
+    // },
+    // watch: {
+    //     '$route': 'auth'
+    // }
 }
 </script>
