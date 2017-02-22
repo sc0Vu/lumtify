@@ -97,7 +97,7 @@ $app->register(App\Providers\EventServiceProvider::class);
 */
 
 $app->group([
-    'namespace' => 'App\Http\Controllers'
+    'namespace' => 'App\Http\Controllers\Web'
 ], function ($app) {
     require __DIR__.'/../routes/web.php';
 });
