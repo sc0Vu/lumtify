@@ -21,7 +21,7 @@
                     </v-list-tile>
                 </v-list-item>
 
-                <v-list-item v-else>
+                <v-list-item v-else-if="auth.isAuth">
                     <v-list-tile>
                         <v-list-tile-title>Write</v-list-tile-title>
                     </v-list-tile>
@@ -43,8 +43,8 @@ export default {
 	name: 'page-header',
     props: {
         auth: {
-            token: '',
-            isAuth: false
+            isAuth: false,
+            user: {}
         }
     },
 	// data () {
@@ -55,9 +55,9 @@ export default {
  //            }
  //        }
 	// },
-    created () {
-        console.log(this)
-    },
+    // created () {
+    //     console.log(this)
+    // },
     // methods: {
     //     auth () {}
     // },

@@ -67,6 +67,7 @@ export default {
 					this.msg = data.msg
 					this.success = data.success
 					localStorage.setItem('lumtify', data.token)
+					this.$router.push({ name: 'home' })
 				}
 			}).catch((err) => {
 				var e = err.body

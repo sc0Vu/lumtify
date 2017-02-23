@@ -27,7 +27,7 @@ Frontend
 
 PHP
 
-    mv .env.example .env && touch database/lumtify.sqlite && php artisan migrate --seed
+    mv .env.example .env && touch database/lumtify.sqlite && php artisan migrate --seed && php artisan jwt:secret
 
     vendor/bin/phpunit
 
