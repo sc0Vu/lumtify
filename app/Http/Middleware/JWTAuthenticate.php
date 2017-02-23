@@ -36,7 +36,7 @@ class JWTAuthenticate
     public function handle($request, Closure $next, $guard = "api")
     {
         try {
-            if ($user = $this->auth->parseToken()->authenticate()) {
+            if ($this->auth->parseToken()->check()) {
                 return $next($request);
             }
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {

@@ -18,7 +18,7 @@ Vue.use(Vuetify);
 const token = localStorage.getItem('lumtify') || '';
 
 Vue.http.interceptors.push((request, next) => {
-    request.headers.set('Authorization', 'Bearer ' + token);
+    request.headers.set('authorization', 'Bearer ' + token);
 
     next();
 });
@@ -29,5 +29,41 @@ const app = new Vue({
 	router,
 	components: {
 		PageHeader
+	},
+	data () {
+		return {
+			auth: {
+				token: '',
+				isAuth: false
+			}
+		};
+	},
+	created () {
+		this.auth.token = localStorage.getItem('lumtify') || '';
+		this.checkAuth();
+	},
+	methods: {
+		checkAuth () {
+			this.$http.get('/api/auth/user').then((res) => {
+				var data = res.body
+
+				if (data.success) {
+					console.log(data);
+				}
+			}).catch((err) => {
+				var e = err.body
+
+				if (!e.success) {
+					this.resetToken();
+					this.auth.token = '';
+					this.auth.isAuth = false;
+				}
+			}).then(() => {
+				// console.log('Finished')
+			})
+		},
+		resetToken () {
+			localStorage.setItem('lumtify', '');
+		}
 	}
 }).$mount('#app');

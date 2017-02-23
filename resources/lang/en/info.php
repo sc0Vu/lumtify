@@ -4,7 +4,8 @@ return [
     "success" => [
         "create" => "Create successfully!",
         "update" => "Update successfully!",
-        "delete" => "Delete successfully!"
+        "delete" => "Delete successfully!",
+        "login" => "Login successfully!"
     ],
     "failed" => [
         "validate" => "Some thing wrong in data!",

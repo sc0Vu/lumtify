@@ -22,7 +22,7 @@
 </head>
 <body>
     <v-app id="app" top-navbar>
-        <page-header></page-header>
+        <page-header v-bind:auth="auth"></page-header>
         <main>
             <v-content>
                 <v-container>
