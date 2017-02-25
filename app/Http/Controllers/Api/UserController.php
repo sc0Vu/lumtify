@@ -302,6 +302,7 @@ class UserController extends Controller
                 "pass_verify" => "required|same:pass"
             ]);
         }
+        dd($userId);
         return Validator::make($data, [
             "name" => "string|max:255",
             "email" => "email|string|max:255|unique:users,email,id," . $userId,

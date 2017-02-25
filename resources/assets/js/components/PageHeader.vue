@@ -25,8 +25,8 @@
                     <v-list-tile>
                         <v-list-tile-title>Write</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-title>Setting</v-list-tile-title>
+                    <v-list-tile v-bind:href="{name: 'profile', params: {uid: auth.user.uid}}" ripple router>
+                        <v-list-tile-title>Profile</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-on:click.native="logout">
                         <v-list-tile-title>Log Out</v-list-tile-title>
@@ -47,17 +47,6 @@ export default {
             user: {}
         }
     },
-	// data () {
- //        return {
- //            auth: {
- //                token: '',
- //                isAuth: false
- //            }
- //        }
-	// },
-    // created () {
-    //     console.log(this)
-    // },
     methods: {
         logout () {
             this.$http.get('/api/auth/logout').then((res) => {
@@ -76,9 +65,6 @@ export default {
             }).then(() => {
             })
         }
-    },
-    // watch: {
-    //     '$route': 'auth'
-    // }
+    }
 }
 </script>

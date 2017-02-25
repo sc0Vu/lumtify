@@ -14,3 +14,13 @@
 $app->get("/", "HomeController@index");
 
 $app->get("/about", "HomeController@index");
+
+$app->get("/article/{link}", "HomeController@index");
+
+$app->get("/login", "HomeController@index");
+
+$app->get("/register", "HomeController@index");
+
+$app->get("/user/profile/{uid}", "HomeController@index");
+
+$app->get("/user/setting/{uid}", "HomeController@index");

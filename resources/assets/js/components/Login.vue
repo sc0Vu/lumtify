@@ -45,6 +45,12 @@
 
 <script>
 export default {
+	props: {
+        auth: {
+            isAuth: false,
+            user: {}
+        }
+    },
 	data () {
 		return {
 			email: '',

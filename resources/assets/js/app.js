@@ -8,6 +8,8 @@ import Vuetify from 'vuetify';
 
 import router from './router';
 
+import PageHeader from './components/PageHeader.vue';
+
 Vue.use(VueRouter);
 
 Vue.use(VueResource);
@@ -15,15 +17,13 @@ Vue.use(VueResource);
 Vue.use(Vuetify);
 
 // set up jwt auth
-const token = localStorage.getItem('lumtify') || '';
+window.token = localStorage.getItem('lumtify') || '';
 
 Vue.http.interceptors.push((request, next) => {
-    request.headers.set('authorization', 'bearer ' + token);
+    request.headers.set('authorization', 'bearer ' + window.token);
 
     next();
 });
-
-import PageHeader from './components/PageHeader.vue';
 
 const app = new Vue({
 	router,
@@ -39,11 +39,11 @@ const app = new Vue({
 		};
 	},
 	created () {
-		this.auth.token = localStorage.getItem('lumtify') || '';
 		this.checkAuth();
 	},
 	methods: {
 		checkAuth () {
+			window.token = localStorage.getItem('lumtify') || ''
 			this.$http.get('/api/auth/user').then((res) => {
 				var data = res.body
 
@@ -55,15 +55,17 @@ const app = new Vue({
 				var e = err.body
 
 				if (!e.success) {
-					this.resetToken();
-					this.auth.isAuth = false;
+					// this.resetToken()
+					this.auth.isAuth = false
 				}
 			}).then(() => {
-				// console.log('Finished')
 			})
 		},
 		resetToken () {
-			localStorage.setItem('lumtify', '');
+			localStorage.setItem('lumtify', '')
 		}
+	},
+	watch: {
+		'$route': 'checkAuth'
 	}
 }).$mount('#app');

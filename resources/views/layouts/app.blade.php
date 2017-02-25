@@ -27,7 +27,7 @@
             <v-content>
                 <v-container>
                     <transition appear>
-                        <router-view></router-view>
+                        <router-view v-bind:auth="auth"></router-view>
                     </transition>
                 </v-container>
             </v-content>

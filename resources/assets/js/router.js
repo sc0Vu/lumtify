@@ -7,8 +7,11 @@ import VueRouter from 'vue-router';
 const Home = resolve => require(['./components/Home.vue'], resolve);
 const About = resolve => require(['./components/About.vue'], resolve);
 const Article = resolve => require(['./components/Article.vue'], resolve);
-const Login = resolve => require(['./components/Login.vue'], resolve)
-const Register = resolve => require(['./components/Register.vue'], resolve)
+const Login = resolve => require(['./components/Login.vue'], resolve);
+const Register = resolve => require(['./components/Register.vue'], resolve);
+const Profile = resolve => require(['./components/Profile.vue'], resolve);
+const Setting = resolve => require(['./components/Setting.vue'], resolve);
+// const CreateArticle = resolve => require(['./components/CreateArticle.vue'], resolve);
 
 export default new VueRouter({
     mode: 'history',
@@ -19,6 +22,10 @@ export default new VueRouter({
         { name: 'article', path: '/article/:link', component: Article },
         { name: 'login', path: '/login', component: Login },
         { name: 'register', path: '/register', component: Register },
+        { name: 'profile', path: '/user/profile/:uid', component: Profile },
+        { name: 'setting', path: '/user/setting/:uid', component: Setting },
+        // { name: 'createArticle', path: '/article/create', component: createArticle },
+        // { name: 'updateArticle', path: '/article/update/:link', component: updateArticle },
     ],
     linkActiveClass: 'active'
 });

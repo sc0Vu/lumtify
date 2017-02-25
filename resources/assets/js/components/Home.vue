@@ -11,6 +11,12 @@
 import Articles from './Articles.vue'
 
 export default {
+	props: {
+        auth: {
+            isAuth: false,
+            user: {}
+        }
+    },
 	components: {
 		Articles
 	}

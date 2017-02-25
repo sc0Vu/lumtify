@@ -2,9 +2,16 @@
 
 <template>
 <v-col xs4="xs4">
-    <div>
+    <v-col xs12="xs12" class="text-xs-center" v-if="loading">
+    	<v-progress-circular 
+		    indeterminate 
+		    v-bind:size="50" 
+		    class="primary--text" 
+		  />
+    </v-col>
+    <div v-else-if="!loading">
         <div>
-            <h5>Register</h5>
+            <h5>Setting</h5>
         </div>
         <div>
 	        <v-alert v-bind:info="!info" v-bind:error="!success" v-bind:value="true" v-if="msg">
@@ -50,11 +57,11 @@
         <div>
             <v-btn 
                 info
-                v-bind:disabled="loading"
-                v-on:click.native="register"
+                v-bind:disabled="sending"
+                v-on:click.native="setting"
                 small
             >
-                Register
+                Submit
             </v-btn>
         </div>
     </div>
@@ -78,18 +85,46 @@ export default {
 			errFor: {},
 			success: false,
 			loading: false,
+			sending: false,
 			msg: '',
 		}
 	},
+	created () {
+		this.fetch()
+	},
 	methods: {
-		register () {
+		fetch () {
 			this.loading = true
-			this.$http.post('/api/users', {
-				name: this.name,
-				email: this.email,
-				pass: this.password,
-				pass_verify: this.password_verify,
-			}).then((res) => {
+			this.$http.get('/api/users/' + this.$route.params.uid).then((res) => {
+				var data = res.body
+
+				if (data.success) {
+					this.name = data.user.name
+					this.email = data.user.email
+				}
+			}).catch((err) => {
+				console.log(err)
+			}).then(() => {
+				this.loading = false
+			})
+		},
+		setting () {
+			var user = {}
+
+			if (this.name) {
+				user.name = this.name
+			}
+			if (this.email) {
+				user.email = this.email
+			}
+			if (this.password) {
+				user.pass = this.password
+			}
+			if (this.password_verify) {
+				user.pass_verify = this.password_verify
+			}
+			this.sending = true
+			this.$http.put('/api/users/' + this.$route.params.uid, user).then((res) => {
 				var data = res.body
 
 				if (data.success) {
@@ -109,9 +144,12 @@ export default {
 					this.success = e.success
 				}
 			}).then(() => {
-				this.loading = false
+				this.sending = false
 			})
 		}
+	},
+	watch: {
+		'$route': 'fetch'
 	}
 }
 </script>

@@ -21,13 +21,10 @@
 	                <v-spacer></v-spacer>
 	            </v-card-title>
 	        </v-card-row>
-	        <v-card-text class="blue darken-1 white--text">
-	            <div v-text="card_text">{{ article.author.uid }}</div>
-	        </v-card-text>
 	        <v-card-row actions class="blue darken-1 mt-0">
-	            <v-btn icon>
-	                <v-icon class="white--text">explore</v-icon>
-	            </v-btn>
+	            <v-card-text class="blue darken-1 white--text">
+		            <div v-text="card_text">{{ article.author.uid }}</div>
+		        </v-card-text>
 	        </v-card-row>
 	    </v-card>
     </v-col>

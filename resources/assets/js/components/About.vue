@@ -12,4 +12,13 @@
 </div>
 </template>
 
-<script></script>
+<script>
+export default {
+	props: {
+        auth: {
+            isAuth: false,
+            user: {}
+        }
+    },
+}
+</script>
