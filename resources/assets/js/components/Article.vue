@@ -58,7 +58,6 @@ export default {
 				console.log(err)
 			}).then(() => {
 				this.loading = false
-				console.log('Finished')
 			})
 		}
 	},

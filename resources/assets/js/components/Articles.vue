@@ -85,7 +85,6 @@ export default {
 			}).catch((err) => {
 				console.log(err)
 			}).then(() => {
-				console.log('Finished')
 				this.loading = false
 			})
 		}

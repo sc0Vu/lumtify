@@ -16,7 +16,7 @@
                     <v-list-tile href="/login" ripple router>
                         <v-list-tile-title>Login</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile>
+                    <v-list-tile href="/register" ripple router>
                         <v-list-tile-title>Register</v-list-tile-title>
                     </v-list-tile>
                 </v-list-item>
@@ -28,7 +28,7 @@
                     <v-list-tile>
                         <v-list-tile-title>Setting</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile>
+                    <v-list-tile v-on:click.native="logout">
                         <v-list-tile-title>Log Out</v-list-tile-title>
                     </v-list-tile>
                 </v-list-item>
@@ -58,9 +58,25 @@ export default {
     // created () {
     //     console.log(this)
     // },
-    // methods: {
-    //     auth () {}
-    // },
+    methods: {
+        logout () {
+            this.$http.get('/api/auth/logout').then((res) => {
+                var data = res.body
+
+                if (data.success) {
+                    localStorage.setItem('lumtify', '')
+                    this.$router.push({ name: 'home' })
+                }
+            }).catch((err) => {
+                var e = err.body
+
+                if (!e.success) {
+                    console.log(e)
+                }
+            }).then(() => {
+            })
+        }
+    },
     // watch: {
     //     '$route': 'auth'
     // }

@@ -4,12 +4,21 @@
 <v-col xs4="xs4">
     <div>
         <div>
-            <h5>Login</h5>
+            <h5>Register</h5>
         </div>
         <div>
 	        <v-alert v-bind:info="!info" v-bind:error="!success" v-bind:value="true" v-if="msg">
 			    {{ msg }}
 			</v-alert>
+		</div>
+		<div>
+		    <v-text-input 
+			    name="name"
+			    label="Name"
+			    type="text"
+			    v-model="name"
+			></v-text-input>
+			<span class="red--text" v-if="errFor.name">{{ errFor.name.join(",") }}</span>
 		</div>
         <div>
 		    <v-text-input 
@@ -22,21 +31,30 @@
 		</div>
         <div>
 		    <v-text-input 
-			    name="password"
+			    name="pass"
 			    label="Password"
 			    type="password"
 			    v-model="password"
 			></v-text-input>
 			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
 		</div>
+		<div>
+		    <v-text-input 
+			    name="pass_verify"
+			    label="Password Again"
+			    type="password"
+			    v-model="password_verify"
+			></v-text-input>
+			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
+		</div>
         <div>
             <v-btn 
                 info
                 v-bind:disabled="loading"
-                v-on:click.native="login"
+                v-on:click.native="register"
                 small
             >
-                Login
+                Register
             </v-btn>
         </div>
     </div>
@@ -47,8 +65,10 @@
 export default {
 	data () {
 		return {
+			name: '',
 			email: '',
 			password: '',
+			password_verify: '',
 			errFor: {},
 			success: false,
 			loading: false,
@@ -56,11 +76,13 @@ export default {
 		}
 	},
 	methods: {
-		login () {
+		register () {
 			this.loading = true
-			this.$http.post('/api/auth/login', {
+			this.$http.post('/api/users', {
+				name: this.name,
 				email: this.email,
-				password: this.password
+				pass: this.password,
+				pass_verify: this.password_verify,
 			}).then((res) => {
 				var data = res.body
 
@@ -69,7 +91,6 @@ export default {
 					this.errs = data.errs
 					this.msg = data.msg
 					this.success = data.success
-					localStorage.setItem('lumtify', data.token)
 					this.$router.push({ name: 'home' })
 				}
 			}).catch((err) => {
