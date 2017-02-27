@@ -10,7 +10,12 @@
 		  />
     </v-col>
     <v-col xs12="xs12" v-if="article">
-	    <h1>{{ article.title }}</h1>
+	    <h1>
+	        {{ article.title }}
+	        <router-link v-bind:to="{name: 'setting', params: {uid: article.author.uid}}" tag="span" v-if="hasArticle">
+		    	<v-icon medium class="grey--text text--darken-2">edit</v-icon>
+		    </router-link>
+	    </h1>
 	    <h3>{{ article.short_description }}</h3>
 	    <h6>Create: {{ article.created_at }}, Update: {{ article.updated_at }}</h6>
 	    <p>{{ article.content }}</p>
@@ -59,10 +64,22 @@ export default {
 					this.article = data.article
 				}
 			}).catch((err) => {
-				console.log(err)
+				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
 			})
+		},
+		hasArticle () {
+			if (!this.article.author) {
+				return false
+			}
+			if (this.article.author.uid === this.auth.user.uid) {
+				return true
+			}
+			if (this.auth.roles.indexOf("admin") >= 0) {
+				return true
+			}
+			return false
 		}
 	},
 	watch: {
