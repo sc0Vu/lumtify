@@ -17,7 +17,8 @@ export default {
 	props: {
         auth: {
             isAuth: false,
-            user: {}
+            user: {},
+            roles: []
         }
     },
 }

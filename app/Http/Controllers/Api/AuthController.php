@@ -101,11 +101,13 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $user = $this->auth->user();
+        $roles = $user->roles()->with("role")->get()->pluck("role")->pluck("name");
     	return response()->json([
             "errs" => [],
             "errFor" => [],
             "msg" => "",
             "user" => $user,
+            "roles" => $roles,
             "success" => true
         ]);
     }

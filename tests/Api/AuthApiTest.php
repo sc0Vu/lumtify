@@ -23,14 +23,14 @@ class AuthApiTest extends TestCase
         $response->seeJson(["success" => false]);
 
         $response = $this->post('/api/auth/login', [
-            "email" => "not_existed_email_1@gmail.com",
+            "email" => "admin@lumtify.com",
             "password" => "12345"
         ]);
         $response->assertResponseStatus(400);
         $response->seeJson(["success" => false]);
 
         $response = $this->post('/api/auth/login', [
-            "email" => "not_existed_email_1@gmail.com",
+            "email" => "admin@lumtify.com",
             "password" => "ilovelumtify"
         ]);
         $response->assertResponseStatus(200);

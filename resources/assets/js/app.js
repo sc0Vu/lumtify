@@ -34,7 +34,8 @@ const app = new Vue({
 		return {
 			auth: {
 				isAuth: false,
-				user: {}
+				user: {},
+				roles: []
 			}
 		};
 	},
@@ -50,6 +51,7 @@ const app = new Vue({
 				if (data.success) {
 					this.auth.isAuth = true;
 					this.auth.user = data.user
+					this.auth.roles = data.roles
 				}
 			}).catch((err) => {
 				var e = err.body

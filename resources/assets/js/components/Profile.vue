@@ -9,18 +9,32 @@
 		    class="primary--text" 
 		  />
     </v-col>
-    <v-col xs12="xs12" v-if="user">
-	    <h1>{{ user.name }}</h1>
-	    <h3>{{ user.email }}</h3>
+    <v-col xs12="xs12" v-else-if="!loading">
+	    <h1>
+	        {{ name }}
+	        <router-link v-bind:to="{name: 'setting', params: {uid: uid}}" tag="span">
+		    	<v-icon medium class="grey--text text--darken-2">settings</v-icon>
+		    </router-link>
+		</h1>
+	    <h3>{{ email }}</h3>
     </v-col>
 </v-row>
 </template>
 
 <script>
 export default {
+	props: {
+        auth: {
+            isAuth: false,
+            user: {},
+            roles: []
+        }
+    },
 	data () {
 		return {
-			user: null,
+			name: '',
+			email: '',
+			uid: '',
 			loading: true
 		}
 	},
@@ -34,10 +48,12 @@ export default {
 				var data = res.body
 
 				if (data.success) {
-					this.user = data.user
+					this.uid = data.user.uid
+					this.name = data.user.name
+					this.email = data.user.email
 				}
 			}).catch((err) => {
-				console.log(err)
+				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
 			})

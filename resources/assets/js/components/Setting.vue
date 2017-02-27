@@ -73,7 +73,8 @@ export default {
 	props: {
         auth: {
             isAuth: false,
-            user: {}
+            user: {},
+            roles: []
         }
     },
 	data () {
@@ -103,7 +104,7 @@ export default {
 					this.email = data.user.email
 				}
 			}).catch((err) => {
-				console.log(err)
+				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
 			})

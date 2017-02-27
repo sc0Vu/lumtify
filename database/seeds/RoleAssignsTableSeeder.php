@@ -17,10 +17,10 @@ class RoleAssignsTableSeeder extends Seeder
         ];
         $authAssigns = [];
 
-        for ($i=1; $i<=2; $i++) {
+        foreach ($auths as $key => &$auth) {
         	$authAssigns[] =[
-                "user_id" => $i,
-                "role_id" => $i
+                "user_id" => $key + 1,
+                "role_id" => $key + 1
             ];
         }
         

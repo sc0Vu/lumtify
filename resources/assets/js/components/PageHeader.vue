@@ -22,8 +22,14 @@
                 </v-list-item>
 
                 <v-list-item v-else-if="auth.isAuth">
-                    <v-list-tile>
+                    <v-list-tile v-if="roles(['admin', 'editor'])">
                         <v-list-tile-title>Write</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile v-if="roles(['admin', 'editor'])">
+                        <v-list-tile-title>Articles</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile v-if="roles(['admin'])">
+                        <v-list-tile-title>Users</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-bind:href="{name: 'profile', params: {uid: auth.user.uid}}" ripple router>
                         <v-list-tile-title>Profile</v-list-tile-title>
@@ -44,7 +50,8 @@ export default {
     props: {
         auth: {
             isAuth: false,
-            user: {}
+            user: {},
+            roles: []
         }
     },
     methods: {
@@ -64,6 +71,19 @@ export default {
                 }
             }).then(() => {
             })
+        },
+        roles (roles) {
+            if (this.auth.roles.length === 0) {
+                return false
+            }
+            var length = roles.length
+
+            for (var i=0; i<length; i++) {
+                if (this.auth.roles.indexOf(roles[i]) >= 0) {
+                    return true
+                }
+            }
+            return false
         }
     }
 }

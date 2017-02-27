@@ -15,12 +15,28 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $auths = [
+            "admin", "editor"
+        ];
     	$users = [];
         $now = new Carbon;
         $user = new User;
         $repository = new UserRepository($user);
 
-        for ($i=1; $i<=80; $i++) {
+        for ($i=1; $i<=2; $i++) {
+            $uid = $repository->makeUid(32);
+            $users[] =[
+                "id" => $i,
+                "uid" => $uid,
+                "name" => "iamuser " . $i,
+                "password" => Hash::make("ilovelumtify"),
+                "email" => sprintf("%s@lumtify.com", $auths[$i-1]),
+                "status" => 1,
+                "created_at" => $now,
+                "updated_at" => $now
+            ];
+        }
+        for ($i=3; $i<=80; $i++) {
         	$status = rand(1, 2);
             $uid = $repository->makeUid(32);
         	$users[] =[
@@ -28,7 +44,7 @@ class UsersTableSeeder extends Seeder
                 "uid" => $uid,
                 "name" => "iamuser " . $i,
                 "password" => Hash::make("ilovelumtify"),
-                "email" => sprintf("not_existed_email_%d@gmail.com", $i),
+                "email" => sprintf("not_existed_email_%d@lumtify.com", $i),
                 "status" => $status,
                 "created_at" => $now,
                 "updated_at" => $now

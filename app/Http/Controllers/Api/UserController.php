@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Gate;
 use Validator;
 use App\User;
@@ -297,15 +298,24 @@ class UserController extends Controller
         if (isset($data["pass"]) || isset($data["pass_verify"])) {
             return Validator::make($data, [
                 "name" => "string|max:255",
-                "email" => "email|string|max:255|unique:users,email,id," . $userId,
+                "email" => [
+                    "email",
+                    "string",
+                    "max:255",
+                    Rule::unique('users')->ignore($userId),
+                ],
                 "pass" => "required",
                 "pass_verify" => "required|same:pass"
             ]);
         }
-        dd($userId);
         return Validator::make($data, [
             "name" => "string|max:255",
-            "email" => "email|string|max:255|unique:users,email,id," . $userId,
+            "email" => [
+                "email",
+                "string",
+                "max:255",
+                Rule::unique('users')->ignore($userId),
+            ],
         ]);
     }
 }
