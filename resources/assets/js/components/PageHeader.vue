@@ -22,11 +22,8 @@
                 </v-list-item>
 
                 <v-list-item v-else-if="auth.isAuth">
-                    <v-list-tile v-if="roles(['admin', 'editor'])">
+                    <v-list-tile v-if="roles(['admin', 'editor'])" v-bind:href="{name: 'createArticle'}" ripple router>
                         <v-list-tile-title>Write</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile v-if="roles(['admin', 'editor'])">
-                        <v-list-tile-title>Articles</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-if="roles(['admin'])">
                         <v-list-tile-title>Users</v-list-tile-title>
@@ -68,6 +65,8 @@ export default {
 
                 if (!e.success) {
                     console.log(e)
+                } else {
+                    this.$router.push({ name: 'home' })
                 }
             }).then(() => {
             })

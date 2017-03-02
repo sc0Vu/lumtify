@@ -108,6 +108,8 @@ export default {
 					this.errs = e.errs
 					this.msg = e.msg
 					this.success = e.success
+				} else {
+					this.$router.push({ name: 'home' })
 				}
 			}).then(() => {
 				this.loading = false

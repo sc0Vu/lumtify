@@ -22,6 +22,9 @@
                 <div v-text="card_text">{{ article.short_description }}</div>
             </v-card-text>
             <v-card-row actions class="blue-grey darken-1 mt-0">
+                <v-btn flat class="white--text" v-if="hasArticle(article)">
+                    <router-link v-bind:to="{ name: 'updateArticle', params: { link: article.link } }" class="white--text">Update</router-link>
+                </v-btn>
                 <v-btn flat class="white--text">
                     <router-link v-bind:to="{ name: 'article', params: { link: article.link } }" class="white--text">Read</router-link>
                 </v-btn>
@@ -44,6 +47,13 @@
 <script>
 export default {
 	name: 'articles',
+	props: {
+        auth: {
+            isAuth: false,
+            user: {},
+            roles: []
+        }
+    },
 	data () {
 		return {
 			articles: [],
@@ -83,10 +93,22 @@ export default {
 			        this.articles = this.articles.concat(data.articles.data)
 				}
 			}).catch((err) => {
-				console.log(err)
+				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
 			})
+		},
+		hasArticle (article) {
+			if (!article.author) {
+				return false
+			}
+			if (this.auth.roles.indexOf("admin") >= 0) {
+				return true
+			}
+			if (article.author.uid === this.auth.user.uid) {
+				return true
+			}
+			return false
 		}
 	},
 	watch: {

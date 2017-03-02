@@ -3,7 +3,7 @@
 <template>
 <div>
     <h1>Welcome to lumtify!</h1>
-    <articles></articles>
+    <articles v-bind:auth="auth"></articles>
 </div>
 </template>
 

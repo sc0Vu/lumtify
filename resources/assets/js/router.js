@@ -11,7 +11,8 @@ const Login = resolve => require(['./components/Login.vue'], resolve);
 const Register = resolve => require(['./components/Register.vue'], resolve);
 const Profile = resolve => require(['./components/Profile.vue'], resolve);
 const Setting = resolve => require(['./components/Setting.vue'], resolve);
-// const CreateArticle = resolve => require(['./components/CreateArticle.vue'], resolve);
+const UpdateArticle = resolve => require(['./components/UpdateArticle.vue'], resolve);
+const CreateArticle = resolve => require(['./components/CreateArticle.vue'], resolve);
 
 export default new VueRouter({
     mode: 'history',
@@ -19,13 +20,13 @@ export default new VueRouter({
     routes: [
         { name: 'home', path: '/', component: Home },
         { name: 'about', path: '/about', component: About },
-        { name: 'article', path: '/article/:link', component: Article },
+        { name: 'article', path: '/article/read/:link', component: Article },
         { name: 'login', path: '/login', component: Login },
         { name: 'register', path: '/register', component: Register },
         { name: 'profile', path: '/user/profile/:uid', component: Profile },
         { name: 'setting', path: '/user/setting/:uid', component: Setting },
-        // { name: 'createArticle', path: '/article/create', component: createArticle },
-        // { name: 'updateArticle', path: '/article/update/:link', component: updateArticle },
+        { name: 'updateArticle', path: '/article/update/:link', component: UpdateArticle },
+        { name: 'createArticle', path: '/article/create', component: CreateArticle },
     ],
     linkActiveClass: 'active'
 });

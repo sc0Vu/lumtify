@@ -11,7 +11,7 @@
     </v-col>
     <div v-else-if="!loading">
         <div>
-            <h5>Setting</h5>
+            <h5>Update Article {{ article.title }}</h5>
         </div>
         <div>
 	        <v-alert v-bind:info="!info" v-bind:error="!success" v-bind:value="true" v-if="msg">
@@ -20,45 +20,63 @@
 		</div>
 		<div>
 		    <v-text-input 
-			    name="name"
-			    label="Name"
+			    name="title"
+			    label="Title"
 			    type="text"
-			    v-model="name"
+			    v-model="article.title"
 			></v-text-input>
-			<span class="red--text" v-if="errFor.name">{{ errFor.name.join(",") }}</span>
+			<span class="red--text" v-if="errFor.title">{{ errFor.title.join(",") }}</span>
 		</div>
         <div>
 		    <v-text-input 
-			    name="email"
-			    label="Email"
-			    type="email"
-			    v-model="email"
+			    name="link"
+			    label="Link"
+			    type="text"
+			    v-model="article.link"
 			></v-text-input>
-			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
+			<span class="red--text" v-if="errFor.link">{{ errFor.link.join(",") }}</span>
 		</div>
         <div>
 		    <v-text-input 
-			    name="pass"
-			    label="Password"
-			    type="password"
-			    v-model="password"
+			    name="short_description"
+			    label="Short Description"
+			    type="text"
+			    v-model="article.short_description"
 			></v-text-input>
-			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
+			<span class="red--text" v-if="errFor.short_description">{{ errFor.short_description.join(",") }}</span>
 		</div>
 		<div>
 		    <v-text-input 
-			    name="pass_verify"
-			    label="Password Again"
-			    type="password"
-			    v-model="password_verify"
+			    name="content"
+			    label="Content"
+			    type="text"
+			    v-model="article.content"
 			></v-text-input>
-			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
+			<span class="red--text" v-if="errFor.content">{{ errFor.content.join(",") }}</span>
+		</div>
+		<div>
+		    <v-text-input 
+			    name="thumbnail"
+			    label="Thumbnail"
+			    type="text"
+			    v-model="article.thumbnail"
+			></v-text-input>
+			<span class="red--text" v-if="errFor.thumbnail">{{ errFor.thumbnail.join(",") }}</span>
+		</div>
+		<div>
+		    <v-select 
+		        v-bind:options="statusList"
+			    name="status"
+			    label="Status"
+			    v-model="article.status"
+			></v-select>
+			<span class="red--text" v-if="errFor.status">{{ errFor.status.join(",") }}</span>
 		</div>
         <div>
             <v-btn 
                 info
                 v-bind:disabled="sending"
-                v-on:click.native="setting"
+                v-on:click.native="update"
                 small
             >
                 Submit
@@ -79,15 +97,24 @@ export default {
     },
 	data () {
 		return {
-			name: '',
-			email: '',
-			password: '',
-			password_verify: '',
+			article: {},
 			errFor: {},
 			success: false,
 			loading: false,
 			sending: false,
 			msg: '',
+			statusList: [
+			    {
+			    	value: 1,
+			    	text: 'Draft'
+			    }, {
+			    	value: 2,
+			    	text: 'Publish'
+			    }, {
+			    	value: 3,
+			    	text: 'Archieve'
+			    }
+			]
 		}
 	},
 	created () {
@@ -96,12 +123,11 @@ export default {
 	methods: {
 		fetch () {
 			this.loading = true
-			this.$http.get('/api/users/' + this.$route.params.uid).then((res) => {
+			this.$http.get('/api/articles/' + this.$route.params.link).then((res) => {
 				var data = res.body
 
 				if (data.success) {
-					this.name = data.user.name
-					this.email = data.user.email
+					this.article = data.article
 				}
 			}).catch((err) => {
 				this.$router.push({ name: 'home' })
@@ -109,23 +135,9 @@ export default {
 				this.loading = false
 			})
 		},
-		setting () {
-			var user = {}
-
-			if (this.name) {
-				user.name = this.name
-			}
-			if (this.email) {
-				user.email = this.email
-			}
-			if (this.password) {
-				user.pass = this.password
-			}
-			if (this.password_verify) {
-				user.pass_verify = this.password_verify
-			}
+		update () {
 			this.sending = true
-			this.$http.put('/api/users/' + this.$route.params.uid, user).then((res) => {
+			this.$http.put('/api/articles/' + this.$route.params.link, this.article).then((res) => {
 				var data = res.body
 
 				if (data.success) {

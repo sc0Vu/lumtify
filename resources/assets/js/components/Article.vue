@@ -12,7 +12,7 @@
     <v-col xs12="xs12" v-if="article">
 	    <h1>
 	        {{ article.title }}
-	        <router-link v-bind:to="{name: 'setting', params: {uid: article.author.uid}}" tag="span" v-if="hasArticle">
+	        <router-link v-bind:to="{name: 'updateArticle', params: {link: article.link}}" tag="span" v-if="hasArticle">
 		    	<v-icon medium class="grey--text text--darken-2">edit</v-icon>
 		    </router-link>
 	    </h1>
