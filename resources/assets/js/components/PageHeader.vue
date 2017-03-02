@@ -65,8 +65,6 @@ export default {
 
                 if (!e.success) {
                     console.log(e)
-                } else {
-                    this.$router.push({ name: 'home' })
                 }
             }).then(() => {
             })
