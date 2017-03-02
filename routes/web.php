@@ -15,7 +15,11 @@ $app->get("/", "HomeController@index");
 
 $app->get("/about", "HomeController@index");
 
-$app->get("/article/{link}", "HomeController@index");
+$app->get("/article/read/{link}", "HomeController@index");
+
+$app->get("/article/update/{link}", "HomeController@index");
+
+$app->get("/article/create", "HomeController@index");
 
 $app->get("/login", "HomeController@index");
 

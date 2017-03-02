@@ -139,7 +139,7 @@ class ArticleController extends Controller
         }
 
         $user = $this->auth->user();
-        
+
         if (!$user) {
             $article = $this->repository->read($link);
         } else if ($user->isAdmin()) {
@@ -184,7 +184,7 @@ class ArticleController extends Controller
             ], 400);
         }
         
-        $article = $this->repository->read($link);
+        $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]);
 
         if (empty($article)) {
             return response()->json([
@@ -203,7 +203,7 @@ class ArticleController extends Controller
             ], 403);
         }
         $data = $request->all();
-        $validator = $this->validateUpdate($data, $article->link);
+        $validator = $this->validateUpdate($data, $article->id);
 
         if ($validator->fails()) {
             return response()->json([
