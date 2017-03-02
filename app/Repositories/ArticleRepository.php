@@ -15,14 +15,23 @@ class ArticleRepository
      * @param string $pageName
      * @param int $page
      * @param array $status
+     * @param boolean $isEditor
+     * @param int $userId
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function articles($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[Article::STATUS_PUBLISHED])
+	public function articles($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[Article::STATUS_PUBLISHED], $isEditor = false, $userId = 0)
 	{
 		if (!is_array($status)) {
 			$status = [$status];
 		}
-		return Article::whereIn("status", $status)->with("author")->paginate($perPage, $columns, $pageName, $page);
+        if (!$isEditor) {
+            return Article::whereIn("status", $status)->with("author")->paginate($perPage, $columns, $pageName, $page);
+        }
+        if (empty($userId)) {
+            return Article::whereIn("status", $status)->with("author")->paginate($perPage, $columns, $pageName, $page);
+        }
+		return Article::where("user_id", $userId)->whereIn("status", $status)
+                        ->with("author")->paginate($perPage, $columns, $pageName, $page);
 	}
 
 	/**
