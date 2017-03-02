@@ -63,14 +63,22 @@ class ArticleRepository
 	 * 
 	 * @param string $link
 	 * @param integer $status
+     * @param boolean $isEditor
+     * @param int $userId
 	 * @return array || null
 	 */
-	public function read($link, $status=Article::STATUS_PUBLISHED)
+	public function read($link, $status=Article::STATUS_PUBLISHED, $isEditor = false, $userId = 0)
 	{
 		if (!is_array($status)) {
 			$status = [$status];
 		}
-		return Article::where("link", $link)->whereIn("status", $status)->with("author")->first();
+        if (!$isEditor) {
+            return Article::where("link", $link)->whereIn("status", $status)->with("author")->first();
+        }
+        if (empty($userId)) {
+            return Article::where("link", $link)->whereIn("status", $status)->with("author")->first();
+        }
+		return Article::where("link", $link)->where("user_id", $userId)->whereIn("status", $status)->with("author")->first();
 	}
 
 	/**

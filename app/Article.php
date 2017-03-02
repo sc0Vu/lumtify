@@ -50,7 +50,7 @@ class Article extends Model
      * @var array
      */
     protected $hidden = [
-        "id", "user_id", "status"
+        "id", "user_id"
     ];
 
     /**

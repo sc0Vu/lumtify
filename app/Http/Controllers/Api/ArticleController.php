@@ -137,9 +137,18 @@ class ArticleController extends Controller
                 "success" => false
             ], 400);
         }
-        
-        $article = $this->repository->read($link);
 
+        $user = $this->auth->user();
+        
+        if (!$user) {
+            $article = $this->repository->read($link);
+        } else if ($user->isAdmin()) {
+            $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]);
+        } else if($user->isEditor()) {
+            $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], true, $user->id);
+        } else {
+            $article = $this->repository->read($link);
+        }
         if (empty($article)) {
             return response()->json([
                 "errs" => [],
