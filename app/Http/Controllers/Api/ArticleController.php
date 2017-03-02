@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\JWTAuth;
 use Log;
 use Gate;
@@ -300,7 +301,10 @@ class ArticleController extends Controller
     {
         return Validator::make($data, [
             "title" => "string|max:255",
-            "link" => "alpha_dash|unique:articles,link,id," . $articleId,
+            "link" => [
+                "alpha_dash",
+                Rule::unique('articles')->ignore($articleId)
+            ],
             "short_description" => "string|max:255|unique:users,email",
             "content" => "",
             "thumbnail" => "max:255|active_url",
