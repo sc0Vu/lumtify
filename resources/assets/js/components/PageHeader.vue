@@ -58,6 +58,7 @@ export default {
 
                 if (data.success) {
                     localStorage.setItem('lumtify', '')
+                    alert(data.msg)
                     this.$router.push({ name: 'home' })
                 }
             }).catch((err) => {

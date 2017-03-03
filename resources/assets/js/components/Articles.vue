@@ -9,7 +9,7 @@
 		    class="primary--text" 
 		  />
     </v-col>
-    <v-col xs4="xs4" v-for="article in articles">
+    <v-col xs4="xs4" v-for="(article, index) in articles">
         <v-card style="margin-bottom: 15px;">
             <v-card-row class="blue-grey darken-1">
                 <v-card-title>
@@ -22,11 +22,14 @@
                 <div v-text="card_text">{{ article.short_description }}</div>
             </v-card-text>
             <v-card-row actions class="blue-grey darken-1 mt-0">
-                <v-btn flat class="white--text" v-if="hasArticle(article)">
-                    <router-link v-bind:to="{ name: 'updateArticle', params: { link: article.link } }" class="white--text">Update</router-link>
+                <v-btn flat class="white--text" v-if="hasArticle(article)" v-on:click.native="deleteArticle(article, index)" v-bind:disabled="deleting">
+                    Delete
                 </v-btn>
-                <v-btn flat class="white--text">
-                    <router-link v-bind:to="{ name: 'article', params: { link: article.link } }" class="white--text">Read</router-link>
+                <v-btn flat class="white--text" v-if="hasArticle(article)" v-on:click.native="updateArticle(article)">
+                    Update
+                </v-btn>
+                <v-btn flat class="white--text" v-on:click.native="readArticle(article)">
+                    Read
                 </v-btn>
             </v-card-row>
         </v-card>
@@ -65,7 +68,8 @@ export default {
 			prev_page_url: null,
 			from: 0,
 			to: 0,
-			loading: true
+			loading: true,
+			deleting: false
 		}
 	},
 	created () {
@@ -109,6 +113,36 @@ export default {
 				return true
 			}
 			return false
+		},
+		deleteArticle (article, index) {
+			if (!article.link) {
+				return
+			}
+			this.deleting = true
+			this.$http.delete('/api/articles/' + article.link).then((res) => {
+				var data = res.body
+
+				if (data.success) {
+			        this.articles.splice(index, 1)
+			        alert(data.msg)
+				}
+			}).catch((err) => {
+				this.$router.push({ name: 'home' })
+			}).then(() => {
+				this.deleting = false
+			})
+		},
+		updateArticle (article) {
+			if (!article.link) {
+				return
+			}
+			this.$router.push({ name: 'updateArticle', params: { link: article.link } })
+		},
+		readArticle (article) {
+			if (!article.link) {
+				return
+			}
+			this.$router.push({ name: 'article', params: { link: article.link } })
 		}
 	},
 	watch: {

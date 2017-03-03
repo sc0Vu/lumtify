@@ -23,12 +23,12 @@ export default new VueRouter({
         { name: 'about', path: '/about', component: About },
         { name: 'login', path: '/login', component: Login },
         { name: 'register', path: '/register', component: Register },
-        { name: 'profile', path: '/user/profile/:uid', component: Profile },
-        { name: 'setting', path: '/user/setting/:uid', component: Setting },
+        { name: 'profile', path: '/user/profile/:uid', meta: { requiresAuth: true }, component: Profile },
+        { name: 'setting', path: '/user/setting/:uid', meta: { requiresAuth: true }, component: Setting },
         { name: 'articles', path: '/articles', component: Articles },
         { name: 'article', path: '/articles/read/:link', component: Article },
-        { name: 'updateArticle', path: '/articles/update/:link', component: UpdateArticle },
-        { name: 'createArticle', path: '/articles/create', component: CreateArticle },
+        { name: 'updateArticle', path: '/articles/update/:link', meta: { requiresAuth: true }, component: UpdateArticle },
+        { name: 'createArticle', path: '/articles/create', meta: { requiresAuth: true }, component: CreateArticle },
     ],
     linkActiveClass: 'active'
 });
