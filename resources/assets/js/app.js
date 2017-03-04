@@ -1,29 +1,69 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
-import VueRouter from 'vue-router';
+import VueRouter from 'vue-router'
 
-import VueResource from 'vue-resource';
+import VueResource from 'vue-resource'
 
-import Vuetify from 'vuetify';
+import Vuetify from 'vuetify'
 
-import router from './router';
+import Marked from 'marked'
 
-import PageHeader from './components/PageHeader.vue';
+import router from './router'
 
-Vue.use(VueRouter);
+import PageHeader from './components/PageHeader.vue'
 
-Vue.use(VueResource);
+Vue.use(VueRouter)
 
-Vue.use(Vuetify);
+Vue.use(VueResource)
+
+Vue.use(Vuetify)
 
 // set up jwt auth
-window.token = localStorage.getItem('lumtify') || '';
+window.token = localStorage.getItem('lumtify') || ''
 
 Vue.http.interceptors.push((request, next) => {
-    request.headers.set('authorization', 'bearer ' + window.token);
+    request.headers.set('authorization', 'bearer ' + window.token)
 
-    next();
-});
+    next()
+})
+
+// set markdown editor options
+Marked.setOptions({
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+})
+
+// use window marked if want to marked in local component
+// like 
+// computed: {
+//     markdown () {
+//         return marked(content)
+//     }
+// }
+// window.marked = Marked
+
+// use like filter
+// {{ content | marked }} => only text
+// Vue.filter('marked', function (content) {
+// 	return marked(content)
+// })
+
+Vue.directive('markdown', {
+	bind (el, binding, vnode) {
+		el.innerHTML = Marked(binding.value)
+	},
+	// inserted () {},
+	update (el, binding, vnode) {
+		el.innerHTML = Marked(binding.value)
+	},
+	// componentUpdated () {},
+	// unbind () {}
+})
 
 const app = new Vue({
 	router,
@@ -40,7 +80,7 @@ const app = new Vue({
 		};
 	},
 	created () {
-		this.checkAuth();
+		this.checkAuth()
 	},
 	methods: {
 		checkAuth () {
@@ -70,4 +110,4 @@ const app = new Vue({
 	watch: {
 		'$route': 'checkAuth'
 	}
-}).$mount('#app');
+}).$mount('#app')

@@ -45,15 +45,21 @@
 			></v-text-input>
 			<span class="red--text" v-if="errFor.short_description">{{ errFor.short_description.join(",") }}</span>
 		</div>
-		<div>
-		    <v-text-input 
-			    name="content"
-			    label="Content"
-			    type="text"
-			    v-model="article.content"
-			></v-text-input>
+		<v-row>
+	    	<v-col xs6="xs6">
+	    	    <div class="input-group input-group--dirty">
+		            <label>Content</label>
+		            <textarea v-model="article.content"></textarea>
+		        </div>
+		    </v-col>
+		    <v-col xs6="xs6">
+		        <div>
+		            <h6>Preview</h6>
+		            <p v-markdown="article.content"></p>
+		        </div>
+		    </v-col>
 			<span class="red--text" v-if="errFor.content">{{ errFor.content.join(",") }}</span>
-		</div>
+		</v-row>
 		<div>
 		    <v-text-input 
 			    name="thumbnail"

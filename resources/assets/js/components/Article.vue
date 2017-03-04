@@ -18,7 +18,7 @@
 	    </h1>
 	    <h3>{{ article.short_description }}</h3>
 	    <h6>Create: {{ article.created_at }}, Update: {{ article.updated_at }}</h6>
-	    <p>{{ article.content }}</p>
+	    <p v-markdown:content="article.content"></p>
 	    <v-card>
 	        <v-card-row class="blue darken-1">
 	            <v-card-title>

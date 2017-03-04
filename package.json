@@ -14,5 +14,8 @@
   "scripts": {
     "prod": "gulp --production",
     "dev": "gulp watch"
+  },
+  "dependencies": {
+    "marked": "^0.3.6"
   }
 }
