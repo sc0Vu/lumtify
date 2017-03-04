@@ -12,11 +12,13 @@
     <v-col xs12="xs12" v-else-if="!loading">
 	    <h1>
 	        {{ name }}
-	        <router-link v-bind:to="{name: 'setting', params: {uid: uid}}" tag="span">
-		    	<v-icon medium class="grey--text text--darken-2">settings</v-icon>
-		    </router-link>
 		</h1>
 	    <h3>{{ email }}</h3>
+	    <v-row>
+	    	<v-btn class="white--text" primary small v-on:click.native="setting">
+	    	    Setting
+            </v-btn>
+	    </v-row>
     </v-col>
 </v-row>
 </template>
@@ -57,6 +59,12 @@ export default {
 			}).then(() => {
 				this.loading = false
 			})
+		},
+		setting () {
+			if (!this.uid) {
+				return
+			}
+			this.$router.push({name: 'setting', params: {uid: this.uid}})
 		}
 	},
 	watch: {

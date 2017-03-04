@@ -56,7 +56,7 @@
 		</div>
         <div>
             <v-btn 
-                info
+                primary
                 v-bind:disabled="sending"
                 v-on:click.native="setting"
                 small
