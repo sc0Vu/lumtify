@@ -46,7 +46,6 @@ Marked.setOptions({
 //     }
 // }
 // window.marked = Marked
-
 // use like filter
 // {{ content | marked }} => only text
 // Vue.filter('marked', function (content) {
@@ -65,6 +64,53 @@ Vue.directive('markdown', {
 	// unbind () {}
 })
 
+var auth = {
+	isAuth: false,
+	user: {},
+	roles: [],
+}
+
+router.beforeEach((to, from, next) => {
+	var routerAuth = null
+
+	to.matched.some((record) => {
+		if (record.meta.auth) {
+			routerAuth = record.meta.auth
+		}
+	})
+
+    if (routerAuth && routerAuth.required) {
+	    if (!auth.isAuth) {
+	        next({
+	            name: 'login'
+	        })
+	    } else {
+	    	if (routerAuth.roles) {
+	    		var isAuth = false
+	    		var length = routerAuth.roles.length
+
+	    		for (var i=0; i<length; i++) {
+	                if (auth.roles.indexOf(routerAuth.roles[i]) >= 0) {
+	                	isAuth = true
+	                	break;
+	                }
+	            }
+	            if (isAuth) {
+	            	next()
+	            } else {
+	            	next({
+			            name: 'home'
+			        })
+	            }
+	    	} else {
+	    		next()
+	    	}
+	    }
+    } else {
+		next()
+    }
+})
+
 const app = new Vue({
 	router,
 	components: {
@@ -72,11 +118,7 @@ const app = new Vue({
 	},
 	data () {
 		return {
-			auth: {
-				isAuth: false,
-				user: {},
-				roles: []
-			}
+			auth: auth
 		};
 	},
 	created () {

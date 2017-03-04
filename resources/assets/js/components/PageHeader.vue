@@ -3,9 +3,10 @@
 <template>
 <v-toolbar>
     <v-toolbar-title>
-        <h4 class="white--text">Lumtify - Lumen + Vuetify Blog</h4>
+        <h4 class="white--text">Lumtify</h4>
     </v-toolbar-title>
     <v-toolbar-items>
+        <v-toolbar-item href="/" ripple router>Home</v-toolbar-item>
         <v-toolbar-item href="/about" ripple router>About</v-toolbar-item>
         <v-menu bottom origin="top right" transition="v-scale-transition">
             <v-btn dark icon slot="activator">
