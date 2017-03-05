@@ -114,7 +114,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $this->repository->read($uid);
+        $user = $this->repository->read($uid, [User::STATUS_ACTIVATED, User::STATUS_BANNED]);
 
         if (empty($user)) {
             return response()->json([
@@ -159,7 +159,7 @@ class UserController extends Controller
             ], 400);
         }
         
-        $user = $this->repository->read($uid);
+        $user = $this->repository->read($uid, [User::STATUS_ACTIVATED, User::STATUS_BANNED]);
 
         if (empty($user)) {
             return response()->json([
@@ -280,6 +280,7 @@ class UserController extends Controller
     {
         return Validator::make($data, [
             "name" => "required|string|max:255",
+            "thumbnail" => "max:255|active_url",
             "email" => "required|email|string|max:255|unique:users,email",
             "pass" => "required",
             "pass_verify" => "required|same:pass"
@@ -298,6 +299,7 @@ class UserController extends Controller
         if (isset($data["pass"]) || isset($data["pass_verify"])) {
             return Validator::make($data, [
                 "name" => "string|max:255",
+                "thumbnail" => "max:255|active_url",
                 "email" => [
                     "email",
                     "string",
@@ -310,6 +312,7 @@ class UserController extends Controller
         }
         return Validator::make($data, [
             "name" => "string|max:255",
+            "thumbnail" => "max:255|active_url",
             "email" => [
                 "email",
                 "string",

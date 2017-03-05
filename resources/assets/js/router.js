@@ -14,6 +14,7 @@ const Profile = resolve => require(['./components/Profile.vue'], resolve)
 const Setting = resolve => require(['./components/Setting.vue'], resolve)
 const UpdateArticle = resolve => require(['./components/UpdateArticle.vue'], resolve)
 const CreateArticle = resolve => require(['./components/CreateArticle.vue'], resolve)
+const Users = resolve => require(['./components/Users.vue'], resolve)
 
 export default new VueRouter({
     mode: 'history',
@@ -37,14 +38,14 @@ export default new VueRouter({
             component: Register 
         }, { 
             name: 'profile', 
-            path: '/user/profile/:uid', 
+            path: '/users/:uid/profile', 
             meta: { 
                 auth: { required: true }
             }, 
             component: Profile 
         }, { 
             name: 'setting', 
-            path: '/user/setting/:uid', 
+            path: '/users/:uid/setting', 
             meta: { 
                 auth: { required: true } 
             }, 
@@ -55,11 +56,11 @@ export default new VueRouter({
             component: Articles 
         }, { 
             name: 'article', 
-            path: '/articles/read/:link', 
+            path: '/articles/:link/read', 
             component: Article 
         }, { 
             name: 'updateArticle', 
-            path: '/articles/update/:link', 
+            path: '/articles/:link/update', 
             meta: { 
                 auth: { 
                     required: true,
@@ -77,7 +78,17 @@ export default new VueRouter({
                 },
             }, 
             component: CreateArticle 
-        },
+        }, { 
+            name: 'users', 
+            path: '/users',
+            meta: {
+                auth: {
+                    required: true,
+                    roles: ['admin']
+                }
+            },
+            component: Users 
+        }
     ],
     linkActiveClass: 'active'
 })

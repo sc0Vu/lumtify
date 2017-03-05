@@ -36,6 +36,15 @@
 			></v-text-input>
 			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
 		</div>
+		<div>
+		    <v-text-input 
+			    name="thumbnail"
+			    label="Thumbnail"
+			    type="text"
+			    v-model="thumbnail"
+			></v-text-input>
+			<span class="red--text" v-if="errFor.thumbnail">{{ errFor.thumbnail.join(",") }}</span>
+		</div>
         <div>
 		    <v-text-input 
 			    name="pass"
@@ -81,6 +90,7 @@ export default {
 		return {
 			name: '',
 			email: '',
+			thumbnail: '',
 			password: '',
 			password_verify: '',
 			errFor: {},
@@ -102,6 +112,7 @@ export default {
 				if (data.success) {
 					this.name = data.user.name
 					this.email = data.user.email
+					this.thumbnail = data.user.thumbnail
 				}
 			}).catch((err) => {
 				this.$router.push({ name: 'home' })
@@ -117,6 +128,9 @@ export default {
 			}
 			if (this.email) {
 				user.email = this.email
+			}
+			if (this.thumbnail) {
+				user.thumbnail = this.thumbnail
 			}
 			if (this.password) {
 				user.pass = this.password

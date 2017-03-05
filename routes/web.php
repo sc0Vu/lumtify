@@ -15,9 +15,9 @@ $app->get("/", "HomeController@index");
 
 $app->get("/about", "HomeController@index");
 
-$app->get("/articles/read/{link}", "HomeController@index");
+$app->get("/articles/{link}/read", "HomeController@index");
 
-$app->get("/articles/update/{link}", "HomeController@index");
+$app->get("/articles/{link}/update", "HomeController@index");
 
 $app->get("/articles/create", "HomeController@index");
 
@@ -27,6 +27,8 @@ $app->get("/login", "HomeController@index");
 
 $app->get("/register", "HomeController@index");
 
-$app->get("/user/profile/{uid}", "HomeController@index");
+$app->get("/users/{uid}/profile", "HomeController@index");
 
-$app->get("/user/setting/{uid}", "HomeController@index");
+$app->get("/users/{uid}/setting", "HomeController@index");
+
+$app->get("/users", "HomeController@index");

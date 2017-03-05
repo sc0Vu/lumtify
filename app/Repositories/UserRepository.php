@@ -40,6 +40,7 @@ class UserRepository
 
         $user->uid = $uid;
         $user->name = $data["name"];
+        $user->thumbnail = @$data["thumbnail"];
         $user->email = $data["email"];
         $user->password = Hash::make($data["pass"]);
         $user->status = User::STATUS_ACTIVATED;
@@ -77,6 +78,9 @@ class UserRepository
     {
         if (isset($data["name"])) {
             $user->name = $data["name"];
+        }
+        if (isset($data["thumbnail"])) {
+            $user->thumbnail = $data["thumbnail"];
         }
         if (isset($data["email"])) {
             $user->email = $data["email"];

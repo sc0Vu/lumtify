@@ -26,7 +26,7 @@
                     <v-list-tile v-if="roles(['admin', 'editor'])" v-bind:href="{name: 'createArticle'}" ripple router>
                         <v-list-tile-title>Write</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile v-if="roles(['admin'])">
+                    <v-list-tile v-if="roles(['admin'])" v-bind:href="{name: 'users'}" ripple router>
                         <v-list-tile-title>Users</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-bind:href="{name: 'profile', params: {uid: auth.user.uid}}" ripple router>
