@@ -12,10 +12,14 @@ lumtify is a blog cms build with lumen and vuetify
 PHP
 
     composer install
+
+    mv .env.example .env
     
     touch database/lumtify.sqlite
 
     php artisan migrate
+
+    php artisan jwt:secret
 
 Frontend
     
