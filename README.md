@@ -43,6 +43,18 @@ Frontend
 
 [website](https://lumtify.ptrgl.com/)
 
+* admin
+
+    username: admin@lumtify.com
+
+    password: ilovelumtify
+
+* editor
+
+    username: editor@lumtify.com
+
+    password: ilovelumtify
+
 ## License
 
 [MIT license](http://opensource.org/licenses/MIT)
