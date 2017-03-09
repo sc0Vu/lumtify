@@ -82,7 +82,7 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article)
     {
-        if ($article->user_id == $user->id) {
+        if ($user->isEditor() && ($article->user_id == $user->id)) {
             return true;
         }
         return false;
@@ -97,7 +97,7 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article)
     {
-        if ($article->user_id == $user->id) {
+        if ($user->isEditor() && ($article->user_id == $user->id)) {
             return true;
         }
         return false;

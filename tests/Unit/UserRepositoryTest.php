@@ -31,7 +31,7 @@ class UserRepositoryTest extends TestCase
     {
         $repository = new UserRepository();
         $result = $repository->users(10);
-        $this->assertEquals(count($result), 10);
+        $this->assertEquals($result, User::where("status", User::STATUS_ACTIVATED)->paginate(10));
     }
 
     /**

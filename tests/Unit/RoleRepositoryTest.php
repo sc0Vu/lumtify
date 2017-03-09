@@ -10,6 +10,18 @@ class RoleRepositoryTest extends TestCase
     use DatabaseTransactions;
 
     /**
+     * Test roles.
+     * 
+     * @return boolean
+     */
+    public function testRoles()
+    {
+        $repository = new RoleRepository();
+        $result = $repository->roles(10);
+        $this->assertEquals($result, Role::paginate(10));
+    }
+
+    /**
      * Test get role.
      *
      * @return void
