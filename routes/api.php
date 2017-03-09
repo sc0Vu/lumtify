@@ -30,3 +30,6 @@ $app->post('/users', "UserController@create");
 $app->get('/users/{uid}', ['middleware' => 'api', 'uses' => 'UserController@read']);
 $app->put('/users/{uid}', ['middleware' => 'api', 'uses' => 'UserController@update']);
 $app->delete('/users/{uid}', ['middleware' => 'api', 'uses' => 'UserController@delete']);
+
+// roles
+$app->get('/roles', ['middleware' => 'api', 'uses' => 'RoleController@roles']);

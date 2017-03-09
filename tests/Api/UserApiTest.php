@@ -28,8 +28,13 @@ class UserApiTest extends TestCase
             ]);
             $response->assertResponseStatus(200);
             $response->seeJson(["success" => true]);
-            $result = $response->response->getData(true);
-            $this->assertEquals(count($result["users"]["data"]), 10);
+        } else {
+            $token = $this->app["auth"]->guard("api")->fromUser($user);
+            $response = $this->get("/api/users?per=10", [
+                'Authorization' => 'Bearer ' . $token
+            ]);
+            $response->assertResponseStatus(403);
+            $response->seeJson(["success" => false]);
         }
     }
 

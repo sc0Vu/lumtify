@@ -17,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         Gate::policy(\App\Article::class, \App\Policies\ArticlePolicy::class);
         Gate::policy(\App\User::class, \App\Policies\UserPolicy::class);
+        Gate::policy(\App\Role::class, \App\Policies\RolePolicy::class);
     }
 
     /**
