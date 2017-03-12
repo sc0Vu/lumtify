@@ -132,11 +132,14 @@ class UserController extends Controller
                 "success" => false
             ], 403);
         }
+        $roles = $user->roles()->with("role")->get()->pluck("role")->pluck("name");
+
         return response()->json([
             "errs" => [],
             "errFor" => [],
             "msg" => "",
             "user" => $user,
+            "roles" => $roles,
             "success" => true
         ]);
     }

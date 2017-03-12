@@ -50,7 +50,7 @@ class RoleController extends Controller
         $query = $request->query();
         $page = isset($query["page"]) ? (preg_match("/[\d]+/", $query["page"]) ? $query["page"] : 1): 1;
         $per = isset($query["per"]) ? (preg_match("/[\d]+/", $query["per"]) ? $query["per"] : 10): 10;;
-        $roles = $this->repository->roles($per, ["*"], "page", $page);
+        $roles = $this->repository->roles($per, ["*"], "page", $page)->pluck("name");
         return response()->json([
             "errs" => [],
             "errFor" => [],
