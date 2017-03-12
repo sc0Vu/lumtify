@@ -25,10 +25,10 @@
                 </div>
             </v-card-text>
             <v-card-row actions class="blue-grey darken-1 mt-0">
-                <v-btn flat class="white--text" v-if="auth" v-on:click.native="deleteUser(user, index)" v-bind:disabled="deleting">
+                <v-btn flat class="white--text" v-if="isAdmin" v-on:click.native="deleteUser(user, index)" v-bind:disabled="deleting">
                     Delete
                 </v-btn>
-                <v-btn flat class="white--text" v-if="auth" v-on:click.native="updateUser(user)">
+                <v-btn flat class="white--text" v-if="isAdmin" v-on:click.native="updateUser(user)">
                     Update
                 </v-btn>
                 <v-btn flat class="white--text" v-on:click.native="readUser(user)">
@@ -72,11 +72,13 @@ export default {
 			from: 0,
 			to: 0,
 			loading: true,
-			deleting: false
+			deleting: false,
+			isAdmin: false
 		}
 	},
 	created () {
         this.fetch()
+        this.isAdmin = this.checkAdmin()
     },
 	methods: {
 		fetch () {
@@ -105,8 +107,10 @@ export default {
 				this.loading = false
 			})
 		},
-		auth () {
-			if (this.auth.roles.indexOf("admin") >= 0) {
+		checkAdmin () {
+			var roles = this.auth.roles
+
+			if (roles.indexOf("admin") >= 0) {
 				return true
 			}
 			return false

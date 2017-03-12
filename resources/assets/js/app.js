@@ -71,44 +71,61 @@ var auth = {
 }
 
 router.beforeEach((to, from, next) => {
-	var routerAuth = null
+	Vue.http.get('/api/auth/user').then((res) => {
+		var data = res.body
 
-	to.matched.some((record) => {
-		if (record.meta.auth) {
-			routerAuth = record.meta.auth
+		if (data.success) {
+			auth.isAuth = true
+			auth.user = data.user
+			auth.roles = data.roles
 		}
-	})
+	}).catch((err) => {
+		var e = err.body
 
-    if (routerAuth && routerAuth.required) {
-	    if (!auth.isAuth) {
-	        next({
-	            name: 'login'
-	        })
+		if (!e.success) {
+			localStorage.setItem('lumtify', '')
+			auth.isAuth = false
+		}
+	}).then(() => {
+		var routerAuth = null
+
+		to.matched.some((record) => {
+			if (record.meta.auth) {
+				routerAuth = record.meta.auth
+			}
+		})
+
+	    if (routerAuth && routerAuth.required) {
+		    if (!auth.isAuth) {
+		        next({
+		            name: 'login'
+		        })
+		    } else {
+		    	if (routerAuth.roles) {
+		    		var isAuth = false
+		    		var length = routerAuth.roles.length
+
+		    		for (var i=0; i<length; i++) {
+		                if (auth.roles.indexOf(routerAuth.roles[i]) >= 0) {
+		                	isAuth = true
+		                	break;
+		                }
+		            }
+		            if (isAuth) {
+		            	next()
+		            } else {
+		            	next({
+				            name: 'home'
+				        })
+		            }
+		    	} else {
+		    		next()
+		    	}
+		    }
 	    } else {
-	    	if (routerAuth.roles) {
-	    		var isAuth = false
-	    		var length = routerAuth.roles.length
-
-	    		for (var i=0; i<length; i++) {
-	                if (auth.roles.indexOf(routerAuth.roles[i]) >= 0) {
-	                	isAuth = true
-	                	break;
-	                }
-	            }
-	            if (isAuth) {
-	            	next()
-	            } else {
-	            	next({
-			            name: 'home'
-			        })
-	            }
-	    	} else {
-	    		next()
-	    	}
+			next()
 	    }
-    } else {
-		next()
-    }
+	})
 })
 
 const app = new Vue({
@@ -120,36 +137,5 @@ const app = new Vue({
 		return {
 			auth: auth
 		};
-	},
-	created () {
-		this.checkAuth()
-	},
-	methods: {
-		checkAuth () {
-			window.token = localStorage.getItem('lumtify') || ''
-			this.$http.get('/api/auth/user').then((res) => {
-				var data = res.body
-
-				if (data.success) {
-					this.auth.isAuth = true;
-					this.auth.user = data.user
-					this.auth.roles = data.roles
-				}
-			}).catch((err) => {
-				var e = err.body
-
-				if (!e.success) {
-					// this.resetToken()
-					this.auth.isAuth = false
-				}
-			}).then(() => {
-			})
-		},
-		resetToken () {
-			localStorage.setItem('lumtify', '')
-		}
-	},
-	watch: {
-		'$route': 'checkAuth'
 	}
 }).$mount('#app')

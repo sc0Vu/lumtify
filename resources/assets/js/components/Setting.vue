@@ -63,6 +63,16 @@
 			></v-text-input>
 			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
 		</div>
+		<div v-if="admin()">
+			<v-select 
+		        v-bind:options="rolesList"
+			    name="roles"
+			    label="Roles"
+			    v-model="roles"
+			    multiple
+			></v-select>
+			<span class="red--text" v-if="errFor.roles">{{ errFor.roles.join(",") }}</span>
+		</div>
         <div>
             <v-btn 
                 primary
@@ -98,6 +108,8 @@ export default {
 			loading: false,
 			sending: false,
 			msg: '',
+			rolesList: [],
+			roles: []
 		}
 	},
 	created () {
@@ -113,11 +125,29 @@ export default {
 					this.name = data.user.name
 					this.email = data.user.email
 					this.thumbnail = data.user.thumbnail
+					this.roles = data.user.roles
+					this.fetchRoles()
 				}
 			}).catch((err) => {
 				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
+			})
+		},
+		fetchRoles () {
+			this.$http.get('/api/roles').then((res) => {
+				var data = res.body
+
+				if (data.success) {
+					var self = this
+
+					data.roles.forEach(function (role) {
+						self.rolesList.push({value: role, text: role})
+					})
+				}
+			}).catch((err) => {
+				// this.$router.push({ name: 'home' })
+			}).then(() => {
 			})
 		},
 		setting () {
@@ -137,6 +167,9 @@ export default {
 			}
 			if (this.password_verify) {
 				user.pass_verify = this.password_verify
+			}
+			if (this.roles) {
+				user.roles = this.roles
 			}
 			this.sending = true
 			this.$http.put('/api/users/' + this.$route.params.uid, user).then((res) => {
@@ -165,6 +198,12 @@ export default {
 			}).then(() => {
 				this.sending = false
 			})
+		},
+		admin () {
+			if (this.auth.roles.indexOf('admin') >= 0) {
+				return true
+			}
+			return false
 		}
 	},
 	watch: {

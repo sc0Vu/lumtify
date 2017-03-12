@@ -47,10 +47,11 @@
 		</div>
 		<v-row>
 	    	<v-col xs6="xs6">
-	    	    <div class="input-group input-group--dirty">
-		            <label>Content</label>
-		            <textarea v-model="article.content"></textarea>
-		        </div>
+	            <v-textarea
+	                name="content"
+		            label="Content"
+	                v-model="article.content"
+	            ></v-textarea>
 		    </v-col>
 		    <v-col xs6="xs6">
 		        <div>
