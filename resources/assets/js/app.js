@@ -18,11 +18,11 @@ Vue.use(VueResource)
 
 Vue.use(Vuetify)
 
-// set up jwt auth
-window.token = localStorage.getItem('lumtify') || ''
-
+// set up jwt auth in vue http
 Vue.http.interceptors.push((request, next) => {
-    request.headers.set('authorization', 'bearer ' + window.token)
+	var token = localStorage.getItem('lumtify') || ''
+
+    request.headers.set('authorization', 'bearer ' + token)
 
     next()
 })

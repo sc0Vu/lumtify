@@ -63,7 +63,7 @@
 			></v-text-input>
 			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
 		</div>
-		<div v-if="admin()">
+		<div v-if="admin() && rolesList.length > 0">
 			<v-select 
 		        v-bind:options="rolesList"
 			    name="roles"
@@ -115,6 +115,11 @@ export default {
 	created () {
 		this.fetch()
 	},
+	mounted () {
+		if (this.admin()) {
+			this.fetchRoles()
+		}
+	},
 	methods: {
 		fetch () {
 			this.loading = true
@@ -125,8 +130,7 @@ export default {
 					this.name = data.user.name
 					this.email = data.user.email
 					this.thumbnail = data.user.thumbnail
-					this.roles = data.user.roles
-					this.fetchRoles()
+					this.roles = data.roles
 				}
 			}).catch((err) => {
 				this.$router.push({ name: 'home' })
