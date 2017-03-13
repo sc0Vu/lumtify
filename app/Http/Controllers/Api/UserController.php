@@ -299,21 +299,7 @@ class UserController extends Controller
      */
     protected function validateUpdate($data, $userId)
     {
-        if (isset($data["pass"]) || isset($data["pass_verify"])) {
-            return Validator::make($data, [
-                "name" => "string|max:255",
-                "thumbnail" => "max:255|active_url",
-                "email" => [
-                    "email",
-                    "string",
-                    "max:255",
-                    Rule::unique('users')->ignore($userId),
-                ],
-                "pass" => "required",
-                "pass_verify" => "required|same:pass"
-            ]);
-        }
-        return Validator::make($data, [
+        $rules = [
             "name" => "string|max:255",
             "thumbnail" => "max:255|active_url",
             "email" => [
@@ -322,6 +308,19 @@ class UserController extends Controller
                 "max:255",
                 Rule::unique('users')->ignore($userId),
             ],
-        ]);
+        ];
+
+        if (isset($data["pass"]) || isset($data["pass_verify"])) {
+            $rules += [
+                "pass" => "required",
+                "pass_verify" => "required|same:pass"
+            ];
+        }
+        if (isset($data["roles"])) {
+            $rules += [
+                "roles.*" => "regex:/^[a-zA-Z0-9]+$/|exists:roles,name"
+            ];
+        }
+        return Validator::make($data, $rules);
     }
 }

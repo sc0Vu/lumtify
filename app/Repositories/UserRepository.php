@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use App\User;
+use App\Role;
+use App\RoleAssign;
 
 class UserRepository
 {
@@ -87,6 +89,29 @@ class UserRepository
         }
         if (isset($data["pass"])) {
             $user->password = Hash::make($data["pass"]);
+        }
+        if (isset($data["roles"])) {
+            $roles = $user->roles()->with("role")->get();
+
+            foreach ($roles as &$role) {
+                $key = array_search($role->role->name, $data["roles"]);
+
+                if (is_int($key) && $key >= 0) {
+                    unset($data["roles"][$key]);
+                } else {
+                    $role->delete();
+                }
+            }
+            foreach ($data["roles"] as &$role) {
+                $role = Role::where("name", $role)->first();
+
+                if ($role) {
+                    $roleAssign = new RoleAssign;
+                    $roleAssign->role_id = $role->id;
+                    $roleAssign->user_id = $user->id;
+                    $roleAssign->save();
+                }
+            }
         }
         try {
             return $user->save();

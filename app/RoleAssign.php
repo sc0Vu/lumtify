@@ -7,11 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class RoleAssign extends Model
 {
     /**
+     * The timestamps
+     * 
+     * @var boolean
+     */
+    public $timestamps = false;
+    
+    /**
      * The primary key
      * 
      * @var string
      */
-    // public $primary = "";
+    public $primary = "id";
     
     /**
      * The table

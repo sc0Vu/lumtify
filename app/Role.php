@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     /**
+     * The timestamps
+     * 
+     * @var boolean
+     */
+    public $timestamps = false;
+    
+    /**
      * The primary key
      * 
      * @var string
