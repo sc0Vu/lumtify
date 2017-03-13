@@ -27,7 +27,7 @@ class ArticlesTableSeeder extends Seeder
         	    "link" => "article".$i,
         	    "user_id" => $user,
         	    "status" => $status,
-        	    "thumbnail" => "http://placehold.it/300/09f/fff.png",
+        	    "thumbnail" => "https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=hello+lumtify&w=300&h=300&fm=png",
                 "created_at" => $now,
                 "updated_at" => $now
         	];
