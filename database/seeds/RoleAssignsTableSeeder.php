@@ -20,7 +20,6 @@ class RoleAssignsTableSeeder extends Seeder
         foreach ($auths as $key => &$auth) {
             $pivot = $key + 1;
         	$authAssigns[] =[
-                "id" => $pivot,
                 "user_id" => $pivot,
                 "role_id" => $pivot
             ];
