@@ -16,6 +16,7 @@
     "dev": "gulp watch"
   },
   "dependencies": {
-    "marked": "^0.3.6"
+    "marked": "^0.3.6",
+    "vuex": "^2.2.1"
   }
 }
