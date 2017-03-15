@@ -45,13 +45,6 @@
 
 <script>
 export default {
-	props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
-    },
 	data () {
 		return {
 			email: '',
@@ -96,9 +89,6 @@ export default {
 				this.loading = false
 			})
 		}
-	},
-	watch: {
-		'$route': 'fetch'
 	}
 }
 </script>

@@ -12,9 +12,6 @@
     <v-col xs12="xs12" v-if="article">
 	    <h1>
 	        {{ article.title }}
-	        <!-- <router-link v-bind:to="{name: 'updateArticle', params: {link: article.link}}" tag="span" v-if="hasArticle">
-		    	<v-icon medium class="grey--text text--darken-2">edit</v-icon>
-		    </router-link> -->
 	    </h1>
 	    <h3>{{ article.short_description }}</h3>
 	    <h6>Create: {{ article.created_at }}, Update: {{ article.updated_at }}</h6>
@@ -38,13 +35,6 @@
 
 <script>
 export default {
-	props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
-    },
 	data () {
 		return {
 			article: null,
@@ -68,18 +58,6 @@ export default {
 			}).then(() => {
 				this.loading = false
 			})
-		},
-		hasArticle () {
-			if (!this.article.author) {
-				return false
-			}
-			if (this.article.author.uid === this.auth.user.uid) {
-				return true
-			}
-			if (this.auth.roles.indexOf("admin") >= 0) {
-				return true
-			}
-			return false
 		}
 	},
 	watch: {

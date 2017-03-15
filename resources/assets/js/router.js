@@ -4,17 +4,17 @@
 
 import VueRouter from 'vue-router'
 
-const Home = resolve => require(['./components/Home.vue'], resolve)
-const About = resolve => require(['./components/About.vue'], resolve)
-const Article = resolve => require(['./components/Article.vue'], resolve)
-const Articles = resolve => require(['./components/Articles.vue'], resolve)
-const Login = resolve => require(['./components/Login.vue'], resolve)
-const Register = resolve => require(['./components/Register.vue'], resolve)
-const Profile = resolve => require(['./components/Profile.vue'], resolve)
-const Setting = resolve => require(['./components/Setting.vue'], resolve)
-const UpdateArticle = resolve => require(['./components/UpdateArticle.vue'], resolve)
-const CreateArticle = resolve => require(['./components/CreateArticle.vue'], resolve)
-const Users = resolve => require(['./components/Users.vue'], resolve)
+const Home = resolve => require(['./Views/Home.vue'], resolve)
+const About = resolve => require(['./Views/About.vue'], resolve)
+const Article = resolve => require(['./Views/Article.vue'], resolve)
+const Articles = resolve => require(['./Views/Articles.vue'], resolve)
+const Login = resolve => require(['./Views/Login.vue'], resolve)
+const Register = resolve => require(['./Views/Register.vue'], resolve)
+const Profile = resolve => require(['./Views/Profile.vue'], resolve)
+const Setting = resolve => require(['./Views/Setting.vue'], resolve)
+const UpdateArticle = resolve => require(['./Views/UpdateArticle.vue'], resolve)
+const CreateArticle = resolve => require(['./Views/CreateArticle.vue'], resolve)
+const Users = resolve => require(['./Views/Users.vue'], resolve)
 
 export default new VueRouter({
     mode: 'history',

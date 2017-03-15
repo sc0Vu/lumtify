@@ -1,5 +1,7 @@
 import Vue from 'vue'
 
+import Vuex from 'vuex'
+
 import VueRouter from 'vue-router'
 
 import VueResource from 'vue-resource'
@@ -10,7 +12,9 @@ import Marked from 'marked'
 
 import router from './router'
 
-import PageHeader from './components/PageHeader.vue'
+import PageLumtify from './Components/PageLumtify.vue'
+
+Vue.use(Vuex)
 
 Vue.use(VueRouter)
 
@@ -64,11 +68,76 @@ Vue.directive('markdown', {
 	// unbind () {}
 })
 
-var auth = {
+const auth = {
 	isAuth: false,
 	user: {},
-	roles: [],
+	roles: []
 }
+
+const store = new Vuex.Store({
+	state: {
+		auth: auth
+	},
+	getters: {
+		isAuth ({ auth }) {
+			return auth.isAuth
+		},
+		user ({ auth }) {
+			return auth.user
+		},
+		hasRoles: ({ auth }) => (roles) => {
+            if (auth.roles.length === 0) {
+                return false
+            }
+            var length = roles.length
+
+            for (var i=0; i<length; i++) {
+                if (auth.roles.indexOf(roles[i]) >= 0) {
+                    return true
+                }
+            }
+            return false
+        },
+        isSelf: ({ auth }) => (uid) => {
+        	return auth.user.uid === uid
+        },
+        notSelf: ({ auth }) => (uid) => {
+        	return auth.user.uid !== uid
+        },
+        hasArticle: ({ auth }) => (article) => {
+            if (!article.author) {
+				return false
+			}
+			if (auth.roles.indexOf("admin") >= 0) {
+				return true
+			}
+			if (article.author.uid === auth.user.uid) {
+				return true
+			}
+			return false
+        },
+	},
+	mutations: {
+		authenticate ({ auth }, isAuth) {
+			auth.isAuth = isAuth
+		},
+		login ({ auth }, user) {
+			auth.user = user
+		},
+		acting ({ auth }, roles) {
+			auth.roles = roles
+		}
+	},
+	actions: {
+		loginAs ({ commit }, user) {
+			commit('authenticate', true)
+			commit('login', user)
+		},
+		actingAs ({ commit }, roles) {
+			commit('acting', roles)
+		}
+	}
+})
 
 router.beforeEach((to, from, next) => {
 	Vue.http.get('/api/auth/user').then((res) => {
@@ -130,12 +199,13 @@ router.beforeEach((to, from, next) => {
 
 const app = new Vue({
 	router,
+	store,
 	components: {
-		PageHeader
+		PageLumtify
 	},
 	data () {
 		return {
 			auth: auth
-		};
+		}
 	}
 }).$mount('#app')

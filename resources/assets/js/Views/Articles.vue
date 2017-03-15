@@ -9,29 +9,26 @@
 		    class="primary--text" 
 		  />
     </v-col>
-    <v-col xs4="xs4" v-for="(user, index) in users">
+    <v-col xs4="xs4" v-for="(article, index) in articles">
         <v-card style="margin-bottom: 15px;">
             <v-card-row class="blue-grey darken-1">
                 <v-card-title>
-                    <span class="white--text">{{ user.name }}</span>
+                    <span class="white--text">{{ article.title }}</span>
                     <v-spacer></v-spacer>
                 </v-card-title>
             </v-card-row>
-            <v-card-row v-bind:img="user.thumbnail" height="300px"></v-card-row>
+            <v-card-row v-bind:img="article.thumbnail" height="300px"></v-card-row>
             <v-card-text class="blue-grey darken-3 white--text">
-                <div v-text="card_text">
-                    <p>Name: {{ user.name }}</p>
-                    <p>Email: {{ user.email }}</p>
-                </div>
+                <div v-text="card_text">{{ article.short_description }}</div>
             </v-card-text>
             <v-card-row actions class="blue-grey darken-1 mt-0">
-                <v-btn flat class="white--text" v-if="isAdmin" v-on:click.native="deleteUser(user, index)" v-bind:disabled="deleting">
+                <v-btn flat class="white--text" v-if="hasArticle(article)" v-on:click.native="deleteArticle(article, index)" v-bind:disabled="deleting">
                     Delete
                 </v-btn>
-                <v-btn flat class="white--text" v-if="isAdmin" v-on:click.native="updateUser(user)">
+                <v-btn flat class="white--text" v-if="hasArticle(article)" v-on:click.native="updateArticle(article)">
                     Update
                 </v-btn>
-                <v-btn flat class="white--text" v-on:click.native="readUser(user)">
+                <v-btn flat class="white--text" v-on:click.native="readArticle(article)">
                     Read
                 </v-btn>
             </v-card-row>
@@ -51,18 +48,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-	name: 'users',
-	props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
-    },
+	name: 'articles',
 	data () {
 		return {
-			users: [],
+			articles: [],
 			total: 0,
 			per_page: 9,
 			current_page: 1,
@@ -72,13 +64,14 @@ export default {
 			from: 0,
 			to: 0,
 			loading: true,
-			deleting: false,
-			isAdmin: false
+			deleting: false
 		}
 	},
 	created () {
         this.fetch()
-        this.isAdmin = this.checkAdmin()
+    },
+    computed: {
+    	...mapGetters(['hasArticle'])
     },
 	methods: {
 		fetch () {
@@ -87,19 +80,19 @@ export default {
 			}
 
 			this.loading = true
-			this.$http.get('/api/users?page=' + this.current_page + '&per=' + this.per_page).then((res) => {
+			this.$http.get('/api/articles?page=' + this.current_page + '&per=' + this.per_page).then((res) => {
 				var data = res.body
 
 				if (data.success) {
-					this.total = data.users.total
-			        this.per_page = data.users.per_page
-			        this.current_page = data.users.current_page
-			        this.last_page = data.users.last_page
-			        this.next_page_url = data.users.next_page_url
-			        this.prev_page_url = data.users.prev_page_url
-			        this.from = data.users.from
-			        this.to = data.users.to
-			        this.users = this.users.concat(data.users.data)
+					this.total = data.articles.total
+			        this.per_page = data.articles.per_page
+			        this.current_page = data.articles.current_page
+			        this.last_page = data.articles.last_page
+			        this.next_page_url = data.articles.next_page_url
+			        this.prev_page_url = data.articles.prev_page_url
+			        this.from = data.articles.from
+			        this.to = data.articles.to
+			        this.articles = this.articles.concat(data.articles.data)
 				}
 			}).catch((err) => {
 				this.$router.push({ name: 'home' })
@@ -107,24 +100,16 @@ export default {
 				this.loading = false
 			})
 		},
-		checkAdmin () {
-			var roles = this.auth.roles
-
-			if (roles.indexOf("admin") >= 0) {
-				return true
-			}
-			return false
-		},
-		deleteUser (user, index) {
-			if (!user.uid) {
+		deleteArticle (article, index) {
+			if (!article.link) {
 				return
 			}
 			this.deleting = true
-			this.$http.delete('/api/users/' + user.uid).then((res) => {
+			this.$http.delete('/api/articles/' + article.link).then((res) => {
 				var data = res.body
 
 				if (data.success) {
-			        this.users.splice(index, 1)
+			        this.articles.splice(index, 1)
 			        alert(data.msg)
 				}
 			}).catch((err) => {
@@ -133,17 +118,17 @@ export default {
 				this.deleting = false
 			})
 		},
-		updateUser (user) {
-			if (!user.uid) {
+		updateArticle (article) {
+			if (!article.link) {
 				return
 			}
-			this.$router.push({ name: 'setting', params: { uid: user.uid } })
+			this.$router.push({ name: 'updateArticle', params: { link: article.link } })
 		},
-		readUser (user) {
-			if (!user.uid) {
+		readArticle (article) {
+			if (!article.link) {
 				return
 			}
-			this.$router.push({ name: 'profile', params: { uid: user.uid } })
+			this.$router.push({ name: 'article', params: { link: article.link } })
 		}
 	},
 	watch: {

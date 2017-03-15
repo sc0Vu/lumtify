@@ -22,16 +22,7 @@
 </head>
 <body>
     <v-app id="app" top-navbar>
-        <page-header v-bind:auth="auth"></page-header>
-        <main>
-            <v-content>
-                <v-container>
-                    <transition appear>
-                        <router-view v-bind:auth="auth"></router-view>
-                    </transition>
-                </v-container>
-            </v-content>
-        </main>
+        <page-lumtify v-bind:auth="auth"></page-lumtify>
     </v-app>
     <script src="{{ env('APP_URL') }}/js/app.js" async defer></script>
 </body>

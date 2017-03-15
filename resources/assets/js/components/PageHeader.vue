@@ -13,7 +13,7 @@
                 <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list>
-                <v-list-item v-if="!auth.isAuth" href="/about" ripple router>
+                <v-list-item v-if="!isAuth" href="/about" ripple router>
                     <v-list-tile href="/login" ripple router>
                         <v-list-tile-title>Login</v-list-tile-title>
                     </v-list-tile>
@@ -22,14 +22,14 @@
                     </v-list-tile>
                 </v-list-item>
 
-                <v-list-item v-else-if="auth.isAuth">
-                    <v-list-tile v-if="roles(['admin', 'editor'])" v-bind:href="{name: 'createArticle'}" ripple router>
+                <v-list-item v-else>
+                    <v-list-tile v-if="hasRoles(['admin', 'editor'])" v-bind:href="{name: 'createArticle'}" ripple router>
                         <v-list-tile-title>Write</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile v-if="roles(['admin'])" v-bind:href="{name: 'users'}" ripple router>
+                    <v-list-tile v-if="hasRoles(['admin'])" v-bind:href="{name: 'users'}" ripple router>
                         <v-list-tile-title>Users</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile v-bind:href="{name: 'profile', params: {uid: auth.user.uid}}" ripple router>
+                    <v-list-tile v-bind:href="{name: 'profile', params: {uid: user.uid}}" ripple router>
                         <v-list-tile-title>Profile</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-on:click.native="logout">
@@ -43,14 +43,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
 	name: 'page-header',
-    props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
+    computed: {
+        ...mapGetters(['isAuth', 'user', 'hasRoles']),
     },
     methods: {
         logout () {
@@ -70,19 +68,6 @@ export default {
                 }
             }).then(() => {
             })
-        },
-        roles (roles) {
-            if (this.auth.roles.length === 0) {
-                return false
-            }
-            var length = roles.length
-
-            for (var i=0; i<length; i++) {
-                if (this.auth.roles.indexOf(roles[i]) >= 0) {
-                    return true
-                }
-            }
-            return false
         }
     }
 }

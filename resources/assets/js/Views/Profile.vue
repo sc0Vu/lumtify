@@ -25,13 +25,6 @@
 
 <script>
 export default {
-	props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
-    },
 	data () {
 		return {
 			name: '',

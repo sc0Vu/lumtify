@@ -63,7 +63,7 @@
 			></v-text-input>
 			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
 		</div>
-		<div v-if="admin() && rolesList.length > 0">
+		<div v-if="hasRoles(['admin']) && rolesList.length > 0">
 			<v-select 
 		        v-bind:options="rolesList"
 			    name="roles"
@@ -88,14 +88,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-	props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
-    },
 	data () {
 		return {
 			name: '',
@@ -116,9 +111,12 @@ export default {
 		this.fetch()
 	},
 	mounted () {
-		if (this.admin()) {
+		if (this.hasRoles(['admin'])) {
 			this.fetchRoles()
 		}
+	},
+	computed: {
+		...mapGetters(['hasRoles'])
 	},
 	methods: {
 		fetch () {
@@ -202,12 +200,6 @@ export default {
 			}).then(() => {
 				this.sending = false
 			})
-		},
-		admin () {
-			if (this.auth.roles.indexOf('admin') >= 0) {
-				return true
-			}
-			return false
 		}
 	},
 	watch: {
