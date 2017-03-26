@@ -1,6 +1,8 @@
 # lumtify
 
 [![Build Status](https://travis-ci.org/sc0Vu/lumtify.svg?branch=master)](https://travis-ci.org/sc0Vu/lumtify)
+[![Coverage Status](https://coveralls.io/repos/github/sc0Vu/lumtify/badge.svg?branch=master)](https://coveralls.io/github/sc0Vu/lumtify?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/58d7719e6893fd004792c9e7/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58d7719e6893fd004792c9e7)
 
 [Lumen](https://github.com/laravel/lumen) + [Vuetify](https://github.com/vuetifyjs/vuetify) blog
 
