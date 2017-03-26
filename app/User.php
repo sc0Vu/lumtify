@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Cache;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
@@ -85,16 +86,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function isAdmin()
     {
-        $roles = $this->roles()->with("role")->get();
-        $isAdmin = false;
+        $key = sha1(sprintf("%s_roles", $this->uid));
 
+        if (Cache::has($key)) {
+            $roles = Cache::get($key);
+        } else {
+            $roles = $this->roles()->with('role')->get();
+            Cache::put($key, $roles, 60);
+        }
         foreach ($roles as &$role) {
             if ($role->role->name === "admin") {
-                $isAdmin = true;
-                break;
+                return true;
             }
         }
-        return $isAdmin;
+        return false;
     }
 
     /**
@@ -104,22 +109,26 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function isEditor()
     {
-        $roles = $this->roles()->with("role")->get();
-        $isEditor = false;
+        $key = sha1(sprintf("%s_roles", $this->uid));
 
+        if (Cache::has($key)) {
+            $roles = Cache::get($key);
+        } else {
+            $roles = $this->roles()->with('role')->get();
+            Cache::put($key, $roles, 60);
+        }
         foreach ($roles as &$role) {
             if ($role->role->name === "editor") {
-                $isEditor = true;
-                break;
+                return true;
             }
         }
-        return $isEditor;
+        return false;
     }
 
     /**
      * Merge data.
      * 
-     * @param array $data
+     * @param  array  $data
      * @return void
      */
     public function mergeData($data)

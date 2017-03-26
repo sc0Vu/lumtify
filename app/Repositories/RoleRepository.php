@@ -9,10 +9,10 @@ class RoleRepository
 	/**
      * Get roles.
      * 
-     * @param int $perPage
-     * @param array $columns
-     * @param string $pageName
-     * @param int $page
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int $page
      * @return \App\Role
      */
     public function roles($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1)
@@ -23,8 +23,8 @@ class RoleRepository
 	/**
 	 * Get role.
 	 * 
-	 * @param string $roleName
-	 * @param boolean $withUsers
+	 * @param  string  $roleName
+	 * @param  boolean  $withUsers
 	 * @return \Illuminate\Support\Collection
 	 */
 	public function getRole($roleName, $withUsers=false)

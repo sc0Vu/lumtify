@@ -2,13 +2,19 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
+// use Illuminate\Auth\Access\HandlesAuthorization;
+use Cache;
 use App\User;
 use App\Article;
 
 class ArticlePolicy
 {
-    use HandlesAuthorization;
+    /**
+     * Uncomment to use:
+     * allow($message)
+     * deny($message)
+     */
+    // use HandlesAuthorization;
     
     /**
      * user roles
@@ -20,35 +26,44 @@ class ArticlePolicy
     /**
      * Create a new policy instance.
      *
+     * @param  \App\User  $user
      * @return void
      */
-    // public function __construct()
-    // {
-    // }
+    public function __construct(User $user)
+    {
+        if (empty($this->roles)) {
+            $key = sha1(sprintf("%s_roles", $user->uid));
+
+            if (Cache::has($key)) {
+                $this->roles = Cache::get($key);
+            } else {
+                $roles = $user->roles()->with('role')->get();
+                $this->roles = $roles;
+                Cache::put($key, $roles, 60);
+            }
+        }
+    }
 
     /**
      * before all check
      * 
-     * @param  App\User $user
-     * @param   string $ability
-     * @return  boolean
+     * @param  \App\User  $user
+     * @param  string  $ability
+     * @return boolean
      */
-    public function before($user, $ability)
+    public function before(User $user, $ability)
     {
         if ($user->isAdmin()) {
             return true;
-        }
-        if (empty($this->roles)) {
-            $this->roles = $user->roles()->with('role')->get();
         }
     }
     
     /**
      * The read article policy.
      * 
-     * @param  User  $user
-     * @param  Article  $article
-     * @return  boolean
+     * @param  \App\User  $user
+     * @param  \App\Article  $article
+     * @return boolean
      */
     // public function read(User $user, Article $article)
     // {
@@ -61,9 +76,9 @@ class ArticlePolicy
     /**
      * The create article policy.
      * 
-     * @param  User  $user
-     * @param  Article  $article
-     * @return  boolean
+     * @param  \App\User  $user
+     * @param  \App\Article  $article
+     * @return boolean
      */
     public function create(User $user, Article $article)
     {
@@ -76,9 +91,9 @@ class ArticlePolicy
     /**
      * The update article policy.
      * 
-     * @param  User  $user
-     * @param  Article  $article
-     * @return  boolean
+     * @param  \App\User  $user
+     * @param  \App\Article  $article
+     * @return boolean
      */
     public function update(User $user, Article $article)
     {
@@ -91,9 +106,9 @@ class ArticlePolicy
     /**
      * The delete article policy.
      * 
-     * @param  User  $user
-     * @param  Article  $article
-     * @return  boolean
+     * @param  \App\User  $user
+     * @param  \App\Article  $article
+     * @return boolean
      */
     public function delete(User $user, Article $article)
     {

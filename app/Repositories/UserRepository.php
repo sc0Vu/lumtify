@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use DB;
+use Cache;
 use App\User;
 use App\Role;
 use App\RoleAssign;
@@ -14,11 +15,11 @@ class UserRepository
     /**
      * Get users.
      * 
-     * @param int $perPage
-     * @param array $columns
-     * @param string $pageName
-     * @param int $page
-     * @param array $status
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int  $page
+     * @param  array  $status
      * @return \App\User
      */
     public function users($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[User::STATUS_ACTIVATED])
@@ -32,7 +33,7 @@ class UserRepository
     /**
      * Create user.
      * 
-     * @param array $data
+     * @param  array  $data
      * @return boolean
      */
     public function create($data)
@@ -57,8 +58,8 @@ class UserRepository
     /**
      * Get user.
      * 
-     * @param string $uid
-     * @param array $status
+     * @param  string  $uid
+     * @param  array  $status
      * @return \App\User
      */
     public function read($uid="", $status=[User::STATUS_ACTIVATED])
@@ -72,8 +73,8 @@ class UserRepository
     /**
      * Update user.
      *
-     * @param \App\User $user
-     * @param array $data
+     * @param  \App\User  $user
+     * @param  array  $data
      * @return mixed
      */
     public function update(User $user, $data)
@@ -112,6 +113,14 @@ class UserRepository
                     $roleAssign->save();
                 }
             }
+            // update user cache
+            $key = sha1(sprintf("%s_roles", $user->uid));
+
+            if (Cache::has($key)) {
+                Cache::forget($key);
+                $roles = $user->roles()->with('role')->get();
+                Cache::put($key, $roles, 60);
+            }
         }
         try {
             return $user->save();
@@ -123,7 +132,7 @@ class UserRepository
     /**
      * Delete user.
      * 
-     * @param \App\User $user
+     * @param  \App\User  $user
      * @return boolean
      */
     public function delete(User $user)
@@ -145,7 +154,7 @@ class UserRepository
     /**
      * Make user uid.
      *
-     * @param integer $length
+     * @param  integer  $length
      * @return string
      */
 	public function makeUid($length=32)

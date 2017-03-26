@@ -2,12 +2,19 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
+// use Illuminate\Auth\Access\HandlesAuthorization;
+use Cache;
+use App\User;
 use App\Role;
 
 class RolePolicy
 {
-    use HandlesAuthorization;
+    /**
+     * Uncomment to use:
+     * allow($message)
+     * deny($message)
+     */
+    // use HandlesAuthorization;
     
     /**
      * user roles
@@ -19,34 +26,43 @@ class RolePolicy
     /**
      * Create a new policy instance.
      *
+     * @param  \App\User  $user
      * @return void
      */
-    // public function __construct()
-    // {
-    // }
+    public function __construct(User $user)
+    {
+        if (empty($this->roles)) {
+            $key = sha1(sprintf("%s_roles", $user->uid));
+
+            if (Cache::has($key)) {
+                $this->roles = Cache::get($key);
+            } else {
+                $roles = $user->roles()->with('role')->get();
+                $this->roles = $roles;
+                Cache::put($key, $roles, 60);
+            }
+        }
+    }
 
     /**
-     * before all check
+     * before all check.
      * 
-     * @param App\User $user
-     * @param string $ability
+     * @param  \App\User  $user
+     * @param  string  $ability
      * @return boolean
      */
-    public function before($user, $ability)
+    public function before(User $user, $ability)
     {
         if ($user->isAdmin()) {
             return true;
-        }
-        if (empty($this->roles)) {
-            $this->roles = $user->roles()->with('role')->get();
         }
     }
 
     /**
      * The roles policy.
      * 
-     * @param User $user
-     * @param Role $role
+     * @param  \App\User  $user
+     * @param  \App\Role  $role
      * @return boolean
      */
     public function roles(User $user, Role $role)
@@ -57,8 +73,8 @@ class RolePolicy
     /**
      * The read role policy.
      * 
-     * @param User $user
-     * @param Role $role
+     * @param  \App\User  $user
+     * @param  \App\Role  $role
      * @return boolean
      */
     public function read(User $user, Role $role)
@@ -69,8 +85,8 @@ class RolePolicy
     /**
      * The update role policy.
      * 
-     * @param User $user
-     * @param Role $role
+     * @param  \App\User  $user
+     * @param  \App\Role  $role
      * @return boolean
      */
     public function update(User $user, Role $role)
@@ -81,8 +97,8 @@ class RolePolicy
     /**
      * The delete role policy.
      * 
-     * @param User $user
-     * @param Role $role
+     * @param  \App\User  $user
+     * @param  \App\Role  $role
      * @return boolean
      */
     public function delete(User $user, Role $role)

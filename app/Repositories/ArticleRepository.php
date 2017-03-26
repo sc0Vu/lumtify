@@ -10,13 +10,13 @@ class ArticleRepository
 	/**
 	 * Get articles.
 	 * 
-	 * @param int $perPage
-     * @param array $columns
-     * @param string $pageName
-     * @param int $page
-     * @param array $status
-     * @param boolean $isEditor
-     * @param int $userId
+	 * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int  $page
+     * @param  array  $status
+     * @param  boolean  $isEditor
+     * @param  int  $userId
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
 	public function articles($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[Article::STATUS_PUBLISHED], $isEditor = false, $userId = 0)
@@ -37,7 +37,7 @@ class ArticleRepository
 	/**
      * Create article.
      * 
-     * @param array $data
+     * @param  array  $data
      * @return boolean
      */
     public function create($data)
@@ -61,10 +61,10 @@ class ArticleRepository
 	/**
 	 * Get article.
 	 * 
-	 * @param string $link
-	 * @param integer $status
-     * @param boolean $isEditor
-     * @param int $userId
+	 * @param  string  $link
+	 * @param  integer  $status
+     * @param  boolean  $isEditor
+     * @param  int  $userId
 	 * @return array || null
 	 */
 	public function read($link, $status=Article::STATUS_PUBLISHED, $isEditor = false, $userId = 0)
@@ -84,8 +84,8 @@ class ArticleRepository
 	/**
      * Update article.
      *
-     * @param \App\Article $article
-     * @param array $data
+     * @param  \App\Article  $article
+     * @param  array  $data
      * @return boolean
      */
     public function update(Article $article, $data)
@@ -118,7 +118,7 @@ class ArticleRepository
     /**
      * Delete article.
      * 
-     * @param \App\Article $article
+     * @param  \App\Article  $article
      * @return boolean
      */
     public function delete(Article $article)
