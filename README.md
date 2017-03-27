@@ -27,7 +27,7 @@ Frontend
     
     npm install // yarn install
 
-    gulp
+    gulp // compile assets
     
 ## Test
 
