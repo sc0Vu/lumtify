@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryRelationship extends Model
 {
     /**
+     * The timestamps
+     * 
+     * @var boolean
+     */
+    public $timestamps = false;
+    
+    /**
      * The table
      * 
      * @var string
