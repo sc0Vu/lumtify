@@ -140,11 +140,16 @@ class ArticleRepository
     {
     	DB::beginTransaction();
 
-    	if ($article->delete()) {
-    		DB::commit();
-    		return true;
-    	}
-    	DB::rollback();
-    	return false;
+    	try {
+            if ($article->delete()) {
+                DB::commit();
+                return true;
+            }
+            DB::rollback();
+            return false;
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollback();
+            return false;
+        }
     }
 }

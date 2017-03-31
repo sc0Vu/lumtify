@@ -48,7 +48,7 @@ class UserRepository
         $user->password = Hash::make($data["pass"]);
         $user->status = User::STATUS_ACTIVATED;
         DB::beginTransaction();
-        
+
         try {
             if ($user->save()) {
                 DB::commit();
@@ -152,18 +152,24 @@ class UserRepository
      */
     public function delete(User $user)
     {
-        DB::beginTransaction();
         $articles = $user->articles();
 
-        if ($articles) {
-            $articles->delete();
+        DB::beginTransaction();
+
+        try {
+            if ($articles) {
+                $articles->delete();
+            }
+            if ($user->delete()) {
+                DB::commit();
+                return true;
+            }
+            DB::rollback();
+            return false;
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollback();
+            return false;
         }
-        if ($user->delete()) {
-            DB::commit();
-            return true;
-        }
-        DB::rollback();
-        return false;
     }
     
     /**
