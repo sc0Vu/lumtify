@@ -33,3 +33,10 @@ $app->delete('/users/{uid}', ['middleware' => 'api', 'uses' => 'UserController@d
 
 // roles
 $app->get('/roles', ['middleware' => 'api', 'uses' => 'RoleController@roles']);
+
+// categories
+$app->get('/categories', 'CategoryController@categories');
+$app->post('/categories', ['middleware' => 'api', 'uses' => 'CategoryController@create']);
+$app->get('/categories/{slug}', 'CategoryController@read');
+$app->put('/categories/{slug}', ['middleware' => 'api', 'uses' => 'CategoryController@update']);
+$app->delete('/categories/{slug}', ['middleware' => 'api', 'uses' => 'CategoryController@delete']);
