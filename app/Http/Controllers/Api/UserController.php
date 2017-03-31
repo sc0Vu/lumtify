@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Auth;
 use Gate;
 use Validator;
 use App\User;
@@ -190,6 +191,9 @@ class UserController extends Controller
                 "msg" => trans("info.failed.validate"),
                 "success" => false
             ], 400);
+        }
+        if (!Auth::user()->isAdmin() && isset($data["roles"])) {
+            unset($data["roles"]);
         }
         if ($this->repository->update($user, $data)) {
             return response()->json([
