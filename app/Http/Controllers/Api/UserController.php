@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Auth;
+use Tymon\JWTAuth\JWTAuth;
 use Gate;
 use Validator;
 use App\User;
@@ -21,14 +21,23 @@ class UserController extends Controller
     protected $repository;
 
     /**
+     * The authentication guard factory instance.
+     *
+     * @var \Tymon\JWTAuth\JWTAuth
+     */
+    protected $auth;
+
+    /**
      * Create a new controller instance.
      *
      * @param \App\Repositories\UserRepository $repository
+     * @param \Tymon\JWTAuth\JWTAuth  $auth
      * @return void
      */
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, JWTAuth $auth)
     {
         $this->repository = $repository;
+        $this->auth = $auth;
     }
 
     /**
@@ -192,7 +201,7 @@ class UserController extends Controller
                 "success" => false
             ], 400);
         }
-        if (!Auth::user()->isAdmin() && isset($data["roles"])) {
+        if (!$this->auth->user()->isAdmin() && isset($data["roles"])) {
             unset($data["roles"]);
         }
         if ($this->repository->update($user, $data)) {
