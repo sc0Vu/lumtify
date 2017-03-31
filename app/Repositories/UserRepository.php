@@ -47,10 +47,17 @@ class UserRepository
         $user->email = $data["email"];
         $user->password = Hash::make($data["pass"]);
         $user->status = User::STATUS_ACTIVATED;
+        DB::beginTransaction();
         
         try {
-            return $user->save();
+            if ($user->save()) {
+                DB::commit();
+                return true;
+            }
+            DB::rollback();
+            return false;
         } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollback();
             return false;
         }
     }
@@ -122,9 +129,17 @@ class UserRepository
                 Cache::put($key, $roles, 60);
             }
         }
+        DB::beginTransaction();
+        
         try {
-            return $user->save();
+            if ($user->save()) {
+                DB::commit();
+                return true;
+            }
+            DB::rollback();
+            return false;
         } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollback();
             return false;
         }
     }

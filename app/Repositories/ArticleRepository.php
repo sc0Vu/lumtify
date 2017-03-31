@@ -42,6 +42,7 @@ class ArticleRepository
      */
     public function create($data)
     {
+        DB::beginTransaction();
         $article = new Article;
         $article->user_id = $data["user_id"];
         $article->title = $data["title"];
@@ -52,8 +53,14 @@ class ArticleRepository
         $article->status = $data["status"];
         
         try {
-            return $article->save();
+            if ($article->save()) {
+                DB::commit();
+                return true;
+            }
+            DB::rollback();
+            return false;
         } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollback();
             return false;
         }
     }
@@ -108,9 +115,17 @@ class ArticleRepository
     	if (isset($data["status"])) {
     		$article->status = $data["status"];
     	}
+        DB::beginTransaction();
+
         try {
-            return $article->save();
+            if ($article->save()) {
+                DB::commit();
+                return true;
+            }
+            DB::rollback();
+            return false;
         } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollback();
             return false;
         }
     }
