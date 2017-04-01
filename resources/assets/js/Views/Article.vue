@@ -19,14 +19,19 @@
 	    <v-card>
 	        <v-card-row class="blue darken-1">
 	            <v-card-title>
+	                <p class="white--text">
+	                	Categories:
+	                	<span v-for="(category, index) in article.categories">
+	                		{{ category.category.name }}
+	                	</span>
+	                </p>
+	            </v-card-title>
+	        </v-card-row>
+	        <v-card-row class="blue darken-1">
+	            <v-card-title>
 	                <span class="white--text">{{ article.author.name }}</span>
 	                <v-spacer></v-spacer>
 	            </v-card-title>
-	        </v-card-row>
-	        <v-card-row actions class="blue darken-1 mt-0">
-	            <v-card-text class="blue darken-1 white--text">
-		            <div v-text="card_text">{{ article.author.uid }}</div>
-		        </v-card-text>
 	        </v-card-row>
 	    </v-card>
     </v-col>

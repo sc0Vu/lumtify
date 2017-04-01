@@ -9,7 +9,10 @@
 		    class="primary--text" 
 		  />
     </v-col>
-    <v-col xs4="xs4" v-for="(article, index) in articles">
+    <v-col xs12="xs12" class="text-xs-center" v-else-if="articles.length <= 0">
+    	<h1>No articles here!</h1>
+    </v-col>
+    <v-col xs4="xs4" v-for="(article, index) in articles" v-else-if="articles.length > 0">
         <v-card style="margin-bottom: 15px;">
             <v-card-row class="blue-grey darken-1">
                 <v-card-title>
@@ -64,7 +67,8 @@ export default {
 			from: 0,
 			to: 0,
 			loading: true,
-			deleting: false
+			deleting: false,
+			category: ''
 		}
 	},
 	created () {
@@ -75,12 +79,17 @@ export default {
     },
 	methods: {
 		fetch () {
+			var query = this.$route.query
+            
+			this.per_page = query.per || 9
+			this.category = query.category || ''
+
 			if (this.last_page > this.current_page) {
 				this.current_page += 1
 			}
 
 			this.loading = true
-			this.$http.get('/api/articles?page=' + this.current_page + '&per=' + this.per_page).then((res) => {
+			this.$http.get('/api/articles?page=' + this.current_page + '&per=' + this.per_page + '&category=' + this.category).then((res) => {
 				var data = res.body
 
 				if (data.success) {
