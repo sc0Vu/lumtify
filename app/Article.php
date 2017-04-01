@@ -62,4 +62,14 @@ class Article extends Model
     {
         return $this->belongsTo("App\User", "user_id", "id");
     }
+
+    /**
+     * The categories relation.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categories()
+    {
+        return $this->hasMany("App\CategoryRelationship", "article_id", "id");
+    }
 }

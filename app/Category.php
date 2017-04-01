@@ -12,7 +12,7 @@ class Category extends Model
      * @var boolean
      */
     public $timestamps = false;
-    
+
     /**
      * The primary key
      * 
@@ -33,7 +33,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        "parent_id", "children_id", "slug", "name"
+        "parent_id", "child_id", "slug", "name"
     ];
 
     /**
@@ -42,7 +42,7 @@ class Category extends Model
      * @var array
      */
     protected $hidden = [
-        "id", "parent__id", "children_id"
+        "id", "parent_id", "child_id"
     ];
 
     /**
@@ -62,7 +62,7 @@ class Category extends Model
      */
     public function child()
     {
-        return $this->belongsTo("App\Category", "parent_id", "id");
+        return $this->belongsTo("App\Category", "child_id", "id");
     }
 
     /**
@@ -72,6 +72,6 @@ class Category extends Model
      */
     public function articles()
     {
-        return $this->hasMany("App\CategoryRelationship", "id", "category_id")->with("article");
+        return $this->hasMany("App\CategoryRelationship", "category_id", "id");
     }
 }
