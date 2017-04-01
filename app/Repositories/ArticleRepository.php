@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use DB;
 use App\Article;
+use App\Category;
+use App\CategoryRelationship;
 
 class ArticleRepository
 {
@@ -15,23 +17,39 @@ class ArticleRepository
      * @param  string  $pageName
      * @param  int  $page
      * @param  array  $status
-     * @param  boolean  $isEditor
      * @param  int  $userId
+     * @param  string  $category
 	 * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
 	 */
-	public function articles($perPage = 10, $columns = ['*'], $pageName = 'page', $page = 1, $status=[Article::STATUS_PUBLISHED], $isEditor = false, $userId = 0)
+	public function articles($perPage = 10, $columns = ["*"], $pageName = "page", $page = 1, $status=[Article::STATUS_PUBLISHED], $userId = 0, $category = "")
 	{
 		if (!is_array($status)) {
 			$status = [$status];
 		}
-        if (!$isEditor) {
-            return Article::whereIn("status", $status)->with("author")->paginate($perPage, $columns, $pageName, $page);
+        if (preg_match("/[\w]+/", $category)) {
+            $categories = explode(",", $category);
+            $relationships = Category::select("id")->whereIn("slug", $categories)->with(["articles"])->get()->pluck("articles");
+            $articleIds = [];
+
+            foreach ($relationships as $relation) {
+                $articleIds = array_merge($articleIds, $relation->pluck("article_id")->all());
+            }
+        } else {
+            $category = "";
         }
-        if (empty($userId)) {
-            return Article::whereIn("status", $status)->with("author")->paginate($perPage, $columns, $pageName, $page);
+        if (empty($category)) {
+            if (empty($userId)) {
+                return Article::whereIn("status", $status)->with(["author", "categories.category"])->paginate($perPage, $columns, $pageName, $page);
+            }
+            return Article::where("user_id", $userId)->whereIn("status", $status)
+                            ->with(["author", "categories.category"])->paginate($perPage, $columns, $pageName, $page);
+        } else {
+            if (empty($userId)) {
+                return Article::whereIn("status", $status)->whereIn("id", $articleIds)->with(["author", "categories.category"])->paginate($perPage, $columns, $pageName, $page);
+            }
+            return Article::where("user_id", $userId)->whereIn("status", $status)->whereIn("id", $articleIds)
+                            ->with(["author", "categories.category"])->paginate($perPage, $columns, $pageName, $page);
         }
-		return Article::where("user_id", $userId)->whereIn("status", $status)
-                        ->with("author")->paginate($perPage, $columns, $pageName, $page);
 	}
 
 	/**
@@ -70,22 +88,18 @@ class ArticleRepository
 	 * 
 	 * @param  string  $link
 	 * @param  integer  $status
-     * @param  boolean  $isEditor
      * @param  int  $userId
 	 * @return array || null
 	 */
-	public function read($link, $status=Article::STATUS_PUBLISHED, $isEditor = false, $userId = 0)
+	public function read($link, $status=Article::STATUS_PUBLISHED, $userId = 0)
 	{
 		if (!is_array($status)) {
 			$status = [$status];
 		}
-        if (!$isEditor) {
-            return Article::where("link", $link)->whereIn("status", $status)->with("author")->first();
-        }
         if (empty($userId)) {
-            return Article::where("link", $link)->whereIn("status", $status)->with("author")->first();
+            return Article::where("link", $link)->whereIn("status", $status)->with(["author", "categories.category"])->first();
         }
-		return Article::where("link", $link)->where("user_id", $userId)->whereIn("status", $status)->with("author")->first();
+		return Article::where("link", $link)->where("user_id", $userId)->whereIn("status", $status)->with(["author", "categories.category"])->first();
 	}
 
 	/**

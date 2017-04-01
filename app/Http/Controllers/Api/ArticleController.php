@@ -53,15 +53,16 @@ class ArticleController extends Controller
         $query = $request->query();
         $page = isset($query["page"]) ? (preg_match("/[\d]+/", $query["page"]) ? $query["page"] : 1) : 1;
         $per = isset($query["per"]) ? (preg_match("/[\d]+/", $query["per"]) ? $query["per"] : 10) : 10;
+        $category = isset($query["category"]) ? $query["category"] : "";
 
         if (!$user) {
-            $articles = $this->repository->articles($per, ["title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_PUBLISHED]);
+            $articles = $this->repository->articles($per, ["id", "title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_PUBLISHED], 0, $category);
         } else if ($user->isAdmin()) {
-            $articles = $this->repository->articles($per, ["title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]);
+            $articles = $this->repository->articles($per, ["id", "title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], 0, $category);
         } else if($user->isEditor()) {
-            $articles = $this->repository->articles($per, ["title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], true, $user->id);
+            $articles = $this->repository->articles($per, ["id", "title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], $user->id, $category);
         } else {
-            $articles = $this->repository->articles($per, ["title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_PUBLISHED]);
+            $articles = $this->repository->articles($per, ["id", "title", "short_description", "thumbnail", "link", "user_id", "created_at", "updated_at"], "page", $page, [Article::STATUS_PUBLISHED], 0, $category);
         }
         return response()->json([
             "errs" => [],
@@ -145,7 +146,7 @@ class ArticleController extends Controller
         } else if ($user->isAdmin()) {
             $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE]);
         } else if($user->isEditor()) {
-            $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], true, $user->id);
+            $article = $this->repository->read($link, [Article::STATUS_DRAFT, Article::STATUS_PUBLISHED, Article::STATUS_ARCHIEVE], $user->id);
         } else {
             $article = $this->repository->read($link);
         }
