@@ -24,7 +24,7 @@ class CategoryRelationshipsTableSeeder extends Seeder
         	for ($j=1; $j<=$categoriesCount; $j++) {
         		$categoryRelationships[] = [
 	        	    "article_id" => $i,
-	        	    "category_id" => $i
+	        	    "category_id" => $j
 	        	];
         	}
         }
