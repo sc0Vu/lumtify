@@ -97,17 +97,17 @@ $app->register(App\Providers\EventServiceProvider::class);
 */
 
 $app->group([
-    'namespace' => 'App\Http\Controllers\Web'
-], function ($app) {
-    require __DIR__.'/../routes/web.php';
-});
-
-$app->group([
     'prefix' => 'api',
     'namespace' => 'App\Http\Controllers\Api',
     'middleware' => 'throttle:20,1'
 ], function ($app) {
     require __DIR__.'/../routes/api.php';
+});
+
+$app->group([
+    'namespace' => 'App\Http\Controllers\Web'
+], function ($app) {
+    require __DIR__.'/../routes/web.php';
 });
 
 return $app;

@@ -13,22 +13,4 @@
 
 $app->get("/", "HomeController@index");
 
-$app->get("/about", "HomeController@index");
-
-$app->get("/articles/{link}/read", "HomeController@index");
-
-$app->get("/articles/{link}/update", "HomeController@index");
-
-$app->get("/articles/create", "HomeController@index");
-
-$app->get("/articles", "HomeController@index");
-
-$app->get("/login", "HomeController@index");
-
-$app->get("/register", "HomeController@index");
-
-$app->get("/users/{uid}/profile", "HomeController@index");
-
-$app->get("/users/{uid}/setting", "HomeController@index");
-
-$app->get("/users", "HomeController@index");
+$app->get('/{any}', 'HomeController@index');
