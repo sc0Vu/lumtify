@@ -69,18 +69,25 @@ class ArticleRepository
         $article->content = $data["content"];
         $article->thumbnail = $data["thumbnail"];
         $article->status = $data["status"];
-        
-        try {
-            if ($article->save()) {
-                DB::commit();
-                return true;
+
+        if ($article->save()) {
+            if (isset($data["categories"])) {
+                $categoryRelationships = [];
+                $categoryIds = Category::select("id")->whereIn("slug", $data["categories"])->get();
+
+                foreach ($categoryIds as &$category) {
+                    $categoryRelationships[] = [
+                        "article_id" => $article->id,
+                        "category_id" => $category->id
+                    ];
+                }
+                CategoryRelationship::insert($categoryRelationships);
             }
-            DB::rollback();
-            return false;
-        } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollback();
-            return false;
+            DB::commit();
+            return true;
         }
+        DB::rollback();
+        return false;
     }
 
 	/**
@@ -131,17 +138,29 @@ class ArticleRepository
     	}
         DB::beginTransaction();
 
-        try {
-            if ($article->save()) {
-                DB::commit();
-                return true;
+        if (isset($data["categories"])) {
+            // delete all categories
+            $article->categories()->delete();
+            
+            // insert new categories
+            $categoryRelationships = [];
+            $categoryIds = Category::select("id")->whereIn("slug", $data["categories"])->get();
+
+            foreach ($categoryIds as &$category) {
+                $categoryRelationships[] = [
+                    "article_id" => $article->id,
+                    "category_id" => $category->id
+                ];
             }
-            DB::rollback();
-            return false;
-        } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollback();
-            return false;
+            CategoryRelationship::insert($categoryRelationships);
         }
+
+        if ($article->save()) {
+            DB::commit();
+            return true;
+        }
+        DB::rollback();
+        return false;
     }
 
     /**
@@ -154,16 +173,11 @@ class ArticleRepository
     {
     	DB::beginTransaction();
 
-    	try {
-            if ($article->delete()) {
-                DB::commit();
-                return true;
-            }
-            DB::rollback();
-            return false;
-        } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollback();
-            return false;
+        if ($article->delete()) {
+            DB::commit();
+            return true;
         }
+        DB::rollback();
+        return false;
     }
 }

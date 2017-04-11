@@ -50,12 +50,15 @@ class ArticleApiTest extends TestCase
                 "short_description" => "Hello lumtify!",
                 "content" => "Hello lumtify!",
                 "thumbnail" => "https://blog.ptrgl.com",
-                "status" => 4
+                "status" => 4,
+                "categories" => [
+                    "git", "helloworld"
+                ]
             ], [
                 'Authorization' => 'Bearer ' . $token
             ]);
             $response->assertResponseStatus(400);
-            $response->seeJson(["success" => false]);
+            $response->seeJson(["success" => false]);            
 
             $response = $this->post("/api/articles", [
                 "title" => "Hello lumtify!",
@@ -63,7 +66,10 @@ class ArticleApiTest extends TestCase
                 "short_description" => "Hello lumtify!",
                 "content" => "Hello lumtify!",
                 "thumbnail" => "https://blog.ptrgl.com",
-                "status" => 1
+                "status" => 1,
+                "categories" => [
+                    "coat"
+                ]
             ], [
                 'Authorization' => 'Bearer ' . $token
             ]);
@@ -127,6 +133,9 @@ class ArticleApiTest extends TestCase
         if ($user->isAdmin() || $user->isEditor()) {
             $response = $this->put("/api/articles/" . $article->link, [
                 "title" => "Hello lumtify!",
+                "categories" => [
+                    "coat"
+                ]
             ], [
                 'Authorization' => 'Bearer ' . $token
             ]);

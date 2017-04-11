@@ -37,7 +37,10 @@ class ArticleRepositoryTest extends TestCase
             "short_description" => "Hello lumtify!",
             "content" => "Hello lumtify!",
             "thumbnail" => "https://blog.ptrgl.com",
-            "status" => 1
+            "status" => 1,
+            "categories" => [
+                "lumtify", "git", "hub"
+            ]
         ]));
     }
 
@@ -70,7 +73,10 @@ class ArticleRepositoryTest extends TestCase
             "short_description" => "Hello lumtify!",
             "content" => "Hello lumtify!",
             "thumbnail" => "https://blog.ptrgl.com",
-            "status" => 1
+            "status" => 1,
+            "categories" => [
+                "lumtify", "git", "hub"
+            ]
         ]));
     }
 
