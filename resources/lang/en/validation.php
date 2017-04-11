@@ -109,6 +109,7 @@ return [
     */
 
     'attributes' => [
+        'categories.*' => 'Categories'
     ],
 
 ];

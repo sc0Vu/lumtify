@@ -296,7 +296,8 @@ class ArticleController extends Controller
             "short_description" => "required|string|max:255|unique:users,email",
             "content" => "required",
             "thumbnail" => "required|max:255|active_url",
-            "status" => "required|in:1,2,3"
+            "status" => "required|in:1,2,3",
+            "categories.*" => "exists:categories,slug"
         ]);
     }
 
@@ -318,7 +319,8 @@ class ArticleController extends Controller
             "short_description" => "string|max:255|unique:users,email",
             "content" => "",
             "thumbnail" => "max:255|active_url",
-            "status" => "in:1,2,3"
+            "status" => "in:1,2,3",
+            "categories.*" => "exists:categories,slug"
         ]);
     }
 
