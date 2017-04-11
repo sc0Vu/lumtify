@@ -266,7 +266,7 @@ class CategoryController extends Controller
     {
         return Validator::make($data, [
             "name" => "required|string|max:255",
-            "slug" => "required|alpha_dash|unique:articles,link|string|max:50",
+            "slug" => "required|alpha_dash|unique:categories,slug|string|max:50",
             "parent_id" => "numeric|exists:categories,id",
             "child_id" => "numeric|exists:categories,id",
         ]);
@@ -287,7 +287,7 @@ class CategoryController extends Controller
                 "alpha_dash",
                 "string",
                 "max:50",
-                Rule::unique('articles')->ignore($categoryId)
+                Rule::unique('categories')->ignore($categoryId)
             ],
             "parent_id" => "numeric|exists:categories,id",
             "child_id" => "numeric|exists:categories,id",
