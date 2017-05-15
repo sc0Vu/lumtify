@@ -1,5 +1,12 @@
-/vendor
+vendor/
 /.idea
 Homestead.json
 Homestead.yaml
 .env
+.DS_Store
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
