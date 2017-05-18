@@ -5,7 +5,7 @@
         <v-content>
             <v-container>
                 <transition appear>
-                    <router-view v-bind:auth="auth"></router-view>
+                    <router-view></router-view>
                 </transition>
             </v-container>
         </v-content>
@@ -20,13 +20,6 @@ export default {
 	name: 'page-lumtify',
 	components: {
 		PageHeader
-	},
-	props: {
-		auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
 	}
 }
 </script>
