@@ -15,6 +15,7 @@ const Setting = resolve => require(['./Views/Setting.vue'], resolve)
 const UpdateArticle = resolve => require(['./Views/UpdateArticle.vue'], resolve)
 const CreateArticle = resolve => require(['./Views/CreateArticle.vue'], resolve)
 const Users = resolve => require(['./Views/Users.vue'], resolve)
+const NotFound = resolve => require(['./Views/NotFound.vue'], resolve)
 
 export default new VueRouter({
     mode: 'history',
@@ -88,6 +89,10 @@ export default new VueRouter({
                 }
             },
             component: Users 
+        }, {
+            name: '404',
+            path: '*',
+            component: NotFound
         }
     ],
     linkActiveClass: 'active'
