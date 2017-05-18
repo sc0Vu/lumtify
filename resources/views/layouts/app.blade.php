@@ -41,7 +41,7 @@
         </div>
     </div>
     <v-app id="app" top-navbar>
-        <page-lumtify v-bind:auth="auth"></page-lumtify>
+        <page-lumtify></page-lumtify>
     </v-app>
     <script src="{{ env('APP_URL') }}/js/app.js" async defer></script>
 </body>
