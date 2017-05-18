@@ -19,48 +19,48 @@
 			</v-alert>
 		</div>
 		<div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="name"
 			    label="Name"
 			    type="text"
 			    v-model="name"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.name">{{ errFor.name.join(",") }}</span>
 		</div>
         <div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="email"
 			    label="Email"
 			    type="email"
 			    v-model="email"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
 		</div>
 		<div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="thumbnail"
 			    label="Thumbnail"
 			    type="text"
 			    v-model="thumbnail"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.thumbnail">{{ errFor.thumbnail.join(",") }}</span>
 		</div>
         <div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="pass"
 			    label="Password"
 			    type="password"
 			    v-model="password"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
 		</div>
 		<div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="pass_verify"
 			    label="Password Again"
 			    type="password"
 			    v-model="password_verify"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
 		</div>
 		<div v-if="hasRoles(['admin']) && rolesList.length > 0">

@@ -12,21 +12,21 @@
 			</v-alert>
 		</div>
         <div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="email"
 			    label="Email"
 			    type="email"
 			    v-model="email"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
 		</div>
         <div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="password"
 			    label="Password"
 			    type="password"
 			    v-model="password"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
 		</div>
         <div>

@@ -19,30 +19,30 @@
 			</v-alert>
 		</div>
 		<div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="title"
 			    label="Title"
 			    type="text"
 			    v-model="article.title"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.title">{{ errFor.title.join(",") }}</span>
 		</div>
         <div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="link"
 			    label="Link"
 			    type="text"
 			    v-model="article.link"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.link">{{ errFor.link.join(",") }}</span>
 		</div>
         <div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="short_description"
 			    label="Short Description"
 			    type="text"
 			    v-model="article.short_description"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.short_description">{{ errFor.short_description.join(",") }}</span>
 		</div>
 		<v-row>
@@ -62,12 +62,12 @@
 			<span class="red--text" v-if="errFor.content">{{ errFor.content.join(",") }}</span>
 		</v-row>
 		<div>
-		    <v-text-input 
+		    <v-text-field 
 			    name="thumbnail"
 			    label="Thumbnail"
 			    type="text"
 			    v-model="article.thumbnail"
-			></v-text-input>
+			></v-text-field>
 			<span class="red--text" v-if="errFor.thumbnail">{{ errFor.thumbnail.join(",") }}</span>
 		</div>
 		<div>
