@@ -40,11 +40,12 @@
 		</div>
 		<v-row>
 	    	<v-col xs6="xs6">
-	    	    <v-textarea
+	    	    <v-text-field
 	                name="content"
 		            label="Content"
 	                v-model="article.content"
-	            ></v-textarea>
+	                multi-line
+	            ></v-text-field>
 		    </v-col>
 		    <v-col xs6="xs6">
 		        <div>
@@ -87,6 +88,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
 	data () {
 		return {
@@ -117,6 +120,7 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions(['notify']),
 		create () {
 			this.sending = true
 			this.$http.post('/api/articles', this.article).then((res) => {
@@ -127,7 +131,7 @@ export default {
 					this.errs = data.errs
 					this.msg = data.msg
 					this.success = data.success
-					alert(data.msg)
+					this.notify({ msg: data.msg })
 					this.$router.push({ name: 'home' })
 				}
 			}).catch((err) => {
@@ -138,7 +142,7 @@ export default {
 					this.errs = e.errs
 					this.msg = e.msg
 					this.success = e.success
-					alert(e.msg)
+					this.notify({ msg: e.msg })
 				} else {
 					this.$router.push({ name: 'home' })
 				}
