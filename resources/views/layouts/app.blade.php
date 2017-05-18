@@ -12,6 +12,18 @@
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet" type="text/css">
+    <style>
+    html {
+        height: 100%;
+    }
+    #pre-loader {
+        width: 100%;
+    }
+    #pre-loader-item {
+        text-align: center;
+        margin-top: 10%;
+    }
+    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -21,6 +33,13 @@
     <![endif]-->
 </head>
 <body>
+    <div id="pre-loader">
+        <div id="pre-loader-item">
+          <div>
+            <p>@lang('info.loading')</p>
+          </div>
+        </div>
+    </div>
     <v-app id="app" top-navbar>
         <page-lumtify v-bind:auth="auth"></page-lumtify>
     </v-app>

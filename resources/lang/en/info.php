@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "loading" => "*** Loading ***",
     "success" => [
         "create" => "Create successfully!",
         "update" => "Update successfully!",

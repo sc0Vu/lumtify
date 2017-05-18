@@ -207,5 +207,16 @@ const app = new Vue({
 		return {
 			auth: auth
 		}
+	},
+	mounted () {
+		var preLoader = document.querySelector('#pre-loader')
+
+		if (preLoader !== null) {
+			try {
+				document.body.removeChild(preLoader)
+			} catch (e) {
+				console.log(e)
+			}
+		}
 	}
 }).$mount('#app')
