@@ -73,7 +73,7 @@
 		</div>
 		<div>
 		    <v-select 
-		        v-bind:options="statusList"
+		        v-bind:items="statusList"
 			    name="status"
 			    label="Status"
 			    v-model="article.status"

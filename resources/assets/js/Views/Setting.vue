@@ -65,7 +65,7 @@
 		</div>
 		<div v-if="hasRoles(['admin']) && rolesList.length > 0">
 			<v-select 
-		        v-bind:options="rolesList"
+		        v-bind:items="rolesList"
 			    name="roles"
 			    label="Roles"
 			    v-model="roles"
@@ -89,6 +89,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
 	data () {
@@ -119,6 +120,7 @@ export default {
 		...mapGetters(['hasRoles'])
 	},
 	methods: {
+		...mapActions(['notify']),
 		fetch () {
 			this.loading = true
 			this.$http.get('/api/users/' + this.$route.params.uid).then((res) => {
@@ -182,7 +184,7 @@ export default {
 					this.errs = data.errs
 					this.msg = data.msg
 					this.success = data.success
-					alert(data.msg)
+					this.notify({ msg: data.msg })
 					this.$router.push({ name: 'home' })
 				}
 			}).catch((err) => {
@@ -193,7 +195,7 @@ export default {
 					this.errs = e.errs
 					this.msg = e.msg
 					this.success = e.success
-					alert(e.msg)
+					this.notify({ msg: e.msg })
 				} else {
 					this.$router.push({ name: 'home' })
 				}
