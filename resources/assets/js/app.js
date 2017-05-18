@@ -76,7 +76,14 @@ const auth = {
 
 const store = new Vuex.Store({
 	state: {
-		auth: auth
+		auth: auth,
+		snaker: {
+			x: 'left',
+			y: 'top',
+			timeout: 3000,
+			show: false,
+			msg: ''
+		}
 	},
 	getters: {
 		isAuth ({ auth }) {
@@ -116,6 +123,21 @@ const store = new Vuex.Store({
 			}
 			return false
         },
+        x ({ snaker }) {
+        	return snaker.x
+        },
+        y ({ snaker }) {
+        	return snaker.y
+        },
+        timeout ({ snaker }) {
+        	return snaker.timeout
+        },
+        show ({ snaker }) {
+        	return snaker.show
+        },
+        msg ({ snaker }) {
+        	return snaker.msg
+        }
 	},
 	mutations: {
 		authenticate ({ auth }, isAuth) {
@@ -126,6 +148,19 @@ const store = new Vuex.Store({
 		},
 		acting ({ auth }, roles) {
 			auth.roles = roles
+		},
+		setX ({ snaker }, x) {
+			snaker.x = x
+		},
+		setY ({ snaker }, y) {
+			snaker.y = y
+		},
+		setTimeout ({ snaker }, timeout) {
+			snaker.timeout = timeout
+		},
+		inform ({ snaker }, msg) {
+			snaker.msg = msg
+			snaker.show = true
 		}
 	},
 	actions: {
@@ -135,6 +170,20 @@ const store = new Vuex.Store({
 		},
 		actingAs ({ commit }, roles) {
 			commit('acting', roles)
+		},
+		notify ({ commit }, snaker) {
+			if (snaker.x) {
+				commit('setX', snaker.x)
+			}
+			if (snaker.y) {
+				commit('setY', snaker.y)
+			}
+			if (snaker.timeout) {
+				commit('setTimeout', snaker.timeout)
+			}
+			if (snaker.msg) {
+				commit('inform', snaker.msg)
+			}
 		}
 	}
 })
