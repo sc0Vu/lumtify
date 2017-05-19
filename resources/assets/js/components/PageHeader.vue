@@ -44,6 +44,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
 	name: 'page-header',
@@ -51,20 +52,21 @@ export default {
         ...mapGetters(['isAuth', 'user', 'hasRoles']),
     },
     methods: {
+        ...mapActions(['notify']),
         logout () {
             this.$http.get('/api/auth/logout').then((res) => {
                 var data = res.body
 
                 if (data.success) {
                     localStorage.setItem('lumtify', '')
-                    alert(data.msg)
+                    this.notify({ msg: data.msg || 'Lougout successful!', show: true })
                     this.$router.push({ name: 'home' })
                 }
             }).catch((err) => {
                 var e = err.body
 
                 if (!e.success) {
-                    console.log(e)
+                    this.notify({ msg: e.msg, show: true })
                 }
             }).then(() => {
             })

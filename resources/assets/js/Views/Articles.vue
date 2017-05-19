@@ -52,6 +52,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
 	name: 'articles',
@@ -78,6 +79,7 @@ export default {
     	...mapGetters(['hasArticle'])
     },
 	methods: {
+		...mapActions(['notify']),
 		fetch () {
 			var query = this.$route.query
             
@@ -104,6 +106,9 @@ export default {
 			        this.articles = this.articles.concat(data.articles.data)
 				}
 			}).catch((err) => {
+				if (!err.success) {
+					this.notify({ msg: err.msg, show: true })
+				}
 				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
@@ -119,9 +124,12 @@ export default {
 
 				if (data.success) {
 			        this.articles.splice(index, 1)
-			        alert(data.msg)
+					this.notify({ msg: data.msg, show: true })
 				}
 			}).catch((err) => {
+				if (!err.success) {
+					this.notify({ msg: err.msg, show: true })
+				}
 				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.deleting = false

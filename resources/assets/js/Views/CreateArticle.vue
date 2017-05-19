@@ -131,7 +131,7 @@ export default {
 					this.errs = data.errs
 					this.msg = data.msg
 					this.success = data.success
-					this.notify({ msg: data.msg })
+					this.notify({ msg: data.msg, show: true })
 					this.$router.push({ name: 'home' })
 				}
 			}).catch((err) => {
@@ -142,7 +142,7 @@ export default {
 					this.errs = e.errs
 					this.msg = e.msg
 					this.success = e.success
-					this.notify({ msg: e.msg })
+					this.notify({ msg: e.msg, show: true })
 				} else {
 					this.$router.push({ name: 'home' })
 				}

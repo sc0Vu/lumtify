@@ -52,6 +52,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
 	name: 'users',
@@ -77,6 +78,7 @@ export default {
     	...mapGetters(['hasRoles', 'notSelf'])
     },
 	methods: {
+		...mapActions(['notify']),
 		fetch () {
 			if (this.last_page > this.current_page) {
 				this.current_page += 1
@@ -98,6 +100,9 @@ export default {
 			        this.users = this.users.concat(data.users.data)
 				}
 			}).catch((err) => {
+				if (!err.success) {
+					this.notify({ msg: err.msg, show: true })
+				}
 				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false
@@ -113,9 +118,12 @@ export default {
 
 				if (data.success) {
 			        this.users.splice(index, 1)
-			        alert(data.msg)
+			        this.notify({ msg: data.msg, show: true })
 				}
 			}).catch((err) => {
+				if (!err.success) {
+					this.notify({ msg: err.msg, show: true })
+				}
 				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.deleting = false

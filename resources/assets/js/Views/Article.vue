@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
 	data () {
 		return {
@@ -50,6 +52,7 @@ export default {
         this.fetch()
     },
 	methods: {
+		...mapActions(['notify']),
 		fetch () {
 			this.loading = true
 			this.$http.get('/api/articles/' + this.$route.params.link).then((res) => {
@@ -59,6 +62,9 @@ export default {
 					this.article = data.article
 				}
 			}).catch((err) => {
+				if (!err.success) {
+					this.notify({ msg: err.msg, show: true })
+				}
 				this.$router.push({ name: 'home' })
 			}).then(() => {
 				this.loading = false

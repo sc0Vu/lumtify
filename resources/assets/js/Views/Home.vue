@@ -3,7 +3,7 @@
 <template>
 <div>
     <h1>Welcome to lumtify!</h1>
-    <articles v-bind:auth="auth"></articles>
+    <articles></articles>
 </div>
 </template>
 
@@ -11,13 +11,6 @@
 import Articles from './Articles.vue'
 
 export default {
-	props: {
-        auth: {
-            isAuth: false,
-            user: {},
-            roles: []
-        }
-    },
 	components: {
 		Articles
 	}

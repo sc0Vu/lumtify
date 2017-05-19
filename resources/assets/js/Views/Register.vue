@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
 	data () {
 		return {
@@ -76,6 +78,7 @@ export default {
 		}
 	},
 	methods: {
+		...mapActions(['notify']),
 		register () {
 			this.loading = true
 			this.$http.post('/api/users', {
@@ -91,7 +94,7 @@ export default {
 					this.errs = data.errs
 					this.msg = data.msg
 					this.success = data.success
-					alert(data.msg)
+					this.notify({ msg: data.msg, show: true })
 					this.$router.push({ name: 'home' })
 				}
 			}).catch((err) => {
@@ -102,7 +105,7 @@ export default {
 					this.errs = e.errs
 					this.msg = e.msg
 					this.success = e.success
-					alert(e.msg)
+					this.notify({ msg: e.msg, show: true })
 				} else {
 					this.$router.push({ name: 'home' })
 				}
