@@ -158,14 +158,17 @@ const store = new Vuex.Store({
 		setTimeout ({ snaker }, timeout) {
 			snaker.timeout = timeout
 		},
+		setShow ({ snaker }, show) {
+			snaker.show = show
+		},
 		inform ({ snaker }, msg) {
 			snaker.msg = msg
 			snaker.show = true
-			// due to value doen'nt when timeout
+			// due to value doesn't when timeout
 			// so we use setTimeout
-			window.setTimeout(function () {
-				snaker.show = false
-			}, snaker.timeout)
+			// window.setTimeout(function () {
+			// 	snaker.show = false
+			// }, snaker.timeout)
 		}
 	},
 	actions: {
