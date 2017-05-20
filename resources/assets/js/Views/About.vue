@@ -8,7 +8,8 @@
         <p>A blog cms build with lumen(jwt-api) and vuetify.</p>
         <p>Author: <a href="https://sc0vu.github.io/">Peter Lai</a></p>
         <p>
-            <a href="https://github.com/sc0Vu/lumtify">Github</a>
+            <a href="https://github.com/sc0Vu/lumtify" target="_blank">Github</a>
+            <a href="https://www.linkedin.com/in/peter-lai-5a11b967/" target="_blank">Linkedin</a>
         </p>
     </div>
 </div>
