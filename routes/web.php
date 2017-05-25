@@ -14,3 +14,9 @@
 $app->get("/", "HomeController@index");
 
 $app->get('/{any}', 'HomeController@index');
+
+$app->get('/articles/{any}', 'HomeController@index');
+
+$app->get('/articles/{any}/{another}', 'HomeController@index');
+
+$app->get('/users/{any}/{another}', 'HomeController@index');
