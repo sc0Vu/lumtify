@@ -9,7 +9,7 @@
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.0",
-    "vuetify": "^0.11.1"
+    "vuetify": "^0.12.1"
   },
   "scripts": {
     "prod": "gulp --production",
