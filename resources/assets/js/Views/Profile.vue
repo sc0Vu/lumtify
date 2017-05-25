@@ -1,15 +1,15 @@
 <style></style>
 
 <template>
-<v-row>
-    <v-col xs12="xs12" class="text-xs-center" v-if="loading">
+<v-layout row wrap>
+    <v-flex xs12 class="text-xs-center" v-if="loading">
     	<v-progress-circular 
 		    indeterminate 
 		    v-bind:size="50" 
 		    class="primary--text" 
 		  />
-    </v-col>
-    <v-col xs12="xs12" v-else-if="!loading">
+    </v-flex>
+    <v-flex xs12 v-else-if="!loading">
 	    <h1>
 	        {{ name }}
 		</h1>
@@ -19,8 +19,8 @@
 	    	    Setting
             </v-btn>
 	    </v-row>
-    </v-col>
-</v-row>
+    </v-flex>
+</v-layout>
 </template>
 
 <script>
