@@ -17,6 +17,8 @@
 			    label="Email"
 			    type="email"
 			    v-model="email"
+			    dark
+			    prepend-icon="email"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
 		</div>
@@ -26,6 +28,8 @@
 			    label="Password"
 			    type="password"
 			    v-model="password"
+			    dark
+			    prepend-icon="lock"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
 		</div>
