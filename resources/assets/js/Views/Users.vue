@@ -1,15 +1,15 @@
 <style></style>
 
 <template>
-<v-row>
-    <v-col xs12="xs12" class="text-xs-center" v-if="loading">
+<v-layout row wrap>
+    <v-flex xs12 class="text-xs-center" v-if="loading">
     	<v-progress-circular 
 		    indeterminate 
 		    v-bind:size="50" 
 		    class="primary--text" 
 		  />
-    </v-col>
-    <v-col xs4="xs4" v-for="(user, index) in users">
+    </v-flex>
+    <v-flex xs4 v-for="(user, index) in users">
         <v-card style="margin-bottom: 15px;">
             <v-card-row class="blue-grey darken-1">
                 <v-card-title>
@@ -36,8 +36,8 @@
                 </v-btn>
             </v-card-row>
         </v-card>
-    </v-col>
-    <v-col xs12="xs12" class="text-xs-center" v-if="next_page_url">
+    </v-flex>
+    <v-flex xs12 class="text-xs-center" v-if="next_page_url">
     	<v-btn 
 		    info
 		    v-on:click.native="fetch" 
@@ -46,8 +46,8 @@
 		>
 		    Load More
 		</v-btn>
-    </v-col>
-</v-row>
+    </v-flex>
+</v-layout>
 </template>
 
 <script>
