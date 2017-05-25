@@ -1,8 +1,8 @@
 <style></style>
 
 <template>
-<v-col xs4="xs4">
-    <div>
+<v-layout row wrap>
+    <v-flex xs12>
         <div>
             <h5>Create Article</h5>
         </div>
@@ -17,6 +17,8 @@
 			    label="Title"
 			    type="text"
 			    v-model="article.title"
+			    dark
+			    prepend-icon="subject"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.title">{{ errFor.title.join(",") }}</span>
 		</div>
@@ -26,6 +28,8 @@
 			    label="Link"
 			    type="text"
 			    v-model="article.link"
+			    dark
+			    prepend-icon="link"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.link">{{ errFor.link.join(",") }}</span>
 		</div>
@@ -35,32 +39,38 @@
 			    label="Short Description"
 			    type="text"
 			    v-model="article.short_description"
+			    dark
+			    prepend-icon="description"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.short_description">{{ errFor.short_description.join(",") }}</span>
 		</div>
-		<v-row>
-	    	<v-col xs6="xs6">
+		<v-layout row wrap>
+	    	<v-flex xs6>
 	    	    <v-text-field
 	                name="content"
 		            label="Content"
 	                v-model="article.content"
 	                multi-line
+	                dark
+	                prepend-icon="create"
 	            ></v-text-field>
-		    </v-col>
-		    <v-col xs6="xs6">
+		    </v-flex>
+		    <v-flex xs6>
 		        <div>
 		            <h6>Preview</h6>
 		            <p v-markdown="article.content"></p>
 		        </div>
-		    </v-col>
+		    </v-flex>
 			<span class="red--text" v-if="errFor.content">{{ errFor.content.join(",") }}</span>
-		</v-row>
+		</v-layout>
 		<div>
 		    <v-text-field 
 			    name="thumbnail"
 			    label="Thumbnail"
 			    type="text"
 			    v-model="article.thumbnail"
+			    dark
+			    prepend-icon="insert_photo"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.thumbnail">{{ errFor.thumbnail.join(",") }}</span>
 		</div>
@@ -70,6 +80,8 @@
 			    name="status"
 			    label="Status"
 			    v-model="article.status"
+			    dark
+			    prepend-icon="visibility"
 			></v-select>
 			<span class="red--text" v-if="errFor.status">{{ errFor.status.join(",") }}</span>
 		</div>
@@ -83,8 +95,8 @@
                 Submit
             </v-btn>
         </div>
-    </div>
-</v-col>
+    </v-flex>
+</v-layout>
 </template>
 
 <script>
