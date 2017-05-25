@@ -1,15 +1,15 @@
 <style></style>
 
 <template>
-<v-row>
-    <v-col xs12="xs12" class="text-xs-center" v-if="loading">
+<v-layout row wrap>
+    <v-flex xs12 class="text-xs-center" v-if="loading">
     	<v-progress-circular 
 		    indeterminate 
 		    v-bind:size="50" 
 		    class="primary--text" 
 		  />
-    </v-col>
-    <v-col xs12="xs12" v-if="article">
+    </v-flex>
+    <v-flex xs12 v-if="article">
 	    <h1>
 	        {{ article.title }}
 	    </h1>
@@ -34,8 +34,8 @@
 	            </v-card-title>
 	        </v-card-row>
 	    </v-card>
-    </v-col>
-</v-row>
+    </v-flex>
+</v-layout>
 </template>
 
 <script>
