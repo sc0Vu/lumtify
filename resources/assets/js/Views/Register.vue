@@ -17,6 +17,8 @@
 			    label="Name"
 			    type="text"
 			    v-model="name"
+			    dark
+			    prepend-icon="account_box"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.name">{{ errFor.name.join(",") }}</span>
 		</div>
@@ -26,6 +28,8 @@
 			    label="Email"
 			    type="email"
 			    v-model="email"
+			    dark
+			    prepend-icon="email"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
 		</div>
@@ -35,6 +39,8 @@
 			    label="Password"
 			    type="password"
 			    v-model="password"
+			    dark
+			    prepend-icon="lock"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
 		</div>
@@ -44,6 +50,8 @@
 			    label="Password Again"
 			    type="password"
 			    v-model="password_verify"
+			    dark
+			    prepend-icon="lock"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
 		</div>
