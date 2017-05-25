@@ -1,14 +1,14 @@
 <style></style>
 
 <template>
-<v-col xs4="xs4">
-    <v-col xs12="xs12" class="text-xs-center" v-if="loading">
+<v-flex xs4>
+    <v-flex xs12 class="text-xs-center" v-if="loading">
     	<v-progress-circular 
 		    indeterminate 
 		    v-bind:size="50" 
 		    class="primary--text" 
 		  />
-    </v-col>
+    </v-flex>
     <div v-else-if="!loading">
         <div>
             <h5>Setting</h5>
@@ -24,6 +24,8 @@
 			    label="Name"
 			    type="text"
 			    v-model="name"
+			    dark
+			    prepend-icon="account_box"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.name">{{ errFor.name.join(",") }}</span>
 		</div>
@@ -33,6 +35,8 @@
 			    label="Email"
 			    type="email"
 			    v-model="email"
+			    dark
+			    prepend-icon="email"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.email">{{ errFor.email.join(",") }}</span>
 		</div>
@@ -42,6 +46,8 @@
 			    label="Thumbnail"
 			    type="text"
 			    v-model="thumbnail"
+			    dark
+			    prepend-icon="face"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.thumbnail">{{ errFor.thumbnail.join(",") }}</span>
 		</div>
@@ -51,6 +57,8 @@
 			    label="Password"
 			    type="password"
 			    v-model="password"
+			    dark
+			    prepend-icon="lock"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.password">{{ errFor.password.join(",") }}</span>
 		</div>
@@ -60,6 +68,8 @@
 			    label="Password Again"
 			    type="password"
 			    v-model="password_verify"
+			    dark
+			    prepend-icon="lock"
 			></v-text-field>
 			<span class="red--text" v-if="errFor.pass_verify">{{ errFor.pass_verify.join(",") }}</span>
 		</div>
@@ -70,6 +80,8 @@
 			    label="Roles"
 			    v-model="roles"
 			    multiple
+			    dark
+			    prepend-icon="perm_identity"
 			></v-select>
 			<span class="red--text" v-if="errFor.roles">{{ errFor.roles.join(",") }}</span>
 		</div>
@@ -84,7 +96,7 @@
             </v-btn>
         </div>
     </div>
-</v-col>
+</v-flex>
 </template>
 
 <script>
