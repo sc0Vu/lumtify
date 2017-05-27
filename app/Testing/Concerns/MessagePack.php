@@ -2,6 +2,7 @@
 
 namespace App\Testing\Concerns;
 
+use Illuminate\Support\Str;
 use MessagePack\Packer;
 use MessagePack\BufferUnpacker;
 use PHPUnit\Framework\Assert as PHPUnit;
@@ -9,34 +10,22 @@ use PHPUnit\Framework\Assert as PHPUnit;
 trait MessagePack
 {
     /**
-     * Assert that the response contains msgpack.
+     * Assert that the response contains messagepack.
      *
-     * @param  array|null  $data
      * @return $this
      */
-    protected function shouldReturnMsgPack(array $data = null)
+    protected function shouldReturnMessagePack()
     {
-        return $this->receiveMsgPack($data);
+        return $this->seeMessagePack();
     }
 
     /**
-     * Assert that the response contains msgpack.
-     *
-     * @param  array|null  $data
-     * @return $this|null
-     */
-    protected function receiveMsgPack($data = null)
-    {
-        return $this->seeMsgPack($data);
-    }
-
-    /**
-     * Assert that the response contains an exact msgpack array.
+     * Assert that the response contains an exact messagepack array.
      *
      * @param  array  $data
      * @return $this
      */
-    public function seeMsgPackEquals(array $data)
+    public function seeMessagePackEquals(array $data)
     {
         $packer = new Packer();
 
@@ -52,19 +41,19 @@ trait MessagePack
 
         } catch (\MessagePack\Exception\PackingFailedException $e) {
 
-            PHPUnit::assertEquals(true, false);
+            PHPUnit::fail('Messagepack is not equal.');
         }
 
         return $this;
     }
 
     /**
-     * Assert that the response contains msgpack.
+     * Assert that the response contains messagepack.
      *
      * @param  array|null  $data
      * @return $this
      */
-    public function seeMsgPack(array $data = null)
+    public function seeMessagePack(array $data = null)
     {
         if (is_null($data)) {
             $data = $this->response->getData();
@@ -74,6 +63,36 @@ trait MessagePack
             return $this;
         }
 
-        return $this->seeMsgPackEquals($data);
+        return $this->seeMessagePackContains($data);
+    }
+
+    /**
+     * Assert that the response contains the given messagepack array.
+     *
+     * @param  array  $data
+     * @return $this
+     */
+    protected function seeMessagePackContains(array $data)
+    {
+        $actual = $this->response->getData();
+
+        if (is_null($actual)) {
+            return PHPUnit::fail('Invalid messagepack data was returned from the route.');
+        }
+
+        $actual = json_encode(array_sort_recursive(
+            (array) $actual
+        ));
+
+        foreach (array_sort_recursive($data) as $key => $value) {
+            $expected = $this->formatToExpectedJson($key, $value);
+
+            call_user_func(['PHPUnit_Framework_Assert', 'assertTrue'],
+                Str::contains($actual, $expected),
+                "Unable to find Messagepack fragment [{$expected}] within [{$actual}]."
+            );
+        }
+
+        return $this;
     }
 }
