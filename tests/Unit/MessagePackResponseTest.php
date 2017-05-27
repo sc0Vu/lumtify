@@ -41,11 +41,12 @@ class MessagePackResponseTest extends TestCase
      */
     public function testSetData()
     {
+        $origin = $this->response->getContent();
         $data = $this->response->setData([
             'a' => 'ha'
         ]);
 
-        $this->assertEquals($data, $this->response->getContent()->content);
+        $this->assertNotEquals($data->getContent(), $origin);
     }
 
     /**
