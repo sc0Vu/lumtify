@@ -1,7 +1,11 @@
 <?php
 
+use LGC\Msgpack\MsgpackConcern;
+
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
+	use MsgpackConcern;
+	
     /**
      * Creates the application.
      *

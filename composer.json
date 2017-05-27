@@ -9,7 +9,7 @@
         "laravel/lumen-framework": "5.4.*",
         "vlucas/phpdotenv": "~2.2",
         "tymon/jwt-auth": "^1.0@dev",
-        "rybakit/msgpack": "^0.2.2"
+        "guancheng/msgpack": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
