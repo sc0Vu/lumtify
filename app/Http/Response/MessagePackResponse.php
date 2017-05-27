@@ -33,9 +33,17 @@ class MessagePackResponse extends Response
      */
     public function getData()
     {
-        $unpacker = new BufferUnpacker();
-        $unpacker->reset($this->data);
-        return $unpacker->unpack();
+        try {
+            $unpacker = new BufferUnpacker();
+            $unpacker->reset($this->data);
+            $unpacked = $unpacker->unpack();
+
+        } catch (\MessagePack\Exception\UnpackingFailedException $e) {
+
+            throw new InvalidArgumentException($e->getMessage());
+        }
+
+        return $unpacked;
     }
 
     /**
@@ -51,6 +59,7 @@ class MessagePackResponse extends Response
 
         try {
             $this->data = $packer->pack($data);
+
         } catch (\MessagePack\Exception\PackingFailedException $e) {
 
             throw new InvalidArgumentException($e->getMessage());
