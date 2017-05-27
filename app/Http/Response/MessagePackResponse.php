@@ -39,7 +39,9 @@ class MessagePackResponse extends Response
     }
 
     /**
-     * {@inheritdoc}
+     * Set the data.
+     *
+     * @return mixed
      */
     public function setData($data = [])
     {
