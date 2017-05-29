@@ -2,14 +2,10 @@
 
 <template>
 <v-layout row wrap>
-    <v-flex xs12 class="text-xs-center" v-if="loading">
-    	<v-progress-circular 
-		    indeterminate 
-		    v-bind:size="50" 
-		    class="primary--text" 
-		  />
+    <v-flex xs12 class="text-xs-center" v-if="users.length <= 0 && !loading">
+    	<h1>No users here!</h1>
     </v-flex>
-    <v-flex xs4 v-for="(user, index) in users">
+    <v-flex xs4 v-for="(user, index) in users" v-else-if="users.length > 0">
         <v-card style="margin-bottom: 15px;">
             <v-card-row class="blue-grey darken-1">
                 <v-card-title>
@@ -36,6 +32,13 @@
                 </v-btn>
             </v-card-row>
         </v-card>
+    </v-flex>
+    <v-flex xs12 class="text-xs-center" v-if="loading">
+    	<v-progress-circular 
+		    indeterminate 
+		    v-bind:size="50" 
+		    class="primary--text" 
+		  />
     </v-flex>
     <v-flex xs12 class="text-xs-center" v-if="next_page_url">
     	<v-btn 
