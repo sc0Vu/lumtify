@@ -2,14 +2,7 @@
 
 <template>
 <v-layout row wrap>
-    <v-flex xs12 class="text-xs-center" v-if="loading">
-    	<v-progress-circular 
-		    indeterminate 
-		    v-bind:size="50" 
-		    class="primary--text" 
-		  />
-    </v-flex>
-    <v-flex xs12 class="text-xs-center" v-else-if="articles.length <= 0">
+    <v-flex xs12 class="text-xs-center" v-if="articles.length <= 0 && !loading">
     	<h1>No articles here!</h1>
     </v-flex>
     <v-flex xs4 v-for="(article, index) in articles" v-else-if="articles.length > 0">
@@ -36,6 +29,13 @@
                 </v-btn>
             </v-card-row>
         </v-card>
+    </v-flex>
+    <v-flex xs12 class="text-xs-center" v-if="loading">
+    	<v-progress-circular 
+		    indeterminate 
+		    v-bind:size="50" 
+		    class="primary--text" 
+		  />
     </v-flex>
     <v-flex xs12 class="text-xs-center" v-if="next_page_url">
     	<v-btn 
