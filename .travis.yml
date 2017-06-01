@@ -19,4 +19,7 @@ script:
   -  touch ./database/lumtify.sqlite
   -  php artisan migrate --seed
   -  php artisan jwt:secret
-  -  vendor/bin/phpunit
+  -  vendor/bin/phpunit --coverage-clover=coverage.xml
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash) -t 24a6843f-ce8c-4f1c-bb89-ccc8de9eced1
