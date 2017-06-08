@@ -60,3 +60,8 @@ Frontend
 ## License
 
 [MIT license](http://opensource.org/licenses/MIT)
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/sc0Vu/lumtify/badge.svg?style=beer-square)](https://beerpay.io/sc0Vu/lumtify)  [![Beerpay](https://beerpay.io/sc0Vu/lumtify/make-wish.svg?style=flat-square)](https://beerpay.io/sc0Vu/lumtify?focus=wish)
