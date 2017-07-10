@@ -29,6 +29,10 @@ Frontend
 
     gulp // compile assets
     
+> Please note the gulp file will get error if you are using `npm > 8`
+
+> See [pr](https://github.com/laravel/elixir/pull/723)
+    
 ## Test
 
 PHP
