@@ -41,30 +41,36 @@ class JWTAuthenticate
             }
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json([
-                "errs" => [],
+                "errs" => [
+                    $e->getMessage()
+                ],
                 "errFor" => [],
-                "msg" => $e->getMessage(),
+                "msg" => trans('http.status.190'),
                 "success" => false
             ], 190);
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             return response()->json([
-                "errs" => [],
+                "errs" => [
+                    $e->getMessage()
+                ],
                 "errFor" => [],
-                "msg" => $e->getMessage(),
+                "msg" => trans('http.status.401'),
                 "success" => false
             ], 401);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json([
-                "errs" => [],
+                "errs" => [
+                    $e->getMessage()
+                ],
                 "errFor" => [],
-                "msg" => $e->getMessage(),
+                "msg" => trans('http.status.401'),
                 "success" => false
             ], 401);
         }
         return response()->json([
             "errs" => [],
             "errFor" => [],
-            "msg" => 'Unauthorized.',
+            "msg" => trans('http.status.401'),
             "success" => false
         ], 401);
     }

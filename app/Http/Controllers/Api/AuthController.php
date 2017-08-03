@@ -50,7 +50,7 @@ class AuthController extends Controller
     	$auth = $this->auth;
 
         try {
-            if (! $token = $auth->attempt($data)) {
+            if (!$token = $auth->attempt($data)) {
                 return response()->json([
                     "errs" => [],
                     "errFor" => $validator->errors(),
@@ -60,9 +60,11 @@ class AuthController extends Controller
             }
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json([
-                "errs" => [],
+                "errs" => [
+                    $e->getMessage()
+                ],
                 "errFor" => [],
-                "msg" => $e->getMessage(),
+                "msg" => trans("http.status.500"),
                 "success" => false
             ], 500);
         }
@@ -83,7 +85,18 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $this->auth->invalidate(true);
+        try {
+            $this->auth->invalidate(true);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                "errs" => [
+                    $e->getMessage()
+                ],
+                "errFor" => [],
+                "msg" => trans("http.status.500"),
+                "success" => false
+            ], 500);
+        }
         return response()->json([
             "errs" => [],
             "errFor" => [],
@@ -119,8 +132,19 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        $token = $this->auth->parseToken();
-        $token = $token->refresh();
+        try {
+            $token = $this->auth->parseToken();
+            $token = $token->refresh();
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                "errs" => [
+                    $e->getMessage()
+                ],
+                "errFor" => [],
+                "msg" => trans("http.status.500"),
+                "success" => false
+            ], 500);
+        }
         return response()->json([
             "errs" => [],
             "errFor" => [],
