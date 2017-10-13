@@ -13,10 +13,14 @@
   },
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch"
+    "dev": "gulp watch",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "marked": "^0.3.6",
-    "vuex": "^2.2.1"
-  }
+    "vuex": "^2.2.1",
+    "snyk": "^1.42.6"
+  },
+  "snyk": true
 }
