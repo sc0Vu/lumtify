@@ -1,5 +1,7 @@
 # lumtify
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/sc0Vu/lumtify.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/sc0Vu/lumtify.svg?branch=master)](https://travis-ci.org/sc0Vu/lumtify)
 [![codecov](https://codecov.io/gh/sc0Vu/lumtify/branch/master/graph/badge.svg)](https://codecov.io/gh/sc0Vu/lumtify)
 [![Dependency Status](https://www.versioneye.com/user/projects/58d7719e6893fd004792c9e7/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58d7719e6893fd004792c9e7)
